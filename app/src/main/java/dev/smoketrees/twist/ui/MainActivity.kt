@@ -1,7 +1,8 @@
-package dev.smoketrees.twist
+package dev.smoketrees.twist.ui
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import dev.smoketrees.twist.R
 
 class MainActivity : AppCompatActivity() {
 
