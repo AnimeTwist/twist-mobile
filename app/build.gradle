@@ -67,5 +67,9 @@ dependencies {
     // apache commons
     implementation "org.apache.commons:commons-lang3:3.9"
 
+    // Exoplayer - stream video
+    implementation 'com.google.android.exoplayer:exoplayer:2.10.5'
 
+    // Spinkit - loading animations
+    implementation 'com.github.ybq:Android-SpinKit:1.4.0'
 }

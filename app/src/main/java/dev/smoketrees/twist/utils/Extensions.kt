@@ -45,3 +45,7 @@ fun Context.hideKeyboard(view: View) {
 fun Fragment.toast(message: String) {
     requireContext().toast(message)
 }
+
+fun Fragment.longToast(message: String) {
+    requireContext().longToast(message)
+}

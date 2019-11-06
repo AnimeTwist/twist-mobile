@@ -9,5 +9,38 @@
         android:id="@+id/homeFragment"
         android:name="dev.smoketrees.twist.ui.home.HomeFragment"
         android:label="fragment_home"
-        tools:layout="@layout/fragment_home" />
+        tools:layout="@layout/fragment_home" >
+        <action
+            android:id="@+id/action_homeFragment_to_episodesFragment"
+            app:destination="@id/episodesFragment" />
+    </fragment>
+    <activity
+        android:id="@+id/animePlayerActivity"
+        android:name="dev.smoketrees.twist.ui.player.AnimePlayerActivity"
+        android:label="activity_anime_player"
+        tools:layout="@layout/activity_anime_player" >
+        <argument
+            android:name="slugName"
+            app:argType="string"
+            app:nullable="true"
+            android:defaultValue="@null" />
+        <argument
+            android:name="episodeNo"
+            app:argType="integer"
+            android:defaultValue="0" />
+    </activity>
+    <fragment
+        android:id="@+id/episodesFragment"
+        android:name="dev.smoketrees.twist.ui.player.EpisodesFragment"
+        android:label="fragment_episodes"
+        tools:layout="@layout/fragment_episodes" >
+        <action
+            android:id="@+id/action_episodesFragment_to_animePlayerActivity"
+            app:destination="@id/animePlayerActivity" />
+        <argument
+            android:name="slugName"
+            app:argType="string"
+            app:nullable="true"
+            android:defaultValue="@null" />
+    </fragment>
 </navigation>

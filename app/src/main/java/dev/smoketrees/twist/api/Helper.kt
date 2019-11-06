@@ -5,6 +5,7 @@ import dev.smoketrees.twist.BuildConfig
 import dev.smoketrees.twist.R
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
+import java.util.concurrent.TimeUnit
 
 fun getOkHttpClient(context: Context): OkHttpClient {
 
@@ -30,5 +31,7 @@ fun getOkHttpClient(context: Context): OkHttpClient {
         )
     }
 
-    return httpClient.build()
+    return httpClient.readTimeout(60, TimeUnit.SECONDS)
+        .connectTimeout(60, TimeUnit.SECONDS)
+        .build()
 }
