@@ -75,4 +75,13 @@ dependencies {
 
     // Spinkit - loading animations
     implementation 'com.github.ybq:Android-SpinKit:1.4.0'
+
+    // Room for database stuff
+    def room_version = "2.2.1"
+
+    implementation "androidx.room:room-runtime:$room_version"
+    kapt "androidx.room:room-compiler:$room_version"
+
+    // optional - Kotlin Extensions and Coroutines support for Room
+    implementation "androidx.room:room-ktx:$room_version"
 }

@@ -1,10 +1,10 @@
-package dev.smoketrees.twist.model
+package dev.smoketrees.twist.model.twist
 
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 import org.apache.commons.lang3.builder.ToStringBuilder
 
-class Episode {
+class Slug {
 
     @SerializedName("anime_id")
     @Expose
@@ -15,16 +15,16 @@ class Episode {
     @SerializedName("id")
     @Expose
     var id: Int? = null
-    @SerializedName("number")
+    @SerializedName("slug")
     @Expose
-    var number: Int? = null
+    var slug: String? = null
     @SerializedName("updated_at")
     @Expose
     var updatedAt: String? = null
 
     override fun toString(): String {
         return ToStringBuilder(this).append("animeId", animeId).append("createdAt", createdAt)
-            .append("id", id).append("number", number).append("updatedAt", updatedAt).toString()
+            .append("id", id).append("slug", slug).append("updatedAt", updatedAt).toString()
     }
 
 }

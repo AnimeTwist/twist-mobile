@@ -1,8 +1,8 @@
 package dev.smoketrees.twist.api.anime
 
-import dev.smoketrees.twist.model.AnimeDetails
-import dev.smoketrees.twist.model.AnimeItem
-import dev.smoketrees.twist.model.AnimeSource
+import dev.smoketrees.twist.model.twist.AnimeDetails
+import dev.smoketrees.twist.model.twist.AnimeItem
+import dev.smoketrees.twist.model.twist.AnimeSource
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Path

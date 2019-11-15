@@ -5,7 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import dev.smoketrees.twist.R
-import dev.smoketrees.twist.model.AnimeItem
+import dev.smoketrees.twist.model.twist.AnimeItem
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.animelist_item.*
 

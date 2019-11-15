@@ -1,4 +1,4 @@
-package dev.smoketrees.twist.model
+package dev.smoketrees.twist.model.twist
 
 import java.io.Serializable
 

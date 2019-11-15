@@ -1,7 +1,7 @@
 package dev.smoketrees.twist.api
 
 import dev.smoketrees.twist.BuildConfig
-import dev.smoketrees.twist.model.Result
+import dev.smoketrees.twist.model.twist.Result
 import retrofit2.Response
 
 open class BaseApiClient {

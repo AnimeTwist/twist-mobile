@@ -4,13 +4,11 @@ import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import dev.smoketrees.twist.R
-import dev.smoketrees.twist.model.Episode
+import dev.smoketrees.twist.model.twist.Episode
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.animelist_item.*
-import kotlinx.android.synthetic.main.animelist_item.view.*
 
 class EpisodeListAdapter(private val listener: (Episode) -> Unit) :
     RecyclerView.Adapter<EpisodeListAdapter.EpisodeViewHolder>() {

@@ -12,13 +12,11 @@ import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import dev.smoketrees.twist.R
 import dev.smoketrees.twist.adapters.EpisodeListAdapter
-import dev.smoketrees.twist.model.Result
-import dev.smoketrees.twist.ui.home.AnimeViewModel
+import dev.smoketrees.twist.model.twist.Result
 import dev.smoketrees.twist.utils.hide
 import dev.smoketrees.twist.utils.show
 import dev.smoketrees.twist.utils.toast
 import kotlinx.android.synthetic.main.fragment_episodes.*
-import kotlinx.android.synthetic.main.fragment_home.*
 import org.koin.android.viewmodel.ext.android.sharedViewModel
 
 class EpisodesFragment : Fragment() {
@@ -39,7 +37,8 @@ class EpisodesFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val adapter = EpisodeListAdapter {
-            val action = EpisodesFragmentDirections.actionEpisodesFragmentToAnimePlayerActivity(args.slugName!!, it.number!!)
+            val action = EpisodesFragmentDirections.
+                actionEpisodesFragmentToAnimePlayerActivity(args.slugName!!, it.number!!)
             findNavController().navigate(action)
         }
         val layoutManager = LinearLayoutManager(requireContext())

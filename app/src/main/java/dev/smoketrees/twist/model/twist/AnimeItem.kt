@@ -1,11 +1,15 @@
-package dev.smoketrees.twist.model
+package dev.smoketrees.twist.model.twist
 
+import androidx.room.*
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 import org.apache.commons.lang3.builder.ToStringBuilder
 
+@Entity
 class AnimeItem {
 
+    @PrimaryKey
+    @ColumnInfo(name = "uid")
     @SerializedName("id")
     @Expose
     var id: Int? = null
@@ -24,18 +28,22 @@ class AnimeItem {
     @SerializedName("hb_id")
     @Expose
     var hbId: Int? = null
+    @Ignore
     @SerializedName("hidden")
     @Expose
     var hidden: Int? = null
     @SerializedName("mal_id")
     @Expose
     var malId: Int? = null
+    @Ignore
     @SerializedName("created_at")
     @Expose
     var createdAt: String? = null
+    @Ignore
     @SerializedName("updated_at")
     @Expose
     var updatedAt: String? = null
+    @Embedded
     @SerializedName("slug")
     @Expose
     var slug: Slug? = null

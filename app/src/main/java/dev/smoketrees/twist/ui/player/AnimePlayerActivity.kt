@@ -14,7 +14,7 @@ import com.google.android.exoplayer2.source.ProgressiveMediaSource
 import com.google.android.exoplayer2.upstream.DefaultHttpDataSourceFactory
 import com.google.android.exoplayer2.util.Util
 import dev.smoketrees.twist.R
-import dev.smoketrees.twist.model.Result
+import dev.smoketrees.twist.model.twist.Result
 import dev.smoketrees.twist.utils.CryptoHelper
 import dev.smoketrees.twist.utils.hide
 import dev.smoketrees.twist.utils.show

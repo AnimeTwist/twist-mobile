@@ -1,4 +1,4 @@
-package dev.smoketrees.twist.model
+package dev.smoketrees.twist.model.twist
 
 data class ApiResponse(
     val status: String?,

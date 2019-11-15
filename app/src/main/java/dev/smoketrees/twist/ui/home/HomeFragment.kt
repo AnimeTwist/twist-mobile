@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.exoplayer2.ExoPlayer
 import dev.smoketrees.twist.R
 import dev.smoketrees.twist.adapters.AnimeListAdapter
-import dev.smoketrees.twist.model.Result
+import dev.smoketrees.twist.model.twist.Result
 import dev.smoketrees.twist.utils.hide
 import dev.smoketrees.twist.utils.show
 import dev.smoketrees.twist.utils.toast
@@ -35,48 +35,6 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-//        exoPlayer = ExoPlayerFactory.newSimpleInstance(requireContext())
-//        player_view.player = exoPlayer
-//
-//        val animeName = "toaru-majutsu-no-index"
-//
-//        viewModel.getAnimeSources(animeName).observe(this, Observer {
-//            when (it.status) {
-//                Result.Status.LOADING -> {
-//                    toast("Loading")
-//                }
-//
-//                Result.Status.SUCCESS -> {
-//                    val sourceFactory = DefaultHttpDataSourceFactory(
-//                        Util.getUserAgent(
-//                            requireContext(),
-//                            "twist.moe"
-//                        )
-//                    )
-//
-//                    val mediaSource = ProgressiveMediaSource.Factory {
-//                        val dataSource = sourceFactory.createDataSource()
-//                        dataSource.setRequestProperty("Referer", "https://twist.moe/a/$animeName/0")
-//                        dataSource
-//                    }
-//                        .createMediaSource(
-//                            Uri.parse(
-//                                "https://twist.moe${CryptoHelper.decryptSourceUrl(
-//                                    requireContext(),
-//                                    it?.data?.get(0)?.source!!
-//                                )}"
-//                            )
-//                        )
-//
-//                    exoPlayer.prepare(mediaSource)
-//                }
-//
-//                Result.Status.ERROR -> {
-//                    toast(it.message!!)
-//                }
-//            }
-//        })
 
         val adapter = AnimeListAdapter {
             val action = HomeFragmentDirections.actionHomeFragmentToEpisodesFragment(it.slug!!.slug!!)
@@ -108,15 +66,9 @@ class HomeFragment : Fragment() {
         })
 
         viewModel.animeListLiveData.observe(viewLifecycleOwner, Observer {
-            if (it.isEmpty()) {
-
-            } else {
+            if (it.isNotEmpty()) {
                 adapter.updateData(it)
             }
         })
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
     }
 }
