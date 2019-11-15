@@ -3,11 +3,11 @@ package dev.smoketrees.twist.adapters
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import dev.smoketrees.twist.R
 import dev.smoketrees.twist.model.AnimeItem
-import kotlinx.android.synthetic.main.animelist_item.view.*
+import kotlinx.android.extensions.LayoutContainer
+import kotlinx.android.synthetic.main.animelist_item.*
 
 class AnimeListAdapter(private val listener: (AnimeItem) -> Unit) :
     RecyclerView.Adapter<AnimeListAdapter.AnimeViewHolder>() {
@@ -26,16 +26,15 @@ class AnimeListAdapter(private val listener: (AnimeItem) -> Unit) :
     override fun getItemCount() = animeList.size
 
     override fun onBindViewHolder(holder: AnimeViewHolder, position: Int) {
-        holder.animeTitle.text = animeList[position].title
-        holder.animeTitle.setOnClickListener {
+        holder.anime_name.text = animeList[position].title
+        holder.anime_name.setOnClickListener {
             listener(animeList[position])
         }
     }
 
 
-    class AnimeViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val animeTitle: TextView = itemView.anime_name
-    }
+    class AnimeViewHolder(override val containerView: View) :
+        RecyclerView.ViewHolder(containerView), LayoutContainer
 
     fun updateData(newData: List<AnimeItem>) {
         animeList = newData

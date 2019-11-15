@@ -8,6 +8,8 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import dev.smoketrees.twist.R
 import dev.smoketrees.twist.model.Episode
+import kotlinx.android.extensions.LayoutContainer
+import kotlinx.android.synthetic.main.animelist_item.*
 import kotlinx.android.synthetic.main.animelist_item.view.*
 
 class EpisodeListAdapter(private val listener: (Episode) -> Unit) :
@@ -28,16 +30,15 @@ class EpisodeListAdapter(private val listener: (Episode) -> Unit) :
 
     @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: EpisodeViewHolder, position: Int) {
-        holder.animeTitle.text = "Episode no ${episodeList[position].number!!}"
-        holder.animeTitle.setOnClickListener {
+        holder.anime_name.text = "Episode no ${episodeList[position].number!!}"
+        holder.anime_name.setOnClickListener {
             listener(episodeList[position])
         }
     }
 
 
-    class EpisodeViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val animeTitle: TextView = itemView.anime_name
-    }
+    class EpisodeViewHolder(override val containerView: View) :
+        RecyclerView.ViewHolder(containerView), LayoutContainer
 
     fun updateData(newData: List<Episode>) {
         episodeList = newData
