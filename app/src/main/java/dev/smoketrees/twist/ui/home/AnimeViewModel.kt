@@ -20,5 +20,7 @@ class AnimeViewModel(private val repo: AnimeRepo) : ViewModel() {
         })
     }
 
+    fun searchAnime(animeName: String) = repo.searchAnime(animeName)
+
     lateinit var lifeCycleOwner: LifecycleOwner
 }

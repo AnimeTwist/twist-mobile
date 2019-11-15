@@ -13,6 +13,9 @@
         <action
             android:id="@+id/action_homeFragment_to_episodesFragment"
             app:destination="@id/episodesFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_searchActivity"
+            app:destination="@id/searchActivity" />
     </fragment>
     <activity
         android:id="@+id/animePlayerActivity"
@@ -42,5 +45,17 @@
             app:argType="string"
             app:nullable="true"
             android:defaultValue="@null" />
+    </fragment>
+    <fragment
+        android:id="@+id/searchActivity"
+        android:name="dev.smoketrees.twist.ui.search.SearchFragment"
+        android:label="activity_search"
+        tools:layout="@layout/fragment_search" >
+        <action
+            android:id="@+id/action_searchActivity_to_episodesFragment"
+            app:destination="@id/episodesFragment" />
+        <argument
+            android:name="query"
+            app:argType="string" />
     </fragment>
 </navigation>

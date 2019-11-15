@@ -48,7 +48,7 @@ class AnimePlayerActivity : AppCompatActivity() {
 
                     Result.Status.SUCCESS -> {
                         val decryptedUrl =
-                            CryptoHelper.decryptSourceUrl(this, it?.data?.get(epNo)?.source!!)
+                            CryptoHelper.decryptSourceUrl(this, it?.data?.get(epNo - 1)?.source!!)
                         play(Uri.parse("https://twist.moe${decryptedUrl}"))
                     }
 
@@ -78,10 +78,10 @@ class AnimePlayerActivity : AppCompatActivity() {
             )
         )
 
-        player.addListener(object: Player.EventListener {
+        player.addListener(object : Player.EventListener {
             override fun onPlayerStateChanged(playWhenReady: Boolean, playbackState: Int) {
                 super.onPlayerStateChanged(playWhenReady, playbackState)
-                when(playbackState) {
+                when (playbackState) {
                     Player.STATE_BUFFERING -> {
                         progressBar.show()
                     }

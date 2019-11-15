@@ -27,4 +27,6 @@ class AnimeRepo(
     fun getMALAnime(animeName: String) = makeRequest {
         jikanClient.getAnimeByName(animeName)
     }
+
+    fun searchAnime(animeName: String) = animeDao.searchAnime(animeName)
 }

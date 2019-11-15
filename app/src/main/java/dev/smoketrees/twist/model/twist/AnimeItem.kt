@@ -47,7 +47,6 @@ class AnimeItem {
     @SerializedName("slug")
     @Expose
     var slug: Slug? = null
-
     @ColumnInfo(name = "img_url")
     var imgUrl: String? = null
 

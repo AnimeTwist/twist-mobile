@@ -9,6 +9,9 @@ interface AnimeDao {
     @Query("SELECT * FROM animeitem")
     fun getAllAnime(): LiveData<List<AnimeItem>>
 
+    @Query("SELECT * FROM animeitem WHERE title LIKE :searchText OR altTitle LIKE :searchText")
+    fun searchAnime(searchText: String): LiveData<List<AnimeItem>>
+
     @Query("SELECT * FROM animeitem WHERE id = :id")
     fun getAnimeById(id: Int): LiveData<AnimeItem>
 

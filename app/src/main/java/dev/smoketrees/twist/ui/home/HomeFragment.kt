@@ -1,15 +1,16 @@
 package dev.smoketrees.twist.ui.home
 
 
+import android.app.SearchManager
+import android.content.Context
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
+import android.widget.SimpleCursorAdapter
+import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.google.android.exoplayer2.ExoPlayer
 import dev.smoketrees.twist.R
 import dev.smoketrees.twist.adapters.AnimeListAdapter
 import dev.smoketrees.twist.db.AnimeDao
@@ -23,16 +24,17 @@ import org.koin.android.viewmodel.ext.android.sharedViewModel
 
 class HomeFragment : Fragment() {
 
-    private lateinit var exoPlayer: ExoPlayer
 
     private val viewModel by sharedViewModel<AnimeViewModel>()
     private val animeDao: AnimeDao by inject()
+    private lateinit var searchAdapter: SimpleCursorAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
+        setHasOptionsMenu(true)
         return inflater.inflate(R.layout.fragment_home, container, false)
     }
 
@@ -41,16 +43,18 @@ class HomeFragment : Fragment() {
         viewModel.lifeCycleOwner = viewLifecycleOwner
 
         val adapter = AnimeListAdapter(viewModel, requireContext()) {
-            val action = HomeFragmentDirections.actionHomeFragmentToEpisodesFragment(it.slug!!.slug!!)
+            val action =
+                HomeFragmentDirections.actionHomeFragmentToEpisodesFragment(it.slug!!.slug!!)
             findNavController().navigate(action)
         }
-        val layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+        val layoutManager =
+            LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
         anime_list.adapter = adapter
         anime_list.layoutManager = layoutManager
         anime_list.smoothScrollToPosition(0)
 
         viewModel.getAllAnime().observe(viewLifecycleOwner, Observer {
-            when(it.status) {
+            when (it.status) {
                 Result.Status.LOADING -> {
                     spinkit.show()
                     anime_list.hide()
@@ -72,6 +76,28 @@ class HomeFragment : Fragment() {
         animeDao.getAllAnime().observe(viewLifecycleOwner, Observer {
             if (it.isNotEmpty()) {
                 adapter.updateData(it)
+            }
+        })
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        super.onCreateOptionsMenu(menu, inflater)
+        inflater.inflate(R.menu.toolbar_menu, menu)
+        val searchManager = requireActivity().getSystemService(Context.SEARCH_SERVICE) as SearchManager
+        val searchView = (menu.findItem(R.id.action_search).actionView as SearchView)
+        searchView.apply {
+            setSearchableInfo(searchManager.getSearchableInfo(requireActivity().componentName))
+        }
+
+        searchView.setOnQueryTextListener(object: SearchView.OnQueryTextListener {
+            override fun onQueryTextChange(newText: String): Boolean {
+                return false
+            }
+
+            override fun onQueryTextSubmit(query: String): Boolean {
+                val action = HomeFragmentDirections.actionHomeFragmentToSearchActivity("%${query}%")
+                findNavController().navigate(action)
+                return true
             }
         })
     }
