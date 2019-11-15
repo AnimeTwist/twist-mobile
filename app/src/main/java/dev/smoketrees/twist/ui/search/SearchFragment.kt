@@ -1,25 +1,17 @@
 package dev.smoketrees.twist.ui.search
 
-import android.app.SearchManager
-import android.content.Context
-import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.LayoutInflater
-import android.view.Menu
 import android.view.View
 import android.view.ViewGroup
-import android.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import androidx.navigation.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import dev.smoketrees.twist.R
 import dev.smoketrees.twist.adapters.SearchListAdapter
 import dev.smoketrees.twist.ui.home.AnimeViewModel
-import dev.smoketrees.twist.ui.player.EpisodesFragmentDirections
 import kotlinx.android.synthetic.main.fragment_search.*
 import org.koin.android.viewmodel.ext.android.sharedViewModel
 

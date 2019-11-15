@@ -13,23 +13,30 @@
 
         <TextView
             android:id="@+id/anime_name"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
+            android:layout_marginEnd="8dp"
+            android:ellipsize="end"
             android:textSize="18sp"
+            app:layout_goneMarginBottom="16dp"
             app:layout_constraintEnd_toStartOf="@+id/anime_ongoing"
-            app:layout_constraintHorizontal_bias="0.13"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/anime_alt_title"
             tools:text="Toaru majutsu no index" />
 
         <TextView
             android:id="@+id/anime_alt_title"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
             android:layout_marginBottom="16dp"
             android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
             app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/anime_ongoing"
             app:layout_constraintStart_toStartOf="@+id/anime_name"
             app:layout_constraintTop_toBottomOf="@+id/anime_name"
             app:layout_constraintVertical_bias="0.0"
@@ -42,10 +49,10 @@
             android:layout_marginEnd="16dp"
             android:text="@string/ongoing_text"
             android:textColor="@color/colorPrimary"
-            android:visibility="invisible"
-            app:layout_constraintBottom_toBottomOf="@+id/anime_alt_title"
+            android:visibility="visible"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/anime_name" />
+            app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </com.google.android.material.card.MaterialCardView>

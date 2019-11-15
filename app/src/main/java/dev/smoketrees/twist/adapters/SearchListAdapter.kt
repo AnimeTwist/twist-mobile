@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import dev.smoketrees.twist.R
 import dev.smoketrees.twist.model.twist.AnimeItem
+import dev.smoketrees.twist.utils.hide
 import dev.smoketrees.twist.utils.show
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.anime_search_item.*
@@ -31,9 +32,15 @@ class SearchListAdapter(val listener: (AnimeItem) -> Unit) :
     override fun onBindViewHolder(holder: SearchViewHolder, position: Int) {
         val item = animeList[position]
         holder.anime_name.text = item.title
-        holder.anime_alt_title.text = item.altTitle
+        holder.anime_alt_title.hide()
+        item.altTitle?.let {
+            holder.anime_alt_title.show()
+            holder.anime_alt_title.text = it
+        }
         if (item.ongoing == 1) {
             holder.anime_ongoing.show()
+        } else {
+            holder.anime_ongoing.hide()
         }
         holder.containerView.setOnClickListener {
             listener(animeList[position])
