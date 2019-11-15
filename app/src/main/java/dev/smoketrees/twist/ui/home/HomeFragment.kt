@@ -12,11 +12,13 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.exoplayer2.ExoPlayer
 import dev.smoketrees.twist.R
 import dev.smoketrees.twist.adapters.AnimeListAdapter
+import dev.smoketrees.twist.db.AnimeDao
 import dev.smoketrees.twist.model.twist.Result
 import dev.smoketrees.twist.utils.hide
 import dev.smoketrees.twist.utils.show
 import dev.smoketrees.twist.utils.toast
 import kotlinx.android.synthetic.main.fragment_home.*
+import org.koin.android.ext.android.inject
 import org.koin.android.viewmodel.ext.android.sharedViewModel
 
 class HomeFragment : Fragment() {
@@ -24,6 +26,7 @@ class HomeFragment : Fragment() {
     private lateinit var exoPlayer: ExoPlayer
 
     private val viewModel by sharedViewModel<AnimeViewModel>()
+    private val animeDao: AnimeDao by inject()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -35,14 +38,16 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        viewModel.lifeCycleOwner = viewLifecycleOwner
 
-        val adapter = AnimeListAdapter {
+        val adapter = AnimeListAdapter(viewModel, requireContext()) {
             val action = HomeFragmentDirections.actionHomeFragmentToEpisodesFragment(it.slug!!.slug!!)
             findNavController().navigate(action)
         }
-        val layoutManager = LinearLayoutManager(requireContext())
+        val layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
         anime_list.adapter = adapter
         anime_list.layoutManager = layoutManager
+        anime_list.smoothScrollToPosition(0)
 
         viewModel.getAllAnime().observe(viewLifecycleOwner, Observer {
             when(it.status) {
@@ -52,10 +57,9 @@ class HomeFragment : Fragment() {
                 }
 
                 Result.Status.SUCCESS -> {
+//                    viewModel.getAnimeImageUrls(it.data!!)
                     spinkit.hide()
                     anime_list.show()
-                    viewModel.animeListLiveData.postValue(it.data!!)
-
                 }
 
                 Result.Status.ERROR -> {
@@ -65,7 +69,7 @@ class HomeFragment : Fragment() {
             }
         })
 
-        viewModel.animeListLiveData.observe(viewLifecycleOwner, Observer {
+        animeDao.getAllAnime().observe(viewLifecycleOwner, Observer {
             if (it.isNotEmpty()) {
                 adapter.updateData(it)
             }

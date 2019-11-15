@@ -3,6 +3,7 @@ package dev.smoketrees.twist.di.module
 import dev.smoketrees.twist.api.anime.AnimeWebClient
 import dev.smoketrees.twist.api.anime.AnimeWebService
 import dev.smoketrees.twist.api.getOkHttpClient
+import dev.smoketrees.twist.api.jikan.JikanWebClient
 import dev.smoketrees.twist.api.jikan.JikanWebService
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.qualifier.named
@@ -38,4 +39,5 @@ val apiModule = module {
     factory { get<Retrofit>(named(JIKAN_API)).create(JikanWebService::class.java) }
 
     factory { AnimeWebClient(get()) }
+    factory { JikanWebClient(get()) }
 }

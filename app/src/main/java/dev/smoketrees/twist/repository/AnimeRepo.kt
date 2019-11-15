@@ -2,11 +2,13 @@ package dev.smoketrees.twist.repository
 
 import android.content.SharedPreferences
 import dev.smoketrees.twist.api.anime.AnimeWebClient
+import dev.smoketrees.twist.api.jikan.JikanWebClient
 import dev.smoketrees.twist.db.AnimeDao
 
 class AnimeRepo(
     private val webClient: AnimeWebClient,
-    private val animeDao: AnimeDao
+    private val jikanClient: JikanWebClient,
+    val animeDao: AnimeDao
 ) : BaseRepo() {
     fun getAllAnime() = makeRequestAndSave(
         databaseQuery = { animeDao.getAllAnime() },
@@ -20,5 +22,9 @@ class AnimeRepo(
 
     fun getAnimeSources(animeName: String) = makeRequest {
         webClient.getAnimeSources(animeName)
+    }
+
+    fun getMALAnime(animeName: String) = makeRequest {
+        jikanClient.getAnimeByName(animeName)
     }
 }

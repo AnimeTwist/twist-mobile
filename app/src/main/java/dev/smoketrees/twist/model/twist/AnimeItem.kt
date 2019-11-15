@@ -48,6 +48,9 @@ class AnimeItem {
     @Expose
     var slug: Slug? = null
 
+    @ColumnInfo(name = "img_url")
+    var imgUrl: String? = null
+
     override fun toString(): String {
         return ToStringBuilder(this).append("id", id).append("title", title)
             .append("altTitle", altTitle).append("season", season).append("ongoing", ongoing)
