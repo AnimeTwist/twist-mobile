@@ -47,11 +47,14 @@ class HomeFragment : Fragment() {
 
         val adapter = AnimeListAdapter(viewModel, requireContext()) {
             val action =
-                HomeFragmentDirections.actionHomeFragmentToEpisodesFragment(it.slug!!.slug!!, it.id!!)
+                HomeFragmentDirections.actionHomeFragmentToEpisodesFragment(
+                    it.slug!!.slug!!,
+                    it.id!!
+                )
             findNavController().navigate(action)
         }
         val layoutManager =
-            GridLayoutManager(requireContext(),4)
+            GridLayoutManager(requireContext(), 4)
 
         anime_list.apply {
             this.adapter = adapter
@@ -67,9 +70,11 @@ class HomeFragment : Fragment() {
                 }
 
                 Result.Status.SUCCESS -> {
-                    adapter.updateData(it.data!!)
-                    spinkit.hide()
-                    anime_list.show()
+                    if (!it.data.isNullOrEmpty()) {
+                        adapter.updateData(it.data)
+                        spinkit.hide()
+                        anime_list.show()
+                    }
                 }
 
                 Result.Status.ERROR -> {
@@ -90,13 +95,14 @@ class HomeFragment : Fragment() {
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
         inflater.inflate(R.menu.toolbar_menu, menu)
-        val searchManager = requireActivity().getSystemService(Context.SEARCH_SERVICE) as SearchManager
+        val searchManager =
+            requireActivity().getSystemService(Context.SEARCH_SERVICE) as SearchManager
         val searchView = (menu.findItem(R.id.action_search).actionView as SearchView)
         searchView.apply {
             setSearchableInfo(searchManager.getSearchableInfo(requireActivity().componentName))
         }
 
-        searchView.setOnQueryTextListener(object: SearchView.OnQueryTextListener {
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextChange(newText: String): Boolean {
                 return false
             }

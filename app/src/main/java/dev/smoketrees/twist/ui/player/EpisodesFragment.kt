@@ -65,25 +65,28 @@ class EpisodesFragment : Fragment() {
                 }
 
                 Result.Status.SUCCESS -> {
-                    anime_title.text = it.data?.title
-                    anime_episodes.text = "${it.data?.episodeList?.size} episodes"
-                    anime_rating.text = "Score: ${it.data?.score}/10"
-                    it.data?.airing?.let { ongoing ->
-                        if (ongoing) anime_ongoing_text.show() else anime_ongoing_text.hide()
-                    }
-                    Glide.with(requireContext())
-                        .load(it.data?.imageUrl)
-                        .into(anime_image)
+                    it.data?.let {detailsEntity ->
 
-                    episode_spinkit.hide()
-                    episode_list.show()
-                    anime_image.show()
-                    anime_title.show()
-                    anime_rating.show()
-                    anime_episodes.show()
+                        anime_title.text = detailsEntity.title
+                        anime_episodes.text = "${detailsEntity.episodeList?.size} episodes"
+                        anime_rating.text = "Score: ${detailsEntity.score}/10"
+                        detailsEntity.airing?.let { ongoing ->
+                            if (ongoing) anime_ongoing_text.show() else anime_ongoing_text.hide()
+                        }
+                        Glide.with(requireContext())
+                            .load(detailsEntity.imageUrl)
+                            .into(anime_image)
 
-                    if (it?.data?.episodeList?.isNotEmpty() == true) {
-                        adapter.updateData(it.data.episodeList)
+                        episode_spinkit.hide()
+                        episode_list.show()
+                        anime_image.show()
+                        anime_title.show()
+                        anime_rating.show()
+                        anime_episodes.show()
+
+                        if (detailsEntity.episodeList.isNotEmpty()) {
+                            adapter.updateData(it.data.episodeList)
+                        }
                     }
                 }
 
