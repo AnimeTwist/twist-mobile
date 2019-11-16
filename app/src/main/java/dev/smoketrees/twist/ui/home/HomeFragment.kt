@@ -4,6 +4,7 @@ package dev.smoketrees.twist.ui.home
 import android.app.SearchManager
 import android.content.Context
 import android.os.Bundle
+import android.text.method.LinkMovementMethod
 import android.view.*
 import android.widget.SimpleCursorAdapter
 import androidx.appcompat.widget.SearchView
@@ -42,6 +43,7 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel.lifeCycleOwner = viewLifecycleOwner
+        header_body.movementMethod = LinkMovementMethod.getInstance()
 
         val adapter = AnimeListAdapter(viewModel, requireContext()) {
             val action =
