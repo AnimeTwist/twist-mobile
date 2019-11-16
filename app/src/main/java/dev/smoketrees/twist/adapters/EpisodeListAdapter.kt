@@ -9,6 +9,7 @@ import dev.smoketrees.twist.R
 import dev.smoketrees.twist.model.twist.Episode
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.animelist_item.*
+import kotlinx.android.synthetic.main.episode_item.*
 
 class EpisodeListAdapter(private val listener: (Episode) -> Unit) :
     RecyclerView.Adapter<EpisodeListAdapter.EpisodeViewHolder>() {
@@ -18,7 +19,7 @@ class EpisodeListAdapter(private val listener: (Episode) -> Unit) :
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
         EpisodeViewHolder(
             LayoutInflater.from(parent.context).inflate(
-                R.layout.animelist_item,
+                R.layout.episode_item,
                 parent,
                 false
             )
@@ -28,8 +29,8 @@ class EpisodeListAdapter(private val listener: (Episode) -> Unit) :
 
     @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: EpisodeViewHolder, position: Int) {
-        holder.anime_name.text = "Episode no ${episodeList[position].number!!}"
-        holder.anime_name.setOnClickListener {
+        holder.episode_text.text = "Episode no ${episodeList[position].number!!}"
+        holder.containerView.setOnClickListener {
             listener(episodeList[position])
         }
     }
