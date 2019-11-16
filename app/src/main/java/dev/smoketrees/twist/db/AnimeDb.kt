@@ -2,11 +2,13 @@ package dev.smoketrees.twist.db
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
+import androidx.room.TypeConverters
+import dev.smoketrees.twist.model.twist.AnimeDetailsEntity
 import dev.smoketrees.twist.model.twist.AnimeItem
-import dev.smoketrees.twist.model.twist.Episode
 
-@Database(entities = [AnimeItem::class, Episode::class], version = 1)
+@Database(entities = [AnimeItem::class, AnimeDetailsEntity::class], version = 1)
+@TypeConverters(EpisodeListTypeConverter::class)
 abstract class AnimeDb : RoomDatabase() {
     abstract fun animeDao(): AnimeDao
-    abstract fun episodeDao(): EpisodeDao
+    abstract fun episodeDao(): AnimeDetailsDao
 }

@@ -42,9 +42,10 @@
             app:destination="@id/animePlayerActivity" />
         <argument
             android:name="slugName"
-            app:argType="string"
-            app:nullable="true"
-            android:defaultValue="@null" />
+            app:argType="string" />
+        <argument
+            android:name="id"
+            app:argType="integer" />
     </fragment>
     <fragment
         android:id="@+id/searchActivity"

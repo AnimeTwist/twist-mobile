@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isNotEmpty
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
@@ -41,7 +42,7 @@ class EpisodesFragment : Fragment() {
 
         val adapter = EpisodeListAdapter {
             val action = EpisodesFragmentDirections.actionEpisodesFragmentToAnimePlayerActivity(
-                args.slugName!!,
+                args.slugName,
                 it.number!!
             )
             findNavController().navigate(action)
@@ -51,7 +52,7 @@ class EpisodesFragment : Fragment() {
         episode_list.layoutManager = layoutManager
 
 
-        viewModel.getAnimeDetails(args.slugName!!).observe(viewLifecycleOwner, Observer {
+        viewModel.getAnimeDetails(args.slugName, args.id).observe(viewLifecycleOwner, Observer {
             when (it.status) {
                 Result.Status.LOADING -> {
                     episode_spinkit.show()
@@ -64,44 +65,26 @@ class EpisodesFragment : Fragment() {
                 }
 
                 Result.Status.SUCCESS -> {
-//                    animeViewModel.getAnimeImageUrl(it.data?.id!!)
-
                     anime_title.text = it.data?.title
-                    anime_episodes.text = "${it.data?.episodes?.size} episodes"
-                    animeViewModel.getMALAnime(it.data?.slug?.slug!!)
-                        .observe(viewLifecycleOwner, Observer { jikanResult ->
-                            when (jikanResult.status) {
-                                Result.Status.SUCCESS -> {
-                                    anime_rating.text =
-                                        "Score: ${jikanResult.data?.results?.get(0)?.score}/10"
-                                    animeViewModel.getMALAnimeById(jikanResult.data?.results?.get(0)?.malId!!)
-                                        .observe(viewLifecycleOwner, Observer { malAnime ->
-                                            anime_studio.text = malAnime.data?.studios?.get(0)?.name
-                                                ?: "Unknown Studio"
-                                            malAnime.data?.airing?.let {ongoing ->
-                                                if (ongoing) anime_ongoing_text.show() else anime_ongoing_text.hide()
-                                            }
-                                            episode_spinkit.hide()
-                                            episode_list.show()
-                                            anime_image.show()
-                                            anime_title.show()
-                                            anime_rating.show()
-                                            anime_episodes.show()
-                                        })
-                                    Glide.with(requireContext())
-                                        .load(jikanResult.data?.results?.get(0)?.imageUrl)
-                                        .into(anime_image)
-                                    episode_spinkit.hide()
-                                    episode_list.show()
-                                    anime_image.show()
-                                    anime_title.show()
-                                    anime_rating.show()
-                                    anime_episodes.show()
-                                }
-                            }
-                        })
+                    anime_episodes.text = "${it.data?.episodeList?.size} episodes"
+                    anime_rating.text = "Score: ${it.data?.score}/10"
+                    it.data?.airing?.let { ongoing ->
+                        if (ongoing) anime_ongoing_text.show() else anime_ongoing_text.hide()
+                    }
+                    Glide.with(requireContext())
+                        .load(it.data?.imageUrl)
+                        .into(anime_image)
 
-                    viewModel.episodeListLiveData.postValue(it.data.episodes)
+                    episode_spinkit.hide()
+                    episode_list.show()
+                    anime_image.show()
+                    anime_title.show()
+                    anime_rating.show()
+                    anime_episodes.show()
+
+                    if (it?.data?.episodeList?.isNotEmpty() == true) {
+                        adapter.updateData(it.data.episodeList)
+                    }
                 }
 
                 Result.Status.ERROR -> {
@@ -109,10 +92,6 @@ class EpisodesFragment : Fragment() {
                     episode_list.hide()
                 }
             }
-        })
-
-        viewModel.episodeListLiveData.observe(viewLifecycleOwner, Observer {
-            adapter.updateData(it)
         })
     }
 }

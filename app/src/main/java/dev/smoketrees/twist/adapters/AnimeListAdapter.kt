@@ -45,7 +45,6 @@ class AnimeListAdapter(
         if (animeList[position].imgUrl == null || animeList[position].imgUrl == "") {
             Glide.with(context).clear(holder.anime_image)
             holder.anime_image.setImageDrawable(null)
-            viewModel.getAnimeImageUrl(animeList[position])
         } else {
             val circularProgressDrawable = CircularProgressDrawable(context)
             circularProgressDrawable.strokeWidth = 5f

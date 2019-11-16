@@ -47,14 +47,17 @@ class HomeFragment : Fragment() {
 
         val adapter = AnimeListAdapter(viewModel, requireContext()) {
             val action =
-                HomeFragmentDirections.actionHomeFragmentToEpisodesFragment(it.slug!!.slug!!)
+                HomeFragmentDirections.actionHomeFragmentToEpisodesFragment(it.slug!!.slug!!, it.id!!)
             findNavController().navigate(action)
         }
         val layoutManager =
             GridLayoutManager(requireContext(),4)
-        anime_list.adapter = adapter
-        anime_list.layoutManager = layoutManager
-        anime_list.smoothScrollToPosition(0)
+
+        anime_list.apply {
+            this.adapter = adapter
+            this.layoutManager = layoutManager
+            smoothScrollToPosition(0)
+        }
 
         viewModel.getAllAnime().observe(viewLifecycleOwner, Observer {
             when (it.status) {
@@ -64,7 +67,7 @@ class HomeFragment : Fragment() {
                 }
 
                 Result.Status.SUCCESS -> {
-//                    viewModel.getAnimeImageUrls(it.data!!)
+                    adapter.updateData(it.data!!)
                     spinkit.hide()
                     anime_list.show()
                 }
@@ -76,11 +79,12 @@ class HomeFragment : Fragment() {
             }
         })
 
-        animeDao.getAllAnime().observe(viewLifecycleOwner, Observer {
-            if (it.isNotEmpty()) {
-                adapter.updateData(it)
-            }
-        })
+        // you don't need this. It is already observing DB
+//        animeDao.getAllAnime().observe(viewLifecycleOwner, Observer {
+//            if (it.isNotEmpty()) {
+//                adapter.updateData(it)
+//            }
+//        })
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {

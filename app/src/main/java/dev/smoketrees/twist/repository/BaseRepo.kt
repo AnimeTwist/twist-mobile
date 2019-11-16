@@ -31,9 +31,7 @@ open class BaseRepo {
         netWorkCall: suspend () -> Result<A>,
         saveCallResult: suspend (A) -> Unit
     ): LiveData<Result<T>> = liveData(Dispatchers.IO) {
-        withContext(Dispatchers.Main) {
-            emit(Result.loading())
-        }
+        emit(Result.loading())
 
         val source = databaseQuery.invoke().map { Result.success(it) }
         emitSource(source)

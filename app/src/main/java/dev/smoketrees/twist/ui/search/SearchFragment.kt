@@ -32,7 +32,7 @@ class SearchFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         val layoutManager = LinearLayoutManager(requireContext())
         val adapter = SearchListAdapter {
-            val action = SearchFragmentDirections.actionSearchActivityToEpisodesFragment(it.slug!!.slug!!)
+            val action = SearchFragmentDirections.actionSearchActivityToEpisodesFragment(it.slug!!.slug!!, it.id!!)
             findNavController().navigate(action)
         }
         search_recyclerview.adapter = adapter

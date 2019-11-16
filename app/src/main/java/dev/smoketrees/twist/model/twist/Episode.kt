@@ -1,12 +1,23 @@
 package dev.smoketrees.twist.model.twist
 
+import androidx.room.ColumnInfo
 import androidx.room.Entity
+import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 import org.apache.commons.lang3.builder.ToStringBuilder
 
-@Entity
+//@Entity(
+//    foreignKeys = [
+//        ForeignKey(
+//            entity = AnimeDetailsEntity::class,
+//            parentColumns = arrayOf("anime_id"),
+//            childColumns = arrayOf("animeId")
+//        )
+//    ]
+//)
+
 class Episode {
 
     @SerializedName("anime_id")
@@ -15,8 +26,8 @@ class Episode {
     @SerializedName("created_at")
     @Expose
     var createdAt: String? = null
-    @PrimaryKey
     @SerializedName("id")
+    @ColumnInfo(name = "ep_id")
     @Expose
     var id: Int? = null
     @SerializedName("number")

@@ -66,15 +66,6 @@
         tools:text="8.81/10" />
 
     <TextView
-        android:id="@+id/anime_studio"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/anime_title"
-        tools:text="Bones" />
-
-    <TextView
         android:id="@+id/anime_ongoing_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
