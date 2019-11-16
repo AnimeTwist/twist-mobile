@@ -83,13 +83,6 @@ class HomeFragment : Fragment() {
                 }
             }
         })
-
-        // you don't need this. It is already observing DB
-//        animeDao.getAllAnime().observe(viewLifecycleOwner, Observer {
-//            if (it.isNotEmpty()) {
-//                adapter.updateData(it)
-//            }
-//        })
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {

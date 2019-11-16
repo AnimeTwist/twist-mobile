@@ -1,6 +1,7 @@
 package dev.smoketrees.twist.ui.player
 
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -37,6 +38,7 @@ class EpisodesFragment : Fragment() {
     }
 
 
+    @SuppressLint("SetTextI18n")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -68,7 +70,7 @@ class EpisodesFragment : Fragment() {
                     it.data?.let {detailsEntity ->
 
                         anime_title.text = detailsEntity.title
-                        anime_episodes.text = "${detailsEntity.episodeList?.size} episodes"
+                        anime_episodes.text = "${detailsEntity.episodeList.size} episodes"
                         anime_rating.text = "Score: ${detailsEntity.score}/10"
                         detailsEntity.airing?.let { ongoing ->
                             if (ongoing) anime_ongoing_text.show() else anime_ongoing_text.hide()

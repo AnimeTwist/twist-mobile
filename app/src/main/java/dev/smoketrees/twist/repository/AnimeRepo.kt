@@ -7,7 +7,6 @@ import dev.smoketrees.twist.db.AnimeDetailsDao
 import dev.smoketrees.twist.model.jikan.JikanSearchModel
 import dev.smoketrees.twist.model.twist.AnimeDetails
 import dev.smoketrees.twist.model.twist.AnimeDetailsEntity
-import dev.smoketrees.twist.model.twist.AnimeItem
 import dev.smoketrees.twist.model.twist.Result
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -23,11 +22,11 @@ class AnimeRepo(
         netWorkCall = { webClient.getAllAnime() },
         saveCallResult = {
             animeDao.saveAnime(it)
-            fetchUrl(it)
+            fetchUrl()
         }
     )
 
-    private suspend fun fetchUrl(animeList: List<AnimeItem>) = withContext(Dispatchers.IO) {
+    private suspend fun fetchUrl() = withContext(Dispatchers.IO) {
         //        val deferredList = animeList.map { animeItem ->
 //            async {
 //                val result = jikanClient.getAnimeByName(animeItem.slug?.slug ?: "")
@@ -46,7 +45,7 @@ class AnimeRepo(
                 val result = jikanClient.getAnimeByName(animeItem.slug?.slug ?: "")
                 if (result.status == Result.Status.SUCCESS) {
                     if (result.data?.results?.isNotEmpty() == true) {
-                        result.data.results.get(0).let { jikanResult ->
+                        result.data.results[0].let { jikanResult ->
                             animeItem.imgUrl = jikanResult.imageUrl
                             animeDao.saveAnime(animeItem)
                         }
@@ -56,10 +55,6 @@ class AnimeRepo(
             }
         }
     }
-
-//    fun getAnimeDetails(animeName: String) = makeRequest {
-//        webClient.getAnimeDetails(animeName)
-//    }
 
     fun getAnimeDetails(name: String, id: Int) = makeRequestAndSave(
         databaseQuery = { episodeDao.getAnimeDetails(id) },
