@@ -28,5 +28,13 @@ class AnimeRepo(
         jikanClient.getAnimeByName(animeName)
     }
 
+    fun getMALAnimeById(id: Int) = makeRequest {
+        jikanClient.getAnimeById(id)
+    }
+
     fun searchAnime(animeName: String) = animeDao.searchAnime(animeName)
+
+    fun getSeasonalAnime() = makeRequest {
+        jikanClient.getSeasonalAnime()
+    }
 }

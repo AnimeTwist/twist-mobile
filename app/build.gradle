@@ -92,4 +92,7 @@ dependencies {
 
     // multidex
     implementation 'com.android.support:multidex:1.0.3'
+
+    // expandable textview
+    implementation 'com.ms-square:expandableTextView:0.1.4'
 }

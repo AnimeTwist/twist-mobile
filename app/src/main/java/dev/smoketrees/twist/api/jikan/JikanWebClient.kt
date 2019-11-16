@@ -10,4 +10,8 @@ class JikanWebClient(private val webService: JikanWebService) : BaseApiClient() 
     suspend fun getAnimeByName(animeName: String) = getResult {
         webService.getAnimeByName(animeName, 1)
     }
+
+    suspend fun getSeasonalAnime() = getResult {
+        webService.getSeasonalAnime("2019", "fall")
+    }
 }
