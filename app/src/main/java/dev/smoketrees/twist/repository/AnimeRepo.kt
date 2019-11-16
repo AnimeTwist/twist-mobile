@@ -14,8 +14,8 @@ import kotlinx.coroutines.withContext
 class AnimeRepo(
     private val webClient: AnimeWebClient,
     private val jikanClient: JikanWebClient,
-    val animeDao: AnimeDao,
-    val episodeDao: AnimeDetailsDao
+    private val animeDao: AnimeDao,
+    private val episodeDao: AnimeDetailsDao
 ) : BaseRepo() {
     fun getAllAnime() = makeRequestAndSave(
         databaseQuery = { animeDao.getAllAnime() },
@@ -27,19 +27,6 @@ class AnimeRepo(
     )
 
     private suspend fun fetchUrl() = withContext(Dispatchers.IO) {
-        //        val deferredList = animeList.map { animeItem ->
-//            async {
-//                val result = jikanClient.getAnimeByName(animeItem.slug?.slug ?: "")
-//                if (result.status == Result.Status.SUCCESS) {
-//                    result.data?.results?.get(0)?.let { jikanResult ->
-//                        animeItem.imgUrl = jikanResult.imageUrl
-//                        animeDao.saveAnime(animeItem)
-//                    }
-//                }
-//            }
-//        }
-//        deferredList.awaitAll()
-
         animeDao.getAllAnimeList().forEach { animeItem ->
             if (animeItem.imgUrl.isNullOrBlank()) {
                 val result = jikanClient.getAnimeByName(animeItem.slug?.slug ?: "")
@@ -51,7 +38,7 @@ class AnimeRepo(
                         }
                     }
                 }
-                Thread.sleep(2000)
+                Thread.sleep(500)
             }
         }
     }

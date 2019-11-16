@@ -28,8 +28,6 @@ class HomeFragment : Fragment() {
 
 
     private val viewModel by sharedViewModel<AnimeViewModel>()
-    private val animeDao: AnimeDao by inject()
-    private lateinit var searchAdapter: SimpleCursorAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
