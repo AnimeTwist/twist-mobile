@@ -1,20 +1,16 @@
 package dev.smoketrees.twist.ui.player
 
 import android.annotation.SuppressLint
-import android.content.Intent
 import android.content.pm.ActivityInfo
-import android.content.res.Configuration
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.provider.Browser
 import android.view.View
 import androidx.lifecycle.Observer
 import androidx.navigation.navArgs
 import com.google.android.exoplayer2.*
 import com.google.android.exoplayer2.source.ProgressiveMediaSource
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector
-import com.google.android.exoplayer2.upstream.DefaultAllocator
 import com.google.android.exoplayer2.upstream.DefaultHttpDataSourceFactory
 import com.google.android.exoplayer2.util.Util
 import dev.smoketrees.twist.R
@@ -24,6 +20,7 @@ import dev.smoketrees.twist.utils.hide
 import dev.smoketrees.twist.utils.show
 import dev.smoketrees.twist.utils.toast
 import kotlinx.android.synthetic.main.activity_anime_player.*
+import kotlinx.android.synthetic.main.exo_playback_control_view.*
 import org.koin.android.viewmodel.ext.android.viewModel
 
 class AnimePlayerActivity : AppCompatActivity() {
@@ -37,6 +34,16 @@ class AnimePlayerActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_anime_player)
         requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
+        exo_rotato_icon.setOnClickListener {
+            if (viewModel.portrait) {
+                requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
+                viewModel.portrait = false
+            } else {
+                requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+                viewModel.portrait = true
+            }
+        }
+
         val slug = args.slugName!!
         val epNo = args.episodeNo
 

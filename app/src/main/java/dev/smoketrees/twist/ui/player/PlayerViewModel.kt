@@ -13,5 +13,6 @@ class PlayerViewModel(private val repo: AnimeRepo) : ViewModel() {
     var playbackPosition = 0L
     var currUri: Uri? = null
     var referer = ""
+    var portrait = false
 
 }
