@@ -2,6 +2,7 @@ package dev.smoketrees.twist.ui.player
 
 import android.annotation.SuppressLint
 import android.content.Intent
+import android.content.pm.ActivityInfo
 import android.content.res.Configuration
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
@@ -31,9 +32,11 @@ class AnimePlayerActivity : AppCompatActivity() {
     private val viewModel by viewModel<PlayerViewModel>()
     private lateinit var player: ExoPlayer
 
+    @SuppressLint("SourceLockedOrientationActivity")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_anime_player)
+        requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
         val slug = args.slugName!!
         val epNo = args.episodeNo
 
