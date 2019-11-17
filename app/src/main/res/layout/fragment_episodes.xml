@@ -31,7 +31,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginEnd="30dp"
+        android:layout_marginEnd="40dp"
         android:ellipsize="end"
         android:maxLines="2"
         android:textAppearance="@style/TextAppearance.AppCompat.Title"
@@ -45,7 +45,8 @@
         android:id="@+id/anime_episodes"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="@+id/anime_title"
+        android:layout_marginEnd="40dp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/anime_title"
         app:layout_constraintTop_toBottomOf="@+id/anime_title"
         tools:text="26 episodes" />

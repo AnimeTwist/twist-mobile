@@ -1,6 +1,7 @@
 package dev.smoketrees.twist.ui.player
 
 import android.annotation.SuppressLint
+import android.content.res.Configuration
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -179,4 +180,9 @@ class AnimePlayerActivity : AppCompatActivity() {
         super.onPause()
         pause()
     }
+
+//    override fun onConfigurationChanged(newConfig: Configuration) {
+//        super.onConfigurationChanged(newConfig)
+//        setContentView(R.layout.activity_anime_player)
+//    }
 }

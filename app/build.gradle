@@ -6,14 +6,13 @@ apply plugin: 'androidx.navigation.safeargs.kotlin'
 
 // load our secrets
 def secretProperties = new Properties()
-if ("$System.env.CI" == null) {
+if ("$System.env.CI" != "true") {
     def secretsFile = rootProject.file("secrets.properties")
     secretProperties.load(new FileInputStream(secretsFile))
 } else {
     secretProperties.setProperty("access_key", "$System.env.ACCESS_KEY")
     secretProperties.setProperty("decrypt_key", "$System.env.DECRYPT_KEY")
 }
-
 
 
 android {

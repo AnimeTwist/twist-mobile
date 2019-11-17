@@ -9,6 +9,8 @@ import dev.smoketrees.twist.model.twist.AnimeDetails
 import dev.smoketrees.twist.model.twist.AnimeDetailsEntity
 import dev.smoketrees.twist.model.twist.Result
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.withContext
 
 class AnimeRepo(
@@ -27,20 +29,35 @@ class AnimeRepo(
     )
 
     private suspend fun fetchUrl() = withContext(Dispatchers.IO) {
-        animeDao.getAllAnimeList().forEach { animeItem ->
-            if (animeItem.imgUrl.isNullOrBlank()) {
+        //        animeDao.getAllAnimeList().forEach { animeItem ->
+//            if (animeItem.imgUrl.isNullOrBlank()) {
+//                val result = jikanClient.getAnimeByName(animeItem.slug?.slug ?: "")
+//                if (result.status == Result.Status.SUCCESS) {
+//                    if (result.data?.results?.isNotEmpty() == true) {
+//                        result.data.results[0].let { jikanResult ->
+//                            animeItem.imgUrl = jikanResult.imageUrl
+//                            animeDao.saveAnime(animeItem)
+//                        }
+//                    }
+//                }
+//                Thread.sleep(500)
+//            }
+//        }
+
+        val deferredList = animeDao.getAllAnimeList().map { animeItem ->
+            async {
                 val result = jikanClient.getAnimeByName(animeItem.slug?.slug ?: "")
                 if (result.status == Result.Status.SUCCESS) {
                     if (result.data?.results?.isNotEmpty() == true) {
                         result.data.results[0].let { jikanResult ->
-                            animeItem.imgUrl = jikanResult.imageUrl     
+                            animeItem.imgUrl = jikanResult.imageUrl
                             animeDao.saveAnime(animeItem)
                         }
                     }
                 }
-                Thread.sleep(500)
             }
         }
+        deferredList.awaitAll()
     }
 
     fun getAnimeDetails(name: String, id: Int) = makeRequestAndSave(
