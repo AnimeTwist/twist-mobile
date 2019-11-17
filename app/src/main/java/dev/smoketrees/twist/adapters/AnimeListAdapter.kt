@@ -47,8 +47,8 @@ class AnimeListAdapter(
             holder.anime_image.setImageDrawable(null)
         } else {
             val circularProgressDrawable = CircularProgressDrawable(context)
-            circularProgressDrawable.strokeWidth = 5f
-            circularProgressDrawable.centerRadius = 30f
+            circularProgressDrawable.strokeWidth = 7f
+            circularProgressDrawable.centerRadius = 40f
             circularProgressDrawable.start()
             Glide.with(context).load(animeList[position].imgUrl)
                 .placeholder(circularProgressDrawable).into(holder.anime_image)

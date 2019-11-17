@@ -44,7 +44,9 @@ class AnimeRepo(
 //            }
 //        }
 
-        val deferredList = animeDao.getAllAnimeList().map { animeItem ->
+        val deferredList = animeDao.getAllAnimeList().filter {
+            it.imgUrl.isNullOrEmpty()
+        }.map { animeItem ->
             async {
                 val result = jikanClient.getAnimeByName(animeItem.slug?.slug ?: "")
                 if (result.status == Result.Status.SUCCESS) {
