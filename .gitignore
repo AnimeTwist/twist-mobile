@@ -15,3 +15,4 @@
 .idea/
 app/release
 secrets.properties
+app/debug

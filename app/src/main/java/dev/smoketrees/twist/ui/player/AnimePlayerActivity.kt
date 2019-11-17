@@ -1,17 +1,19 @@
 package dev.smoketrees.twist.ui.player
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.content.res.Configuration
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.provider.Browser
 import android.view.View
 import androidx.lifecycle.Observer
 import androidx.navigation.navArgs
-import com.google.android.exoplayer2.ExoPlayer
-import com.google.android.exoplayer2.ExoPlayerFactory
-import com.google.android.exoplayer2.Player
+import com.google.android.exoplayer2.*
 import com.google.android.exoplayer2.source.ProgressiveMediaSource
+import com.google.android.exoplayer2.trackselection.DefaultTrackSelector
+import com.google.android.exoplayer2.upstream.DefaultAllocator
 import com.google.android.exoplayer2.upstream.DefaultHttpDataSourceFactory
 import com.google.android.exoplayer2.util.Util
 import dev.smoketrees.twist.R
@@ -38,7 +40,6 @@ class AnimePlayerActivity : AppCompatActivity() {
         viewModel.referer = "https://twist.moe/a/$slug/$epNo"
 
         player = ExoPlayerFactory.newSimpleInstance(this)
-        player_view.player = player
 
         if (viewModel.currUri == null) {
             viewModel.getAnimeSources(slug).observe(this, Observer {
@@ -50,7 +51,9 @@ class AnimePlayerActivity : AppCompatActivity() {
                     Result.Status.SUCCESS -> {
                         val decryptedUrl =
                             CryptoHelper.decryptSourceUrl(this, it?.data?.get(epNo - 1)?.source!!)
+
                         play(Uri.parse("https://twist.moe${decryptedUrl}"))
+
                     }
 
                     Result.Status.ERROR -> {
@@ -104,7 +107,14 @@ class AnimePlayerActivity : AppCompatActivity() {
     }
 
     private fun initializePlayer() {
-        player = ExoPlayerFactory.newSimpleInstance(this)
+        val loadControl = DefaultLoadControl.Builder()
+            .setBufferDurationsMs(
+                DefaultLoadControl.DEFAULT_MIN_BUFFER_MS,
+                10 * 50 * 1000,
+                DefaultLoadControl.DEFAULT_BUFFER_FOR_PLAYBACK_MS,
+                DefaultLoadControl.DEFAULT_BUFFER_FOR_PLAYBACK_AFTER_REBUFFER_MS
+            ).createDefaultLoadControl()
+        player = ExoPlayerFactory.newSimpleInstance(this, DefaultTrackSelector(), loadControl)
         player_view.player = player
         player.playWhenReady = viewModel.playWhenReady
         player.seekTo(viewModel.currentWindowIndex, viewModel.playbackPosition)
