@@ -1,24 +1,19 @@
 package dev.smoketrees.twist.utils
 
 import android.content.Context
-
+import dev.smoketrees.twist.R
 import java.nio.charset.StandardCharsets
 import java.security.DigestException
 import java.security.InvalidAlgorithmParameterException
-import java.security.InvalidKeyException
 import java.security.MessageDigest
 import java.security.NoSuchAlgorithmException
-import java.util.Arrays
-import java.util.Objects
-
+import java.util.*
 import javax.crypto.BadPaddingException
 import javax.crypto.Cipher
 import javax.crypto.IllegalBlockSizeException
 import javax.crypto.NoSuchPaddingException
 import javax.crypto.spec.IvParameterSpec
 import javax.crypto.spec.SecretKeySpec
-
-import dev.smoketrees.twist.R
 
 object CryptoHelper {
     fun generateKeyAndIV(
@@ -60,9 +55,9 @@ object CryptoHelper {
 
             // Copy key and IV into separate byte arrays
             val result = arrayOfNulls<ByteArray>(2)
-            result[0] = Arrays.copyOfRange(generatedData, 0, keyLength)
+            result[0] = generatedData.copyOfRange(0, keyLength)
             if (ivLength > 0)
-                result[1] = Arrays.copyOfRange(generatedData, keyLength, keyLength + ivLength)
+                result[1] = generatedData.copyOfRange(keyLength, keyLength + ivLength)
 
             return result
 

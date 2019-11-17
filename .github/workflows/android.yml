@@ -24,6 +24,9 @@ jobs:
         env:
           BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
           BUILD_SHA: ${{ github.sha }}
+          DECRYPT_KEY: ${{ secrets.DECRYPT_KEY }}
+          ACCESS_KEY: ${{ secrets.ACCESS_KEY }}
+          CI: "true"
         with:
           args: '"
           source /opt/setup-android-sdk.sh;
