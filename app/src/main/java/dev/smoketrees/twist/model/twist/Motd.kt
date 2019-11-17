@@ -1,5 +1,6 @@
 package dev.smoketrees.twist.model.twist
 
+import androidx.annotation.Keep
 import java.io.Serializable
 
 import com.google.gson.annotations.Expose
@@ -7,6 +8,7 @@ import com.google.gson.annotations.SerializedName
 
 import org.apache.commons.lang3.builder.ToStringBuilder
 
+@Keep
 class Motd : Serializable {
 
     @SerializedName("id")

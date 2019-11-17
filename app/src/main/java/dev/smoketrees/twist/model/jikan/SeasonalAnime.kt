@@ -1,7 +1,8 @@
 package dev.smoketrees.twist.model.jikan
+import androidx.annotation.Keep
 import com.google.gson.annotations.SerializedName
 
-
+@Keep
 data class SeasonalAnime(
     @SerializedName("anime")
     val anime: List<Anime> = listOf(),

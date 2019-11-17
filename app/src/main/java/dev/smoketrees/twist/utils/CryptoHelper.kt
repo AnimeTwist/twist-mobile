@@ -1,6 +1,7 @@
 package dev.smoketrees.twist.utils
 
 import android.content.Context
+import androidx.annotation.Keep
 import dev.smoketrees.twist.R
 import java.nio.charset.StandardCharsets
 import java.security.DigestException

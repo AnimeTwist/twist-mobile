@@ -91,7 +91,7 @@
     </LinearLayout>
 
     <ImageView
-        android:id="@+id/exo_rotato_icon"
+        android:id="@+id/exo_rotate_icon"
         android:layout_width="32dp"
         android:layout_height="32dp"
         android:adjustViewBounds="true"

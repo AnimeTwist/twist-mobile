@@ -1,8 +1,11 @@
 package dev.smoketrees.twist.model.twist
 
-import androidx.room.*
-import dev.smoketrees.twist.db.EpisodeListTypeConverter
+import androidx.annotation.Keep
+import androidx.room.ColumnInfo
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 
+@Keep
 @Entity
 data class AnimeDetailsEntity(
     val airing: Boolean? = false,

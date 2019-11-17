@@ -1,9 +1,7 @@
 package dev.smoketrees.twist.model.twist
 
+import androidx.annotation.Keep
 import androidx.room.ColumnInfo
-import androidx.room.Entity
-import androidx.room.ForeignKey
-import androidx.room.PrimaryKey
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 import org.apache.commons.lang3.builder.ToStringBuilder
@@ -18,6 +16,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder
 //    ]
 //)
 
+@Keep
 class Episode {
 
     @SerializedName("anime_id")

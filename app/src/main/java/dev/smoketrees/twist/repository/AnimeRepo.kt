@@ -1,5 +1,6 @@
 package dev.smoketrees.twist.repository
 
+import androidx.annotation.Keep
 import dev.smoketrees.twist.api.anime.AnimeWebClient
 import dev.smoketrees.twist.api.jikan.JikanWebClient
 import dev.smoketrees.twist.db.AnimeDao

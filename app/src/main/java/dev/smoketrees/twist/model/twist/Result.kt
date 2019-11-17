@@ -1,5 +1,8 @@
 package dev.smoketrees.twist.model.twist
 
+import androidx.annotation.Keep
+
+@Keep
 data class Result<out T>(val status: Status, val data: T?, val message: String?) {
 
     enum class Status {
