@@ -33,7 +33,7 @@ class AnimeRepo(
                 if (result.status == Result.Status.SUCCESS) {
                     if (result.data?.results?.isNotEmpty() == true) {
                         result.data.results[0].let { jikanResult ->
-                            animeItem.imgUrl = jikanResult.imageUrl
+                            animeItem.imgUrl = jikanResult.imageUrl     
                             animeDao.saveAnime(animeItem)
                         }
                     }
