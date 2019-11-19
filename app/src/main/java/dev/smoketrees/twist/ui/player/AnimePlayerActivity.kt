@@ -117,14 +117,13 @@ class AnimePlayerActivity : AppCompatActivity() {
     }
 
     private fun initializePlayer() {
-        val loadControl = DefaultLoadControl.Builder()
-            .setBufferDurationsMs(
-                DefaultLoadControl.DEFAULT_MIN_BUFFER_MS,
-                10 * 50 * 1000,
-                DefaultLoadControl.DEFAULT_BUFFER_FOR_PLAYBACK_MS,
-                DefaultLoadControl.DEFAULT_BUFFER_FOR_PLAYBACK_AFTER_REBUFFER_MS
-            ).createDefaultLoadControl()
-        player = ExoPlayerFactory.newSimpleInstance(this, DefaultTrackSelector(), loadControl)
+//        val loadControl = DefaultLoadControl.Builder()
+//            .setBufferDurationsMs(
+//                DefaultLoadControl.DEFAULT_MIN_BUFFER_MS,
+//                10 * 50 * 1000,
+//                DefaultLoadControl.DEFAULT_BUFFER_FOR_PLAYBACK_MS,
+//                DefaultLoadControl.DEFAULT_BUFFER_FOR_PLAYBACK_AFTER_REBUFFER_MS
+//            ).createDefaultLoadControl()
         player_view.player = player
         player.playWhenReady = viewModel.playWhenReady
         player.seekTo(viewModel.currentWindowIndex, viewModel.playbackPosition)
@@ -137,72 +136,21 @@ class AnimePlayerActivity : AppCompatActivity() {
         hideSystemUi()
     }
 
-    private fun saveState() {
-        viewModel.playbackPosition = player.currentPosition
-        viewModel.currentWindowIndex = player.currentWindowIndex
-        viewModel.playWhenReady = player.playWhenReady
-    }
-
-    private fun loadState() {
-        player.apply {
-            playWhenReady = viewModel.playWhenReady
-            seekTo(viewModel.currentWindowIndex, viewModel.playbackPosition)
-        }
-    }
-
-    private fun releasePlayer() {
-        saveState()
-        player.release()
-    }
-
-    private fun start() {
-        player.playWhenReady = true
-        player.playbackState
-        viewModel.currUri?.let {
-            play(it)
-        }
-    }
-
-    private fun resume() {
-        player.playWhenReady = true
-        viewModel.currUri?.let {
-            play(it)
-        }
-        loadState()
-    }
-
-    private fun pause() {
-        player.playWhenReady = false
-        player.playbackState
-        saveState()
-    }
-
-    private fun stop() {
-        releasePlayer()
-    }
-
     override fun onStart() {
         super.onStart()
-        start()
+        player.seekTo(viewModel.playbackPosition)
+        player.playWhenReady = viewModel.playWhenReady
     }
 
     override fun onStop() {
         super.onStop()
-        stop()
+        viewModel.playWhenReady = player.playWhenReady
+        viewModel.playbackPosition = player.currentPosition
+        player.playWhenReady = false
     }
 
-    override fun onResume() {
-        super.onResume()
-        resume()
+    override fun onDestroy() {
+        super.onDestroy()
+        player.release()
     }
-
-    override fun onPause() {
-        super.onPause()
-        pause()
-    }
-
-//    override fun onConfigurationChanged(newConfig: Configuration) {
-//        super.onConfigurationChanged(newConfig)
-//        setContentView(R.layout.activity_anime_player)
-//    }
 }
