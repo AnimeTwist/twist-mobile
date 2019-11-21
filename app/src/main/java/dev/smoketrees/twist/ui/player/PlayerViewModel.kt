@@ -2,6 +2,7 @@ package dev.smoketrees.twist.ui.player
 
 import android.net.Uri
 import androidx.lifecycle.ViewModel
+import com.google.android.exoplayer2.Player
 import dev.smoketrees.twist.api.anime.AnimeWebClient
 import dev.smoketrees.twist.repository.AnimeRepo
 
@@ -14,5 +15,6 @@ class PlayerViewModel(private val repo: AnimeRepo) : ViewModel() {
     var currUri: Uri? = null
     var referer = ""
     var portrait = false
+    lateinit var currentPlayer: Player
 
 }

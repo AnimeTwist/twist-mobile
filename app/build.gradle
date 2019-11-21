@@ -109,4 +109,9 @@ dependencies {
 
     // expandable textview
     implementation 'com.ms-square:expandableTextView:0.1.4'
+
+    // cast support
+    implementation "androidx.mediarouter:mediarouter:1.1.0"
+    implementation "com.google.android.gms:play-services-games:19.0.0"
+
 }
