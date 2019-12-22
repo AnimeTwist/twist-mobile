@@ -12,7 +12,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 private const val TWIST_BASE_URL = "https://twist.moe/api/"
-private const val JIKAN_BASE_URL = "http://157.245.78.55:8080/v3/"
+private const val JIKAN_BASE_URL = "https://jikan.deletescape.cloud/public/v3/"
 private const val TWIST_API = "TWIST_API"
 private const val JIKAN_API = "JIKAN_API"
 
