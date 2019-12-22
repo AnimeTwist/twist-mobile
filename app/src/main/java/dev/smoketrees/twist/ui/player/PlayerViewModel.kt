@@ -15,4 +15,6 @@ class PlayerViewModel(private val repo: AnimeRepo) : ViewModel() {
     var referer = ""
     var portrait = false
 
+    var downloadID = 0L
+
 }

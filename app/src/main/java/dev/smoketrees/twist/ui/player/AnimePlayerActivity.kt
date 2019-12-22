@@ -1,16 +1,23 @@
 package dev.smoketrees.twist.ui.player
 
 import android.annotation.SuppressLint
+import android.app.DownloadManager
+import android.content.BroadcastReceiver
+import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
 import android.content.pm.ActivityInfo
 import android.net.Uri
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Environment
 import android.view.View
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.navigation.navArgs
-import com.google.android.exoplayer2.*
+import com.google.android.exoplayer2.ExoPlayer
+import com.google.android.exoplayer2.ExoPlayerFactory
+import com.google.android.exoplayer2.Player
 import com.google.android.exoplayer2.source.ProgressiveMediaSource
-import com.google.android.exoplayer2.trackselection.DefaultTrackSelector
 import com.google.android.exoplayer2.upstream.DefaultHttpDataSourceFactory
 import com.google.android.exoplayer2.util.Util
 import dev.smoketrees.twist.R
@@ -19,9 +26,11 @@ import dev.smoketrees.twist.utils.CryptoHelper
 import dev.smoketrees.twist.utils.hide
 import dev.smoketrees.twist.utils.show
 import dev.smoketrees.twist.utils.toast
+import io.karn.notify.Notify
 import kotlinx.android.synthetic.main.activity_anime_player.*
 import kotlinx.android.synthetic.main.exo_playback_control_view.*
 import org.koin.android.viewmodel.ext.android.viewModel
+
 
 class AnimePlayerActivity : AppCompatActivity() {
 
@@ -29,10 +38,29 @@ class AnimePlayerActivity : AppCompatActivity() {
     private val viewModel by viewModel<PlayerViewModel>()
     private lateinit var player: ExoPlayer
 
+    private val onDownloadComplete: BroadcastReceiver = object : BroadcastReceiver() {
+        override fun onReceive(
+            context: Context?,
+            intent: Intent
+        ) { //Fetching the download id received with the broadcast
+            val id =
+                intent.getLongExtra(DownloadManager.EXTRA_DOWNLOAD_ID, -1)
+            //Checking if the received broadcast is for our enqueued download by matching download id
+            if (viewModel.downloadID == id) {
+                Notify.with(this@AnimePlayerActivity)
+                    .content {
+                        title = "Download complete!"
+                        text = "The anime you wanted has finished downloading!"
+                    }
+            }
+        }
+    }
+
     @SuppressLint("SourceLockedOrientationActivity")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_anime_player)
+        registerReceiver(onDownloadComplete, IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE))
         requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
         exo_rotate_icon.setOnClickListener {
             if (viewModel.portrait) {
@@ -44,10 +72,46 @@ class AnimePlayerActivity : AppCompatActivity() {
             }
         }
 
-        val slug = args.slugName!!
+        val slug = args.slugName
         val epNo = args.episodeNo
+        val shouldDownload = args.shouldDownload
 
         viewModel.referer = "https://twist.moe/a/$slug/$epNo"
+
+        if (shouldDownload) {
+            viewModel.getAnimeSources(slug).observe(this, Observer {
+                when (it.status) {
+                    Result.Status.LOADING -> {
+                        // TODO: Hide/show some shit
+                    }
+
+                    Result.Status.SUCCESS -> {
+                        val decryptedUrl =
+                            CryptoHelper.decryptSourceUrl(this, it?.data?.get(epNo - 1)?.source!!)
+
+                        val downloadUrl = Uri.parse("https://twist.moe${decryptedUrl}")
+                        val downloadManager = getSystemService(DOWNLOAD_SERVICE) as DownloadManager
+
+                        val request = DownloadManager.Request(downloadUrl)
+                            .setTitle("Downloading $slug-$epNo")
+                            .setDescription("Downloading episode $epNo")
+                            .setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE)
+                            .setDestinationInExternalPublicDir(
+                                Environment.DIRECTORY_MOVIES,
+                                "$slug-$epNo.mkv"
+                            )
+                            .addRequestHeader("Referer", viewModel.referer)
+
+                        viewModel.downloadID = downloadManager.enqueue(request)
+                        finish()
+                    }
+
+                    Result.Status.ERROR -> {
+                        toast(it.message!!)
+                    }
+                }
+            })
+        }
 
         player = ExoPlayerFactory.newSimpleInstance(this)
 
@@ -152,5 +216,6 @@ class AnimePlayerActivity : AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
         player.release()
+        unregisterReceiver(onDownloadComplete)
     }
 }

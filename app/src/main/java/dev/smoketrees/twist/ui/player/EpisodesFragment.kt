@@ -42,10 +42,11 @@ class EpisodesFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val adapter = EpisodeListAdapter {
+        val adapter = EpisodeListAdapter(requireActivity()) { ep, shouldDownload ->
             val action = EpisodesFragmentDirections.actionEpisodesFragmentToAnimePlayerActivity(
-                args.slugName,
-                it.number!!
+                slugName = args.slugName,
+                episodeNo = ep.number!!,
+                shouldDownload = shouldDownload
             )
             findNavController().navigate(action)
         }
@@ -67,7 +68,7 @@ class EpisodesFragment : Fragment() {
                 }
 
                 Result.Status.SUCCESS -> {
-                    it.data?.let {detailsEntity ->
+                    it.data?.let { detailsEntity ->
 
                         anime_title.text = detailsEntity.title
                         anime_episodes.text = "${detailsEntity.episodeList.size} episodes"
