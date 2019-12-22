@@ -9,16 +9,10 @@ import android.view.View
 import androidx.lifecycle.Observer
 import androidx.navigation.navArgs
 import com.google.android.exoplayer2.*
-import com.google.android.exoplayer2.ext.cast.CastPlayer
-import com.google.android.exoplayer2.ext.cast.SessionAvailabilityListener
 import com.google.android.exoplayer2.source.ProgressiveMediaSource
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector
 import com.google.android.exoplayer2.upstream.DefaultHttpDataSourceFactory
 import com.google.android.exoplayer2.util.Util
-import com.google.android.gms.cast.MediaInfo
-import com.google.android.gms.cast.framework.CastButtonFactory
-import com.google.android.gms.cast.framework.CastContext
-import com.google.android.gms.cast.framework.CastState
 import dev.smoketrees.twist.R
 import dev.smoketrees.twist.model.twist.Result
 import dev.smoketrees.twist.utils.CryptoHelper
@@ -29,39 +23,16 @@ import kotlinx.android.synthetic.main.activity_anime_player.*
 import kotlinx.android.synthetic.main.exo_playback_control_view.*
 import org.koin.android.viewmodel.ext.android.viewModel
 
-class AnimePlayerActivity : AppCompatActivity(), SessionAvailabilityListener {
-    override fun onCastSessionAvailable() {
-        player = castPlayer
-        media_button.show()
-    }
-
-    override fun onCastSessionUnavailable() {
-        player = exoPlayer
-        media_button.hide()
-    }
+class AnimePlayerActivity : AppCompatActivity() {
 
     private val args: AnimePlayerActivityArgs by navArgs()
     private val viewModel by viewModel<PlayerViewModel>()
-    private lateinit var exoPlayer: SimpleExoPlayer
-    private lateinit var castPlayer: CastPlayer
-    private lateinit var player: Player
-    private lateinit var castContext: CastContext
+    private lateinit var player: ExoPlayer
 
     @SuppressLint("SourceLockedOrientationActivity")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_anime_player)
-        CastButtonFactory.setUpMediaRouteButton(this, media_button)
-        castContext = CastContext.getSharedInstance(this)!!
-
-        castPlayer = CastPlayer(castContext)
-        castPlayer.setSessionAvailabilityListener(this)
-        exoPlayer = ExoPlayerFactory.newSimpleInstance(this)
-
-        if (castContext.castState != CastState.NO_DEVICES_AVAILABLE) {
-            media_button.show()
-        }
-
         requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
         exo_rotate_icon.setOnClickListener {
             if (viewModel.portrait) {
@@ -77,6 +48,8 @@ class AnimePlayerActivity : AppCompatActivity(), SessionAvailabilityListener {
         val epNo = args.episodeNo
 
         viewModel.referer = "https://twist.moe/a/$slug/$epNo"
+
+        player = ExoPlayerFactory.newSimpleInstance(this)
 
         if (viewModel.currUri == null) {
             viewModel.getAnimeSources(slug).observe(this, Observer {
@@ -140,13 +113,7 @@ class AnimePlayerActivity : AppCompatActivity(), SessionAvailabilityListener {
             dataSource
         }.createMediaSource(uri)
 
-        if (player == exoPlayer) {
-            exoPlayer.prepare(mediaSource, true, false)
-        } else {
-            castContext.sessionManager.currentCastSession
-            val mediaInfo = MediaInfo.Builder()
-
-        }
+        player.prepare(mediaSource, true, false)
     }
 
     private fun initializePlayer() {
@@ -184,7 +151,6 @@ class AnimePlayerActivity : AppCompatActivity(), SessionAvailabilityListener {
 
     override fun onDestroy() {
         super.onDestroy()
-        castPlayer.release()
-        exoPlayer.release()
+        player.release()
     }
 }
