@@ -22,8 +22,8 @@ android {
         applicationId "dev.smoketrees.twist"
         minSdkVersion 19
         targetSdkVersion 29
-        versionCode 3
-        versionName "1.0-prod1"
+        versionCode 5
+        versionName "1.0-prod3"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
         resValue("string", "access_token", secretProperties["access_key"])

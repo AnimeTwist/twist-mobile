@@ -43,16 +43,7 @@ class AnimePlayerActivity : AppCompatActivity() {
             context: Context?,
             intent: Intent
         ) { //Fetching the download id received with the broadcast
-            val id =
-                intent.getLongExtra(DownloadManager.EXTRA_DOWNLOAD_ID, -1)
-            //Checking if the received broadcast is for our enqueued download by matching download id
-            if (viewModel.downloadID == id) {
-                Notify.with(this@AnimePlayerActivity)
-                    .content {
-                        title = "Download complete!"
-                        text = "The anime you wanted has finished downloading!"
-                    }
-            }
+
         }
     }
 
