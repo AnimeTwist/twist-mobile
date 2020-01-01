@@ -5,24 +5,22 @@ import android.app.SearchManager
 import android.content.Context
 import android.os.Bundle
 import android.text.method.LinkMovementMethod
+import android.util.DisplayMetrics
+import android.util.TypedValue
 import android.view.*
-import android.widget.SimpleCursorAdapter
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
 import dev.smoketrees.twist.R
 import dev.smoketrees.twist.adapters.AnimeListAdapter
-import dev.smoketrees.twist.db.AnimeDao
 import dev.smoketrees.twist.model.twist.Result
-import dev.smoketrees.twist.utils.hide
-import dev.smoketrees.twist.utils.show
-import dev.smoketrees.twist.utils.toast
+import dev.smoketrees.twist.utils.*
 import kotlinx.android.synthetic.main.fragment_home.*
-import org.koin.android.ext.android.inject
 import org.koin.android.viewmodel.ext.android.sharedViewModel
+import kotlin.math.floor
+
 
 class HomeFragment : Fragment() {
 
@@ -56,7 +54,10 @@ class HomeFragment : Fragment() {
             findNavController().navigate(action)
         }
         val layoutManager =
-            GridLayoutManager(requireContext(), 4)
+            GridAutofitLayoutManager(requireContext(), TypedValue.applyDimension(
+                TypedValue.COMPLEX_UNIT_DIP, 100f,
+                requireContext().resources.displayMetrics
+            ).toInt())
 
         anime_list.apply {
             this.adapter = adapter
@@ -64,7 +65,7 @@ class HomeFragment : Fragment() {
             smoothScrollToPosition(0)
         }
 
-        viewModel.getAllAnime().observe(viewLifecycleOwner, Observer {
+        viewModel.getOngoingAnime().observe(viewLifecycleOwner, Observer {
             when (it.status) {
                 Result.Status.LOADING -> {
                     spinkit.show()

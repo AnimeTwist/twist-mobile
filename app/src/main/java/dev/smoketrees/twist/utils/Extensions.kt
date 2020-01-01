@@ -2,6 +2,7 @@ package dev.smoketrees.twist.utils
 
 import android.app.Activity
 import android.content.Context
+import android.util.DisplayMetrics
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -52,4 +53,24 @@ fun Fragment.toast(message: String) {
 
 fun Fragment.longToast(message: String) {
     requireContext().longToast(message)
+}
+
+fun Activity.getHeight() : Int {
+    val displayMetrics = DisplayMetrics();
+    this.windowManager.defaultDisplay.getMetrics(displayMetrics)
+    return displayMetrics.heightPixels
+}
+
+fun Activity.getWidth() : Int {
+    val displayMetrics = DisplayMetrics();
+    this.windowManager.defaultDisplay.getMetrics(displayMetrics)
+    return displayMetrics.widthPixels
+}
+
+fun Fragment.getHeight(): Int {
+    return requireActivity().getHeight()
+}
+
+fun Fragment.getWidth(): Int {
+    return requireActivity().getWidth()
 }

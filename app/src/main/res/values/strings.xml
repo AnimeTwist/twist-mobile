@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">Twist.moe</string>
-    <string name="seasonal_anime_title">All anime</string>
+    <string name="seasonal_anime_title">Ongoing anime</string>
     <string name="header_title">Fall season has started!</string>
     <string name="header_text">This Fall season we\'re adding 50 new ongoing anime to Anime Twist, the first episodes are normally delayed but after that, episodes air within a hour after TV. Find the full list of new shows <a href="https://bit.ly/2IsH1eq">here</a></string>
     <string name="search_item_title">Search</string>
