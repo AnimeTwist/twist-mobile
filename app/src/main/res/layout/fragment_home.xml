@@ -8,12 +8,22 @@
     tools:context=".ui.home.HomeFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/constraintLayout"
+        android:id="@+id/banner_container"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:background="@drawable/header_bg_gradient"
         app:layout_constraintTop_toTopOf="parent"
         tools:layout_editor_absoluteX="0dp" >
+
+        <ImageButton
+            android:id="@+id/dismiss_banner_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            android:src="@drawable/ic_dismiss"
+            android:layout_margin="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/textView3"
@@ -52,7 +62,7 @@
         android:text="@string/seasonal_anime_title"
         android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/constraintLayout" />
+        app:layout_constraintTop_toBottomOf="@+id/banner_container" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/anime_list"

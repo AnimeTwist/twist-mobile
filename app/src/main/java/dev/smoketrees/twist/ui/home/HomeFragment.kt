@@ -43,6 +43,10 @@ class HomeFragment : Fragment() {
         viewModel.lifeCycleOwner = viewLifecycleOwner
         header_body.movementMethod = LinkMovementMethod.getInstance()
 
+        dismiss_banner_button.setOnClickListener {
+            banner_container.hide()
+        }
+
         val adapter = AnimeListAdapter(viewModel, requireContext()) {
             val action =
                 HomeFragmentDirections.actionHomeFragmentToEpisodesFragment(
