@@ -10,6 +10,7 @@ import kotlinx.coroutines.launch
 
 class AnimeViewModel(private val repo: AnimeRepo) : ViewModel() {
     fun getAllAnime() = repo.getAllAnime()
+    fun getOngoingAnime() = repo.getSeasonalAnime()
 
     fun searchAnime(animeName: String) = repo.searchAnime(animeName)
     fun getMALAnime(animeName: String) = repo.getMALAnime(animeName)

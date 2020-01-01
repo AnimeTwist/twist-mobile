@@ -1,6 +1,6 @@
 package dev.smoketrees.twist.repository
 
-import androidx.annotation.Keep
+
 import dev.smoketrees.twist.api.anime.AnimeWebClient
 import dev.smoketrees.twist.api.jikan.JikanWebClient
 import dev.smoketrees.twist.db.AnimeDao
@@ -29,22 +29,35 @@ class AnimeRepo(
         }
     )
 
-    private suspend fun fetchUrl() = withContext(Dispatchers.IO) {
-        //        animeDao.getAllAnimeList().forEach { animeItem ->
-//            if (animeItem.imgUrl.isNullOrBlank()) {
-//                val result = jikanClient.getAnimeByName(animeItem.slug?.slug ?: "")
-//                if (result.status == Result.Status.SUCCESS) {
-//                    if (result.data?.results?.isNotEmpty() == true) {
-//                        result.data.results[0].let { jikanResult ->
-//                            animeItem.imgUrl = jikanResult.imageUrl
-//                            animeDao.saveAnime(animeItem)
-//                        }
-//                    }
-//                }
-//                Thread.sleep(500)
-//            }
-//        }
+    fun getSeasonalAnime() = makeRequestAndSave(
+        databaseQuery = { animeDao.getOngoingAnime() },
+        netWorkCall = {webClient.getAllAnime()},
+        saveCallResult = {
+            animeDao.saveAnime(it)
+            fetchOngoingUrl()
+        }
+    )
 
+    private suspend fun fetchOngoingUrl() = withContext(Dispatchers.IO) {
+        val deferredList = animeDao.getOngoingAnimeList().filter {
+            it.imgUrl.isNullOrEmpty()
+        }.map { animeItem ->
+            async {
+                val result = jikanClient.getAnimeByName(animeItem.slug?.slug ?: "")
+                if (result.status == Result.Status.SUCCESS) {
+                    if (result.data?.results?.isNotEmpty() == true) {
+                        result.data.results[0].let { jikanResult ->
+                            animeItem.imgUrl = jikanResult.imageUrl
+                            animeDao.saveAnime(animeItem)
+                        }
+                    }
+                }
+            }
+        }
+        deferredList.awaitAll()
+    }
+
+    private suspend fun fetchUrl() = withContext(Dispatchers.IO) {
         val deferredList = animeDao.getAllAnimeList().filter {
             it.imgUrl.isNullOrEmpty()
         }.map { animeItem ->
@@ -94,6 +107,7 @@ class AnimeRepo(
         }
     }
 
+
     private fun getAnimeDetailsEntity(
         episodeDetails: AnimeDetails,
         result: JikanSearchModel.Result?
@@ -115,7 +129,6 @@ class AnimeRepo(
         episodeList = episodeDetails.episodes!!
     )
 
-
     fun getAnimeSources(animeName: String) = makeRequest {
         webClient.getAnimeSources(animeName)
     }
@@ -129,8 +142,4 @@ class AnimeRepo(
     }
 
     fun searchAnime(animeName: String) = animeDao.searchAnime(animeName)
-
-    fun getSeasonalAnime() = makeRequest {
-        jikanClient.getSeasonalAnime()
-    }
 }
