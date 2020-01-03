@@ -2,7 +2,7 @@ package dev.smoketrees.twist.repository
 
 
 import dev.smoketrees.twist.api.anime.AnimeWebClient
-import dev.smoketrees.twist.api.jikan.JikanWebClient
+import dev.smoketrees.twist.api.jikan.MALWebClient
 import dev.smoketrees.twist.db.AnimeDao
 import dev.smoketrees.twist.db.AnimeDetailsDao
 import dev.smoketrees.twist.model.jikan.JikanSearchModel
@@ -16,7 +16,7 @@ import kotlinx.coroutines.withContext
 
 class AnimeRepo(
     private val webClient: AnimeWebClient,
-    private val jikanClient: JikanWebClient,
+    private val MALClient: MALWebClient,
     private val animeDao: AnimeDao,
     private val episodeDao: AnimeDetailsDao
 ) : BaseRepo() {
@@ -43,7 +43,7 @@ class AnimeRepo(
             it.imgUrl.isNullOrEmpty()
         }.map { animeItem ->
             async {
-                val result = jikanClient.getAnimeByName(animeItem.slug?.slug ?: "")
+                val result = MALClient.getAnimeByName(animeItem.slug?.slug ?: "")
                 if (result.status == Result.Status.SUCCESS) {
                     if (result.data?.results?.isNotEmpty() == true) {
                         result.data.results[0].let { jikanResult ->
@@ -62,7 +62,7 @@ class AnimeRepo(
             it.imgUrl.isNullOrEmpty()
         }.map { animeItem ->
             async {
-                val result = jikanClient.getAnimeByName(animeItem.slug?.slug ?: "")
+                val result = MALClient.getAnimeByName(animeItem.slug?.slug ?: "")
                 if (result.status == Result.Status.SUCCESS) {
                     if (result.data?.results?.isNotEmpty() == true) {
                         result.data.results[0].let { jikanResult ->
@@ -81,7 +81,7 @@ class AnimeRepo(
         netWorkCall = {
             saveEpisodeDetails(
                 webClient.getAnimeDetails(name),
-                jikanClient.getAnimeByName(name)
+                MALClient.getAnimeByName(name)
             )
         },
         saveCallResult = {
@@ -134,11 +134,11 @@ class AnimeRepo(
     }
 
     fun getMALAnime(animeName: String) = makeRequest {
-        jikanClient.getAnimeByName(animeName)
+        MALClient.getAnimeByName(animeName)
     }
 
     fun getMALAnimeById(id: Int) = makeRequest {
-        jikanClient.getAnimeById(id)
+        MALClient.getAnimeById(id)
     }
 
     fun searchAnime(animeName: String) = animeDao.searchAnime(animeName)

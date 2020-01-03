@@ -2,7 +2,7 @@ package dev.smoketrees.twist.api.jikan
 
 import dev.smoketrees.twist.api.BaseApiClient
 
-class JikanWebClient(private val webService: JikanWebService) : BaseApiClient() {
+class MALWebClient(private val webService: MALWebService) : BaseApiClient() {
     suspend fun getAnimeById(animeId: Int) = getResult {
         webService.getAnimeById(animeId)
     }

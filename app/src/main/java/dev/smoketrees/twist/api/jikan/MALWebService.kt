@@ -8,7 +8,7 @@ import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
 
-interface JikanWebService {
+interface MALWebService {
     @GET("anime/{animeId}")
     suspend fun getAnimeById(@Path("animeId") animeId: Int): Response<MALAnime>
 
