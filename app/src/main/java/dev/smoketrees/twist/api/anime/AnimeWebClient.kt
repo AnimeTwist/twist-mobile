@@ -31,4 +31,8 @@ class AnimeWebClient(private val webService: AnimeWebService) : BaseApiClient() 
     ) = getResult {
         webService.kitsuRequest(pageLimit, sort, offset)
     }
+
+    suspend fun getTrendingAnime(limit: Int) = getResult {
+        webService.getTrendingAnime(limit)
+    }
 }

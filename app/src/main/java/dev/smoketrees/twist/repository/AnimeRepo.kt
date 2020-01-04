@@ -25,6 +25,10 @@ class AnimeRepo(
         }
     )
 
+    fun getTrendingAnime(limit: Int) = makeRequest {
+        webClient.getTrendingAnime(limit)
+    }
+
     fun getSeasonalAnime() = makeRequestAndSave(
         databaseQuery = { animeDao.getOngoingAnime() },
         networkCall = { webClient.getAllAnime() },

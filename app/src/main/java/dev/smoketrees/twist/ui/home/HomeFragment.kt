@@ -13,6 +13,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import dev.smoketrees.twist.R
 import dev.smoketrees.twist.adapters.AnimeListAdapter
+import dev.smoketrees.twist.adapters.PagedAnimeListAdapter
 import dev.smoketrees.twist.model.twist.Result
 import dev.smoketrees.twist.utils.*
 import kotlinx.android.synthetic.main.fragment_home.*
@@ -41,7 +42,7 @@ class HomeFragment : Fragment() {
             banner_container.hide()
         }
 
-        val animeListAdapter = AnimeListAdapter(viewModel, requireContext()) {
+        val topAiringAdapter = PagedAnimeListAdapter(viewModel, requireContext()) {
             val action =
                 HomeFragmentDirections.actionHomeFragmentToEpisodesFragment(
                     it.slug!!.slug!!,
@@ -49,16 +50,69 @@ class HomeFragment : Fragment() {
                 )
             findNavController().navigate(action)
         }
-        val animeListLayoutManager =
+        val topAiringLayoutManager =
             LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
         top_airing_recyclerview.apply {
-            adapter = animeListAdapter
-            layoutManager = animeListLayoutManager
+            adapter = topAiringAdapter
+            layoutManager = topAiringLayoutManager
+            smoothScrollToPosition(0)
+        }
+
+        val trendingAdapter = AnimeListAdapter(viewModel, requireContext()) {
+            val action =
+                HomeFragmentDirections.actionHomeFragmentToEpisodesFragment(
+                    it.slug!!.slug!!,
+                    it.id!!
+                )
+            findNavController().navigate(action)
+        }
+        val trendingLayoutManager =
+            LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+        trending_recyclerview.apply {
+            adapter = trendingAdapter
+            layoutManager = trendingLayoutManager
             smoothScrollToPosition(0)
         }
 
         viewModel.animePagedList.observe(viewLifecycleOwner, Observer {
-            animeListAdapter.submitList(it)
+            topAiringAdapter.submitList(it)
+        })
+
+        viewModel.getTrendingAnime(40).observe(viewLifecycleOwner, Observer {
+            when (it.status) {
+                Result.Status.LOADING -> {
+                    if (!spinkit.isShown) {
+                        spinkit.show()
+                        top_airing_recyclerview.hide()
+                        banner_container.hide()
+
+                        top_airing_text.hide()
+                        top_airing_recyclerview.hide()
+
+                        trending_text.hide()
+                        trending_recyclerview.hide()
+                    }
+                }
+
+                Result.Status.SUCCESS -> {
+                    if (!it.data.isNullOrEmpty()) {
+                        trendingAdapter.updateData(it.data)
+                    }
+                    spinkit.hide()
+                    top_airing_recyclerview.show()
+                    banner_container.show()
+
+                    top_airing_text.show()
+                    top_airing_recyclerview.show()
+
+                    trending_text.show()
+                    trending_recyclerview.show()
+                }
+
+                Result.Status.ERROR -> {
+                    toast(it.message.toString())
+                }
+            }
         })
 
         viewModel.networkState.observe(viewLifecycleOwner, Observer {

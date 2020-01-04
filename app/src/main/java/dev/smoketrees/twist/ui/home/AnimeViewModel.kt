@@ -38,9 +38,9 @@ class AnimeViewModel(private val repo: AnimeRepo) : ViewModel() {
             .setPageSize(20)
             .build()
 
-        val trendingDataSourceFactory = KitsuDataSourceFactory(repo.webClient, "")
-
         animePagedList = LivePagedListBuilder(topAiringDataSourceFactory, config).build()
     }
+
+    fun getTrendingAnime(limit: Int) = repo.getTrendingAnime(limit)
 
 }
