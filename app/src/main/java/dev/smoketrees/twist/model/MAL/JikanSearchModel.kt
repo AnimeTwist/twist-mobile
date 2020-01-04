@@ -1,4 +1,4 @@
-package dev.smoketrees.twist.model.jikan
+package dev.smoketrees.twist.model.MAL
 import androidx.annotation.Keep
 import com.google.gson.annotations.SerializedName
 
