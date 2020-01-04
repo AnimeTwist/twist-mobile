@@ -11,7 +11,6 @@
         android:id="@+id/banner_container"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:background="@drawable/header_bg_gradient"
         app:layout_constraintTop_toTopOf="parent"
         tools:layout_editor_absoluteX="0dp" >
 
@@ -29,9 +28,10 @@
             android:id="@+id/textView3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="24dp"
+            android:layout_marginStart="16dp"
             android:layout_marginTop="24dp"
             android:text="@string/header_title"
+            android:textColor="@color/colorAccent"
             android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -54,33 +54,65 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/top_airing_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
+        android:layout_marginStart="16dp"
         android:layout_marginTop="24dp"
         android:text="@string/seasonal_anime_title"
+        android:textStyle="bold"
+        android:textSize="20sp"
+        android:textColor="@color/colorAccent"
         android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/banner_container" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/anime_list"
+        android:id="@+id/top_airing_recyclerview"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
+        android:clipToPadding="false"
         android:orientation="horizontal"
+        android:paddingStart="10dp"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView"
+        app:layout_constraintTop_toBottomOf="@+id/top_airing_text"
+        tools:listitem="@layout/animelist_item" />
+
+    <TextView
+        android:id="@+id/trending_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:text="@string/hot_picks_title_text"
+        android:textStyle="bold"
+        android:textSize="20sp"
+        android:textColor="@color/colorAccent"
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
+        app:layout_constraintStart_toStartOf="@id/top_airing_text"
+        app:layout_constraintTop_toBottomOf="@+id/top_airing_recyclerview" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/trending_recyclerview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:clipToPadding="false"
+        android:orientation="horizontal"
+        android:paddingStart="10dp"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/trending_text"
         tools:listitem="@layout/animelist_item" />
 
     <com.github.ybq.android.spinkit.SpinKitView
         android:id="@+id/spinkit"
-        style="@style/SpinKitView.Large.CubeGrid"
+        style="@style/SpinKitView.Large.Circle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:visibility="gone"

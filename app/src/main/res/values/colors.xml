@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#e53232</color>
-    <color name="colorPrimaryDark">#e53232</color>
-    <color name="colorAccent">#D81B60</color>
-    <color name="colorBackground">#121212</color>
-    <color name="colorCardBackground">#1e1e1e</color>
-    <color name="toolbar_text_color">#bb1d57</color>
+    <color name="colorPrimary">#69F0AE</color>
+    <color name="colorPrimaryDark">#69F0AE</color>
+    <color name="colorAccent">#69F0AE</color>
+    <color name="colorBackground">#1d1f3e</color>
+    <color name="colorCardBackground">#262845</color>
+    <color name="toolbar_text_color">#69F0AE</color>
 </resources>

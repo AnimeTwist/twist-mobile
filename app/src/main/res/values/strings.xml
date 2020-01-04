@@ -6,4 +6,5 @@
     <string name="search_item_title">Search</string>
     <string name="search_hint">Search for anime</string>
     <string name="ongoing_text">ONGOING</string>
+    <string name="hot_picks_title_text">Hot picks</string>
 </resources>
