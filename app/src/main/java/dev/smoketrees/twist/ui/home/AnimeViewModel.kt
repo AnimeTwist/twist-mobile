@@ -13,7 +13,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class AnimeViewModel(private val repo: AnimeRepo) : ViewModel() {
-//    fun getAllAnime() = repo.getAllAnime()
+    //    fun getAllAnime() = repo.getAllAnime()
     fun getOngoingAnime() = repo.getSeasonalAnime()
 
     fun searchAnime(animeName: String) = repo.searchAnime(animeName)
@@ -21,11 +21,16 @@ class AnimeViewModel(private val repo: AnimeRepo) : ViewModel() {
     fun getMALAnimeById(id: Int) = repo.getMALAnimeById(id)
 
     var animePagedList: LiveData<PagedList<AnimeItem>>
+    var networkState: LiveData<Result<List<AnimeItem>?>>
     private var liveDataSource: LiveData<PagedAnimeDatasource>
 
     init {
-        val topAiringDataSourceFactory = KitsuDataSourceFactory(repo.webClient, "-user_count", "current")
+        val topAiringDataSourceFactory =
+            KitsuDataSourceFactory(repo.webClient, "-user_count", "current")
         liveDataSource = topAiringDataSourceFactory.animeLiveDataSource
+        networkState = topAiringDataSourceFactory.animeLiveDataSource.switchMap {
+            it.animeLiveData
+        }
 
         val config = PagedList.Config.Builder()
             .setEnablePlaceholders(false)

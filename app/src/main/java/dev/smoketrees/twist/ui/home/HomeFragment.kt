@@ -65,6 +65,24 @@ class HomeFragment : Fragment() {
         viewModel.animePagedList.observe(viewLifecycleOwner, Observer {
             animeListAdapter.submitList(it)
         })
+
+        viewModel.networkState.observe(viewLifecycleOwner, Observer {
+            when (it.status) {
+                Result.Status.LOADING -> {
+                    spinkit.show()
+                    anime_list.hide()
+                }
+
+                Result.Status.SUCCESS -> {
+                    spinkit.hide()
+                    anime_list.show()
+                    viewModel.networkState.removeObservers(viewLifecycleOwner)
+                }
+
+                else -> {
+                }
+            }
+        })
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
