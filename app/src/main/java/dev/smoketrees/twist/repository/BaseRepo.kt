@@ -5,7 +5,6 @@ import androidx.lifecycle.liveData
 import androidx.lifecycle.map
 import dev.smoketrees.twist.model.twist.Result
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
 
 open class BaseRepo {
 
@@ -28,7 +27,7 @@ open class BaseRepo {
 
     protected fun <T, A> makeRequestAndSave(
         databaseQuery: () -> LiveData<T>,
-        netWorkCall: suspend () -> Result<A>,
+        networkCall: suspend () -> Result<A>,
         saveCallResult: suspend (A) -> Unit
     ): LiveData<Result<T>> = liveData(Dispatchers.IO) {
         emit(Result.loading())
@@ -36,7 +35,7 @@ open class BaseRepo {
         val source = databaseQuery.invoke().map { Result.success(it) }
         emitSource(source)
 
-        val response = netWorkCall.invoke()
+        val response = networkCall.invoke()
         when (response.status) {
             Result.Status.SUCCESS -> {
                 saveCallResult(response.data!!)

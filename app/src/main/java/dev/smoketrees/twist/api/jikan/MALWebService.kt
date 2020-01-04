@@ -1,8 +1,8 @@
 package dev.smoketrees.twist.api.jikan
 
-import dev.smoketrees.twist.model.jikan.JikanSearchModel
-import dev.smoketrees.twist.model.jikan.MALAnime
-import dev.smoketrees.twist.model.jikan.SeasonalAnime
+import dev.smoketrees.twist.model.MAL.JikanSearchModel
+import dev.smoketrees.twist.model.MAL.MALAnime
+import dev.smoketrees.twist.model.MAL.SeasonalAnime
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Path

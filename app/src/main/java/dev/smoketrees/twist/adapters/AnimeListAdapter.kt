@@ -4,6 +4,7 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.paging.PagedListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 import com.bumptech.glide.Glide
@@ -20,11 +21,9 @@ import kotlinx.coroutines.launch
 class AnimeListAdapter(
     private val viewModel: AnimeViewModel,
     private val context: Context,
-    val listener: (AnimeItem) -> Unit
+    private val listener: (AnimeItem) -> Unit
 ) :
-    RecyclerView.Adapter<AnimeListAdapter.AnimeViewHolder>() {
-
-    private var animeList: List<AnimeItem> = mutableListOf()
+    PagedListAdapter<AnimeItem, AnimeListAdapter.AnimeViewHolder>(AnimeItem.DIFF_CALLBACK) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
         AnimeViewHolder(
@@ -35,14 +34,14 @@ class AnimeListAdapter(
             )
         )
 
-    override fun getItemCount() = animeList.size
-
     override fun onBindViewHolder(holder: AnimeViewHolder, position: Int) {
-        holder.anime_name.text = animeList[position].title
+        val item = getItem(position)
+
+        holder.anime_name.text = item?.title
         holder.containerView.setOnClickListener {
-            listener(animeList[position])
+            item?.let(listener)
         }
-        if (animeList[position].imgUrl == null || animeList[position].imgUrl == "") {
+        if (item?.nejireExtension?.poster_image == null || item.nejireExtension?.poster_image == "") {
             Glide.with(context).clear(holder.anime_image)
             holder.anime_image.setImageDrawable(null)
         } else {
@@ -50,7 +49,7 @@ class AnimeListAdapter(
             circularProgressDrawable.strokeWidth = 7f
             circularProgressDrawable.centerRadius = 40f
             circularProgressDrawable.start()
-            Glide.with(context).load(animeList[position].imgUrl)
+            Glide.with(context).load(item.nejireExtension?.poster_image)
                 .placeholder(circularProgressDrawable).into(holder.anime_image)
         }
     }
@@ -58,9 +57,4 @@ class AnimeListAdapter(
 
     class AnimeViewHolder(override val containerView: View) :
         RecyclerView.ViewHolder(containerView), LayoutContainer
-
-    fun updateData(newData: List<AnimeItem>) {
-        animeList = newData
-        notifyDataSetChanged()
-    }
 }

@@ -1,12 +1,18 @@
-package dev.smoketrees.twist.model.twist
+package dev.smoketrees.twist.pagination
 
 import androidx.lifecycle.MutableLiveData
 import androidx.paging.PageKeyedDataSource
 import dev.smoketrees.twist.api.anime.AnimeWebClient
+import dev.smoketrees.twist.model.twist.AnimeItem
+import dev.smoketrees.twist.model.twist.Result
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
-class PagedAnimeDatasource(val webClient: AnimeWebClient, val sort: String) :
+class PagedAnimeDatasource(
+    private val webClient: AnimeWebClient,
+    private val sort: String,
+    private val filter: String
+) :
     PageKeyedDataSource<Int, AnimeItem>() {
     val animeLiveData: MutableLiveData<Result<List<AnimeItem>?>> = MutableLiveData()
 
@@ -17,14 +23,23 @@ class PagedAnimeDatasource(val webClient: AnimeWebClient, val sort: String) :
     ) {
         GlobalScope.launch {
             animeLiveData.postValue(Result.loading())
-            val response = webClient.kitsuRequest(params.requestedLoadSize, sort, 0)
+            val response = webClient.filteredKitsuRequest(params.requestedLoadSize, sort, filter, 0)
             when (response.status) {
                 Result.Status.SUCCESS -> {
-                    animeLiveData.postValue(Result.success(response.data))
-                    response.data?.toMutableList()?.let { callback.onResult(it, null, 1) }
+                    animeLiveData.postValue(
+                        Result.success(
+                            response.data
+                        )
+                    )
+                    response.data?.toMutableList()
+                        ?.let { callback.onResult(it, null, params.requestedLoadSize) }
                 }
                 Result.Status.ERROR -> {
-                    animeLiveData.postValue(Result.error(response.message!!))
+                    animeLiveData.postValue(
+                        Result.error(
+                            response.message!!
+                        )
+                    )
                 }
                 else -> {
                 }
@@ -36,14 +51,23 @@ class PagedAnimeDatasource(val webClient: AnimeWebClient, val sort: String) :
         GlobalScope.launch {
             animeLiveData.postValue(Result.loading())
             val response =
-                webClient.kitsuRequest(params.requestedLoadSize, sort, params.key)
+                webClient.filteredKitsuRequest(params.requestedLoadSize, sort, filter, params.key)
             when (response.status) {
                 Result.Status.SUCCESS -> {
-                    animeLiveData.postValue(Result.success(response.data))
-                    response.data?.toMutableList()?.let { callback.onResult(it, params.key + 1) }
+                    animeLiveData.postValue(
+                        Result.success(
+                            response.data
+                        )
+                    )
+                    response.data?.toMutableList()
+                        ?.let { callback.onResult(it, params.key + params.requestedLoadSize) }
                 }
                 Result.Status.ERROR -> {
-                    animeLiveData.postValue(Result.error(response.message!!))
+                    animeLiveData.postValue(
+                        Result.error(
+                            response.message!!
+                        )
+                    )
                 }
                 else -> {
                 }
@@ -55,15 +79,23 @@ class PagedAnimeDatasource(val webClient: AnimeWebClient, val sort: String) :
         GlobalScope.launch {
             animeLiveData.postValue(Result.loading())
             val response =
-                webClient.kitsuRequest(params.requestedLoadSize, sort, params.key)
+                webClient.filteredKitsuRequest(params.requestedLoadSize, sort, filter, params.key)
             when (response.status) {
                 Result.Status.SUCCESS -> {
-                    animeLiveData.postValue(Result.success(response.data))
-                    val key = if (params.key > 1) params.key - 1 else 0
+                    animeLiveData.postValue(
+                        Result.success(
+                            response.data
+                        )
+                    )
+                    val key = if (params.key > 1) params.key - params.requestedLoadSize else 0
                     response.data?.toMutableList()?.let { callback.onResult(it, key) }
                 }
                 Result.Status.ERROR -> {
-                    animeLiveData.postValue(Result.error(response.message!!))
+                    animeLiveData.postValue(
+                        Result.error(
+                            response.message!!
+                        )
+                    )
                 }
                 else -> {
                 }

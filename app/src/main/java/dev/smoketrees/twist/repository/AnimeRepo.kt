@@ -1,84 +1,43 @@
 package dev.smoketrees.twist.repository
 
 
+import android.util.Log
 import dev.smoketrees.twist.api.anime.AnimeWebClient
 import dev.smoketrees.twist.api.jikan.MALWebClient
 import dev.smoketrees.twist.db.AnimeDao
 import dev.smoketrees.twist.db.AnimeDetailsDao
-import dev.smoketrees.twist.model.jikan.JikanSearchModel
+import dev.smoketrees.twist.model.MAL.JikanSearchModel
 import dev.smoketrees.twist.model.twist.AnimeDetails
 import dev.smoketrees.twist.model.twist.AnimeDetailsEntity
 import dev.smoketrees.twist.model.twist.Result
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
-import kotlinx.coroutines.awaitAll
-import kotlinx.coroutines.withContext
 
 class AnimeRepo(
-    private val webClient: AnimeWebClient,
+    val webClient: AnimeWebClient,
     private val MALClient: MALWebClient,
     private val animeDao: AnimeDao,
     private val episodeDao: AnimeDetailsDao
 ) : BaseRepo() {
     fun getAllAnime() = makeRequestAndSave(
         databaseQuery = { animeDao.getAllAnime() },
-        netWorkCall = { webClient.getAllAnime() },
+        networkCall = { webClient.getAllAnime() },
         saveCallResult = {
             animeDao.saveAnime(it)
-            fetchUrl()
         }
     )
 
     fun getSeasonalAnime() = makeRequestAndSave(
         databaseQuery = { animeDao.getOngoingAnime() },
-        netWorkCall = {webClient.getAllAnime()},
+        networkCall = { webClient.getAllAnime() },
         saveCallResult = {
+
+            it.forEach { x -> Log.d("REPO", x.toString()) }
             animeDao.saveAnime(it)
-            fetchOngoingUrl()
         }
     )
 
-    private suspend fun fetchOngoingUrl() = withContext(Dispatchers.IO) {
-        val deferredList = animeDao.getOngoingAnimeList().filter {
-            it.imgUrl.isNullOrEmpty()
-        }.map { animeItem ->
-            async {
-                val result = MALClient.getAnimeByName(animeItem.slug?.slug ?: "")
-                if (result.status == Result.Status.SUCCESS) {
-                    if (result.data?.results?.isNotEmpty() == true) {
-                        result.data.results[0].let { jikanResult ->
-                            animeItem.imgUrl = jikanResult.imageUrl
-                            animeDao.saveAnime(animeItem)
-                        }
-                    }
-                }
-            }
-        }
-        deferredList.awaitAll()
-    }
-
-    private suspend fun fetchUrl() = withContext(Dispatchers.IO) {
-        val deferredList = animeDao.getAllAnimeList().filter {
-            it.imgUrl.isNullOrEmpty()
-        }.map { animeItem ->
-            async {
-                val result = MALClient.getAnimeByName(animeItem.slug?.slug ?: "")
-                if (result.status == Result.Status.SUCCESS) {
-                    if (result.data?.results?.isNotEmpty() == true) {
-                        result.data.results[0].let { jikanResult ->
-                            animeItem.imgUrl = jikanResult.imageUrl
-                            animeDao.saveAnime(animeItem)
-                        }
-                    }
-                }
-            }
-        }
-        deferredList.awaitAll()
-    }
-
     fun getAnimeDetails(name: String, id: Int) = makeRequestAndSave(
         databaseQuery = { episodeDao.getAnimeDetails(id) },
-        netWorkCall = {
+        networkCall = {
             saveEpisodeDetails(
                 webClient.getAnimeDetails(name),
                 MALClient.getAnimeByName(name)
@@ -142,4 +101,8 @@ class AnimeRepo(
     }
 
     fun searchAnime(animeName: String) = animeDao.searchAnime(animeName)
+
+    fun kitsuRequest(pageLimit: Int, sort: String, offset: Int) = makeRequest {
+        webClient.kitsuRequest(pageLimit, sort, offset)
+    }
 }

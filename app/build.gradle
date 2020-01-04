@@ -28,6 +28,14 @@ android {
         multiDexEnabled true
         resValue("string", "access_token", secretProperties["access_key"])
         resValue("string", "source_decrypt_key", secretProperties["decrypt_key"])
+
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments = [
+                        "room.incremental":"true"
+                ]
+            }
+        }
     }
     buildTypes {
         release {
@@ -42,10 +50,12 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+
     // For Kotlin projects
     kotlinOptions {
         jvmTarget = "1.8"
     }
+
     androidExtensions {
         experimental = true
     }
@@ -62,11 +72,18 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
 
     implementation "androidx.fragment:fragment-ktx:1.2.0-rc04"
+
+    // Lifecycle components
     implementation "androidx.lifecycle:lifecycle-extensions:2.2.0-rc03"
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.2.0-rc03"
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0-rc03"
+
+    // Navigation component
     implementation "androidx.navigation:navigation-fragment-ktx:2.1.0"
     implementation "androidx.navigation:navigation-ui-ktx:2.1.0"
+
+    // Paging support
+    implementation "androidx.paging:paging-runtime-ktx:2.1.1"
 
     // Koin for DI
     implementation "org.koin:koin-android-viewmodel:2.0.1"
@@ -88,7 +105,6 @@ dependencies {
 
     // Exoplayer - stream video
     implementation 'com.google.android.exoplayer:exoplayer:2.10.5'
-    implementation 'com.google.android.exoplayer:extension-cast:2.10.5' // cast support
 
     // Spinkit - loading animations
     implementation 'com.github.ybq:Android-SpinKit:1.4.0'
