@@ -12,6 +12,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import dev.smoketrees.twist.R
 import dev.smoketrees.twist.adapters.SearchListAdapter
 import dev.smoketrees.twist.ui.home.AnimeViewModel
+import dev.smoketrees.twist.utils.hide
+import dev.smoketrees.twist.utils.show
 import kotlinx.android.synthetic.main.fragment_search.*
 import org.koin.android.viewmodel.ext.android.sharedViewModel
 
@@ -40,7 +42,12 @@ class SearchFragment : Fragment() {
 
         viewModel.searchAnime(args.query).observe(viewLifecycleOwner, Observer {
             if (it.isNotEmpty()) {
+                search_recyclerview.show()
+                no_results_text.hide()
                 adapter.updateData(it)
+            } else {
+                search_recyclerview.hide()
+                no_results_text.show()
             }
         })
 

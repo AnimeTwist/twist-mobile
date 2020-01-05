@@ -15,7 +15,9 @@ import dev.smoketrees.twist.R
 import dev.smoketrees.twist.adapters.AnimeListAdapter
 import dev.smoketrees.twist.adapters.PagedAnimeListAdapter
 import dev.smoketrees.twist.model.twist.Result
-import dev.smoketrees.twist.utils.*
+import dev.smoketrees.twist.utils.hide
+import dev.smoketrees.twist.utils.show
+import dev.smoketrees.twist.utils.toast
 import kotlinx.android.synthetic.main.fragment_home.*
 import org.koin.android.viewmodel.ext.android.sharedViewModel
 
@@ -55,7 +57,6 @@ class HomeFragment : Fragment() {
         top_airing_recyclerview.apply {
             adapter = topAiringAdapter
             layoutManager = topAiringLayoutManager
-            smoothScrollToPosition(0)
         }
 
         val trendingAdapter = AnimeListAdapter(viewModel, requireContext()) {
@@ -71,7 +72,6 @@ class HomeFragment : Fragment() {
         trending_recyclerview.apply {
             adapter = trendingAdapter
             layoutManager = trendingLayoutManager
-            smoothScrollToPosition(0)
         }
 
         viewModel.animePagedList.observe(viewLifecycleOwner, Observer {
@@ -81,17 +81,15 @@ class HomeFragment : Fragment() {
         viewModel.getTrendingAnime(40).observe(viewLifecycleOwner, Observer {
             when (it.status) {
                 Result.Status.LOADING -> {
-                    if (!spinkit.isShown) {
-                        spinkit.show()
-                        top_airing_recyclerview.hide()
-                        banner_container.hide()
+                    spinkit.show()
+                    top_airing_recyclerview.hide()
+                    banner_container.hide()
 
-                        top_airing_text.hide()
-                        top_airing_recyclerview.hide()
+                    top_airing_text.hide()
+                    top_airing_recyclerview.hide()
 
-                        trending_text.hide()
-                        trending_recyclerview.hide()
-                    }
+                    trending_text.hide()
+                    trending_recyclerview.hide()
                 }
 
                 Result.Status.SUCCESS -> {
@@ -115,38 +113,7 @@ class HomeFragment : Fragment() {
             }
         })
 
-        viewModel.networkState.observe(viewLifecycleOwner, Observer {
-            when (it.status) {
-                Result.Status.LOADING -> {
-                    spinkit.show()
-                    top_airing_recyclerview.hide()
-                    banner_container.hide()
-
-                    top_airing_text.hide()
-                    top_airing_recyclerview.hide()
-
-                    trending_text.hide()
-                    trending_recyclerview.hide()
-                }
-
-                Result.Status.SUCCESS -> {
-                    spinkit.hide()
-                    top_airing_recyclerview.show()
-                    banner_container.show()
-
-                    top_airing_text.show()
-                    top_airing_recyclerview.show()
-
-                    trending_text.show()
-                    trending_recyclerview.show()
-                    viewModel.networkState.removeObservers(viewLifecycleOwner)
-                }
-
-                else -> {
-                    toast(it.message.toString())
-                }
-            }
-        })
+        viewModel.getAllAnime()
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {

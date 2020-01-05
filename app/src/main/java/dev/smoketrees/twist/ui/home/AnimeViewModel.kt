@@ -1,19 +1,18 @@
 package dev.smoketrees.twist.ui.home
 
-import androidx.lifecycle.*
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.switchMap
 import androidx.paging.LivePagedListBuilder
 import androidx.paging.PagedList
-import dev.smoketrees.twist.di.module.viewModelModule
 import dev.smoketrees.twist.model.twist.AnimeItem
 import dev.smoketrees.twist.model.twist.Result
 import dev.smoketrees.twist.pagination.KitsuDataSourceFactory
 import dev.smoketrees.twist.pagination.PagedAnimeDatasource
 import dev.smoketrees.twist.repository.AnimeRepo
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 
 class AnimeViewModel(private val repo: AnimeRepo) : ViewModel() {
-    //    fun getAllAnime() = repo.getAllAnime()
+    fun getAllAnime() = repo.getAllAnime()
     fun getOngoingAnime() = repo.getSeasonalAnime()
 
     fun searchAnime(animeName: String) = repo.searchAnime(animeName)
