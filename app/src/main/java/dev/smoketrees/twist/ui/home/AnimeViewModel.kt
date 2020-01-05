@@ -23,6 +23,10 @@ class AnimeViewModel(private val repo: AnimeRepo) : ViewModel() {
     var networkState: LiveData<Result<List<AnimeItem>?>>
     private var liveDataSource: LiveData<PagedAnimeDatasource>
 
+    var areAllLoaded = false
+
+    fun getTrendingAnime(limit: Int) = repo.getTrendingAnime(limit)
+
     init {
         val topAiringDataSourceFactory =
             KitsuDataSourceFactory(repo.webClient, "-user_count", "current")
@@ -39,7 +43,5 @@ class AnimeViewModel(private val repo: AnimeRepo) : ViewModel() {
 
         animePagedList = LivePagedListBuilder(topAiringDataSourceFactory, config).build()
     }
-
-    fun getTrendingAnime(limit: Int) = repo.getTrendingAnime(limit)
 
 }

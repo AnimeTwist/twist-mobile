@@ -1,6 +1,7 @@
 package dev.smoketrees.twist.ui.search
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -21,6 +22,7 @@ class SearchFragment : Fragment() {
 
     private val args: SearchFragmentArgs by navArgs()
     private val viewModel: AnimeViewModel by sharedViewModel()
+    private val TAG = this.javaClass.simpleName
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -41,6 +43,7 @@ class SearchFragment : Fragment() {
         search_recyclerview.layoutManager = layoutManager
 
         viewModel.searchAnime(args.query).observe(viewLifecycleOwner, Observer {
+            Log.d(TAG, it.toString())
             if (it.isNotEmpty()) {
                 search_recyclerview.show()
                 no_results_text.hide()
