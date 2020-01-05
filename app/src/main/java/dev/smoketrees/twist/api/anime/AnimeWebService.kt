@@ -3,6 +3,7 @@ package dev.smoketrees.twist.api.anime
 import dev.smoketrees.twist.model.twist.AnimeDetails
 import dev.smoketrees.twist.model.twist.AnimeItem
 import dev.smoketrees.twist.model.twist.AnimeSource
+import dev.smoketrees.twist.model.twist.Motd
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Path
@@ -37,4 +38,7 @@ interface AnimeWebService {
     suspend fun getTrendingAnime(
         @Query("limit") limit: Int
     ): Response<List<AnimeItem>>
+
+    @GET("motd")
+    suspend fun getMotd(): Response<Motd>
 }

@@ -35,4 +35,8 @@ class AnimeWebClient(private val webService: AnimeWebService) : BaseApiClient() 
     suspend fun getTrendingAnime(limit: Int) = getResult {
         webService.getTrendingAnime(limit)
     }
+
+    suspend fun getMotd() = getResult {
+        webService.getMotd()
+    }
 }

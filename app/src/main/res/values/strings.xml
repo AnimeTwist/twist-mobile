@@ -2,10 +2,12 @@
     <string name="app_name">Anime Twist</string>
     <string name="seasonal_anime_title">Top airing</string>
     <string name="header_title">Fall season has started!</string>
-    <string name="header_text">This Fall season we\'re adding 50 new ongoing anime to Anime Twist, the first episodes are normally delayed but after that, episodes air within a hour after TV. Find the full list of new shows <a href="https://bit.ly/2IsH1eq">here</a></string>
+    <string name="header_text">We\'re adding over 50 new ongoing shows to Anime Twist this season. Find out if your favourite new anime will be added here <a href="https://bit.ly/2SKsfpC\" target="_blank\">https://bit.ly/2SKsfpC</a></string>
     <string name="search_item_title">Search</string>
     <string name="search_hint">Search for anime</string>
     <string name="ongoing_text">ONGOING</string>
-    <string name="hot_picks_title_text">Hot picks</string>
+    <string name="hot_picks_title_text">Hot picks 🔥</string>
     <string name="no_search_results_text">NANI? This must be the work of an enemy stand! No results were found.</string>
+    <string name="anime_poster_image_desc">Anime poster</string>
+    <string name="top_rated_header_text">Top rated</string>
 </resources>

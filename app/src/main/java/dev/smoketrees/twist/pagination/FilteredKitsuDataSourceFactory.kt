@@ -5,14 +5,15 @@ import androidx.paging.DataSource
 import dev.smoketrees.twist.api.anime.AnimeWebClient
 import dev.smoketrees.twist.model.twist.AnimeItem
 
-class KitsuDataSourceFactory(
+class FilteredKitsuDataSourceFactory(
     private val webClient: AnimeWebClient,
-    private val sort: String
+    private val sort: String,
+    private val filter: String
 ) : DataSource.Factory<Int, AnimeItem>() {
-    val animeLiveDataSource = MutableLiveData<PagedAnimeDatasource>()
+    val animeLiveDataSource = MutableLiveData<FilteredPagedAnimeDatasource>()
 
     override fun create(): DataSource<Int, AnimeItem> {
-        val animeDataSource = PagedAnimeDatasource(webClient, sort)
+        val animeDataSource = FilteredPagedAnimeDatasource(webClient, sort, filter)
         animeLiveDataSource.postValue(animeDataSource)
         return animeDataSource
     }

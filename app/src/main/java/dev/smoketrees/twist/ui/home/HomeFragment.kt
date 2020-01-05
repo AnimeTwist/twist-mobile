@@ -39,12 +39,13 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        header_body.movementMethod = LinkMovementMethod.getInstance()
+
+        motd_body_text.movementMethod = LinkMovementMethod.getInstance()
         dismiss_banner_button.setOnClickListener {
             banner_container.hide()
         }
 
-        val topAiringAdapter = PagedAnimeListAdapter(viewModel, requireContext()) {
+        val topAiringAdapter = PagedAnimeListAdapter(requireContext()) {
             val action =
                 HomeFragmentDirections.actionHomeFragmentToEpisodesFragment(
                     it.slug!!.slug!!,
@@ -59,7 +60,7 @@ class HomeFragment : Fragment() {
             layoutManager = topAiringLayoutManager
         }
 
-        val trendingAdapter = AnimeListAdapter(viewModel, requireContext()) {
+        val trendingAdapter = AnimeListAdapter(requireContext()) {
             val action =
                 HomeFragmentDirections.actionHomeFragmentToEpisodesFragment(
                     it.slug!!.slug!!,
@@ -73,6 +74,22 @@ class HomeFragment : Fragment() {
             adapter = trendingAdapter
             layoutManager = trendingLayoutManager
         }
+
+        val topRatedAdapter = PagedAnimeListAdapter(requireContext()) {
+            val action =
+                HomeFragmentDirections.actionHomeFragmentToEpisodesFragment(
+                    it.slug!!.slug!!,
+                    it.id!!
+                )
+            findNavController().navigate(action)
+        }
+        val topRatedLayoutManager =
+            LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+        top_rated_recyclerview.apply {
+            adapter = topRatedAdapter
+            layoutManager = topRatedLayoutManager
+        }
+
 
         // only load all anime once
         if (!viewModel.areAllLoaded) {
@@ -88,6 +105,9 @@ class HomeFragment : Fragment() {
 
                         trending_text.hide()
                         trending_recyclerview.hide()
+
+                        top_rated_text.hide()
+                        top_rated_recyclerview.hide()
                     }
 
                     Result.Status.SUCCESS -> {
@@ -100,45 +120,59 @@ class HomeFragment : Fragment() {
 
                         trending_text.show()
                         trending_recyclerview.show()
+
+                        top_rated_text.show()
+                        top_rated_recyclerview.show()
+
                         viewModel.getAllAnime().removeObservers(viewLifecycleOwner)
                         viewModel.areAllLoaded = true
 
-                        viewModel.getTrendingAnime(40).observe(viewLifecycleOwner, Observer {trendingList ->
-                            when (trendingList.status) {
-                                Result.Status.LOADING -> {
-                                    spinkit.show()
-                                    top_airing_recyclerview.hide()
-                                    banner_container.hide()
+                        viewModel.getTrendingAnime(40)
+                            .observe(viewLifecycleOwner, Observer { trendingList ->
+                                when (trendingList.status) {
+                                    Result.Status.LOADING -> {
+                                        spinkit.show()
+                                        top_airing_recyclerview.hide()
+                                        banner_container.hide()
 
-                                    top_airing_text.hide()
-                                    top_airing_recyclerview.hide()
+                                        top_airing_text.hide()
+                                        top_airing_recyclerview.hide()
 
-                                    trending_text.hide()
-                                    trending_recyclerview.hide()
-                                }
+                                        trending_text.hide()
+                                        trending_recyclerview.hide()
 
-                                Result.Status.SUCCESS -> {
-                                    if (!trendingList.data.isNullOrEmpty()) {
-                                        trendingAdapter.updateData(trendingList.data)
+                                        top_rated_text.hide()
+                                        top_rated_recyclerview.hide()
                                     }
-                                    spinkit.hide()
-                                    top_airing_recyclerview.show()
-                                    banner_container.show()
 
-                                    top_airing_text.show()
-                                    top_airing_recyclerview.show()
+                                    Result.Status.SUCCESS -> {
+                                        if (!trendingList.data.isNullOrEmpty()) {
+                                            trendingAdapter.updateData(trendingList.data)
+                                        }
+                                        spinkit.hide()
+                                        top_airing_recyclerview.show()
+                                        banner_container.show()
 
-                                    trending_text.show()
-                                    trending_recyclerview.show()
+                                        top_airing_text.show()
+                                        top_airing_recyclerview.show()
+
+                                        trending_text.show()
+                                        trending_recyclerview.show()
+
+                                        top_rated_text.show()
+                                        top_rated_recyclerview.show()
+                                    }
+
+                                    Result.Status.ERROR -> {
+                                        toast(trendingList.message.toString())
+                                    }
                                 }
-
-                                Result.Status.ERROR -> {
-                                    toast(trendingList.message.toString())
-                                }
-                            }
-                        })
-                        viewModel.animePagedList.observe(viewLifecycleOwner, Observer {pagedList ->
+                            })
+                        viewModel.topAiringAnime.observe(viewLifecycleOwner, Observer { pagedList ->
                             topAiringAdapter.submitList(pagedList)
+                        })
+                        viewModel.topRatedAnime.observe(viewLifecycleOwner, Observer { pagedList ->
+                            topRatedAdapter.submitList(pagedList)
                         })
                     }
 
@@ -148,7 +182,7 @@ class HomeFragment : Fragment() {
                 }
             })
         } else {
-            viewModel.getTrendingAnime(40).observe(viewLifecycleOwner, Observer {trendingList ->
+            viewModel.getTrendingAnime(40).observe(viewLifecycleOwner, Observer { trendingList ->
                 when (trendingList.status) {
                     Result.Status.LOADING -> {
                         spinkit.show()
@@ -160,6 +194,9 @@ class HomeFragment : Fragment() {
 
                         trending_text.hide()
                         trending_recyclerview.hide()
+
+                        top_rated_text.hide()
+                        top_rated_recyclerview.hide()
                     }
 
                     Result.Status.SUCCESS -> {
@@ -175,6 +212,9 @@ class HomeFragment : Fragment() {
 
                         trending_text.show()
                         trending_recyclerview.show()
+
+                        top_rated_text.show()
+                        top_rated_recyclerview.show()
                     }
 
                     Result.Status.ERROR -> {
@@ -182,11 +222,30 @@ class HomeFragment : Fragment() {
                     }
                 }
             })
-            viewModel.animePagedList.observe(viewLifecycleOwner, Observer {pagedList ->
+            viewModel.topAiringAnime.observe(viewLifecycleOwner, Observer { pagedList ->
                 topAiringAdapter.submitList(pagedList)
+            })
+            viewModel.topRatedAnime.observe(viewLifecycleOwner, Observer { pagedList ->
+                topRatedAdapter.submitList(pagedList)
             })
         }
 
+        viewModel.getMotd().observe(viewLifecycleOwner, Observer {
+            when (it.status) {
+                Result.Status.SUCCESS -> {
+                    motd_title_text.text = it.data?.title
+                    motd_body_text.setHtml(it.data?.message.toString())
+                }
+
+                Result.Status.ERROR -> {
+                    toast(it.message.toString())
+                }
+
+                else -> {
+
+                }
+            }
+        })
 
     }
 

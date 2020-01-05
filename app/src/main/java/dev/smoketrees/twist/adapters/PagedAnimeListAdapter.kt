@@ -10,12 +10,10 @@ import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 import com.bumptech.glide.Glide
 import dev.smoketrees.twist.R
 import dev.smoketrees.twist.model.twist.AnimeItem
-import dev.smoketrees.twist.ui.home.AnimeViewModel
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.animelist_item.*
 
 class PagedAnimeListAdapter(
-    private val viewModel: AnimeViewModel,
     private val context: Context,
     private val listener: (AnimeItem) -> Unit
 ) :

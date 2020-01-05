@@ -8,9 +8,10 @@ import dev.smoketrees.twist.model.twist.Result
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
-class PagedAnimeDatasource(
+class FilteredPagedAnimeDatasource(
     private val webClient: AnimeWebClient,
-    private val sort: String
+    private val sort: String,
+    private val filter: String
 ) :
     PageKeyedDataSource<Int, AnimeItem>() {
     val animeLiveData: MutableLiveData<Result<List<AnimeItem>?>> = MutableLiveData()
@@ -22,7 +23,7 @@ class PagedAnimeDatasource(
     ) {
         GlobalScope.launch {
             animeLiveData.postValue(Result.loading())
-            val response = webClient.kitsuRequest(params.requestedLoadSize, sort, 0)
+            val response = webClient.filteredKitsuRequest(params.requestedLoadSize, sort, filter, 0)
             when (response.status) {
                 Result.Status.SUCCESS -> {
                     animeLiveData.postValue(
@@ -50,7 +51,7 @@ class PagedAnimeDatasource(
         GlobalScope.launch {
             animeLiveData.postValue(Result.loading())
             val response =
-                webClient.kitsuRequest(params.requestedLoadSize, sort, params.key)
+                webClient.filteredKitsuRequest(params.requestedLoadSize, sort, filter, params.key)
             when (response.status) {
                 Result.Status.SUCCESS -> {
                     animeLiveData.postValue(
@@ -78,7 +79,7 @@ class PagedAnimeDatasource(
         GlobalScope.launch {
             animeLiveData.postValue(Result.loading())
             val response =
-                webClient.kitsuRequest(params.requestedLoadSize, sort, params.key)
+                webClient.filteredKitsuRequest(params.requestedLoadSize, sort, filter, params.key)
             when (response.status) {
                 Result.Status.SUCCESS -> {
                     animeLiveData.postValue(

@@ -24,6 +24,7 @@
             android:scaleType="fitXY"
             android:src="@drawable/ic_launcher_background"
             android:visibility="gone"
+            android:contentDescription="@string/anime_poster_image_desc"
             tools:visibility="visible" />
 
     </androidx.cardview.widget.CardView>
