@@ -10,7 +10,6 @@ if ("$System.env.CI" != "true") {
     def secretsFile = rootProject.file("secrets.properties")
     secretProperties.load(new FileInputStream(secretsFile))
 } else {
-    secretProperties.setProperty("access_key", "$System.env.ACCESS_KEY")
     secretProperties.setProperty("decrypt_key", "$System.env.DECRYPT_KEY")
 }
 
@@ -26,7 +25,6 @@ android {
         versionName "2.0-prod5"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
-        resValue("string", "access_token", secretProperties["access_key"])
         resValue("string", "source_decrypt_key", secretProperties["decrypt_key"])
 
         javaCompileOptions {

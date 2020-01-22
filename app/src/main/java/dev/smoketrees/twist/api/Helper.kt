@@ -11,17 +11,6 @@ fun getOkHttpClient(context: Context): OkHttpClient {
 
     val httpClient = OkHttpClient.Builder()
 
-    httpClient.addInterceptor { chain ->
-        val original = chain.request()
-        val requestBuilder = original.newBuilder()
-            .addHeader(
-                "x-access-token",
-                context.getString(R.string.access_token)
-            )
-        val request = requestBuilder.build()
-        return@addInterceptor chain.proceed(request)
-    }
-
     if (BuildConfig.DEBUG) {
         val httpLoggingInterceptor = HttpLoggingInterceptor()
         httpClient.addInterceptor(
