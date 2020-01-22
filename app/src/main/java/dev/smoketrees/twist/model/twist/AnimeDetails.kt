@@ -47,6 +47,10 @@ class AnimeDetails {
     @SerializedName("slug")
     @Expose
     var slug: Slug? = null
+    @SerializedName("nejire_extension")
+    @Expose
+    var extension: DetailsNejireExtension? = null
+
 
     override fun toString(): String {
         return ToStringBuilder(this).append("id", id).append("title", title)
@@ -57,4 +61,17 @@ class AnimeDetails {
             .toString()
     }
 
+}
+
+@Keep
+class DetailsNejireExtension {
+    @SerializedName("poster_image")
+    @Expose
+    var posterImage: String? = null
+    @SerializedName("cover_image")
+    @Expose
+    var coverImage: String? = null
+    @SerializedName("avg_score")
+    @Expose
+    var avgScore: Double? = null
 }

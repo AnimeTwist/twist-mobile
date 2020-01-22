@@ -22,6 +22,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:scaleType="fitXY"
+            android:maxHeight="150dp"
+            android:adjustViewBounds="true"
             android:src="@drawable/ic_launcher_background"
             android:visibility="gone"
             android:contentDescription="@string/anime_poster_image_desc"
@@ -72,7 +74,7 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/anime_episodes"
         app:layout_constraintTop_toBottomOf="@+id/anime_episodes"
-        tools:text="8.81/10"
+        tools:text="87.35%"
         tools:visibility="visible" />
 
     <TextView

@@ -3,17 +3,14 @@ package dev.smoketrees.twist.repository
 
 import android.util.Log
 import dev.smoketrees.twist.api.anime.AnimeWebClient
-import dev.smoketrees.twist.api.jikan.MALWebClient
 import dev.smoketrees.twist.db.AnimeDao
 import dev.smoketrees.twist.db.AnimeDetailsDao
-import dev.smoketrees.twist.model.MAL.JikanSearchModel
 import dev.smoketrees.twist.model.twist.AnimeDetails
 import dev.smoketrees.twist.model.twist.AnimeDetailsEntity
 import dev.smoketrees.twist.model.twist.Result
 
 class AnimeRepo(
     val webClient: AnimeWebClient,
-    private val MALClient: MALWebClient,
     private val animeDao: AnimeDao,
     private val episodeDao: AnimeDetailsDao
 ) : BaseRepo() {
@@ -47,8 +44,7 @@ class AnimeRepo(
         databaseQuery = { episodeDao.getAnimeDetails(id) },
         networkCall = {
             saveEpisodeDetails(
-                webClient.getAnimeDetails(name),
-                MALClient.getAnimeByName(name)
+                webClient.getAnimeDetails(name)
             )
         },
         saveCallResult = {
@@ -57,42 +53,35 @@ class AnimeRepo(
     )
 
     private fun saveEpisodeDetails(
-        episodeResult: Result<AnimeDetails>,
-        detailsResult: Result<JikanSearchModel>
+        episodeResult: Result<AnimeDetails>
     ): Result<AnimeDetailsEntity> {
-        return if (episodeResult.status == Result.Status.SUCCESS && detailsResult.status == Result.Status.SUCCESS) {
+        return if (episodeResult.status == Result.Status.SUCCESS) {
             Result.success(
-                getAnimeDetailsEntity(
-                    episodeResult.data!!,
-                    if (detailsResult.data?.results.isNullOrEmpty())
-                        null
-                    else detailsResult.data?.results?.get(0)
-                )
+                getAnimeDetailsEntity(episodeResult.data!!)
             )
         } else {
             Result.error("")
         }
     }
 
-
+    // TODO: add support for this data to nejire and use it in the app
     private fun getAnimeDetailsEntity(
-        episodeDetails: AnimeDetails,
-        result: JikanSearchModel.Result?
+        episodeDetails: AnimeDetails
     ) = AnimeDetailsEntity(
-        airing = result?.airing,
-        endDate = result?.endDate,
-        episodes = result?.episodes,
-        imageUrl = result?.imageUrl,
+        //airing = result?.airing,
+        //endDate = result?.endDate,
+        //episodes = result?.episodes,
+        imageUrl = episodeDetails.extension?.posterImage,
         id = episodeDetails.id,
-        malId = result?.malId,
-        members = result?.members,
-        rated = result?.rated,
-        score = result?.score,
-        startDate = result?.startDate,
-        synopsis = result?.synopsis,
-        title = result?.title,
-        type = result?.type,
-        url = result?.url,
+        //malId = result?.malId,
+        //members = result?.members,
+        //rated = result?.rated,
+        score = episodeDetails.extension?.avgScore,
+        //startDate = result?.startDate,
+        synopsis = episodeDetails.description,
+        title = episodeDetails.title,
+        //type = result?.type,
+        //url = result?.url,
         episodeList = episodeDetails.episodes!!
     )
 
@@ -100,13 +89,6 @@ class AnimeRepo(
         webClient.getAnimeSources(animeName)
     }
 
-    fun getMALAnime(animeName: String) = makeRequest {
-        MALClient.getAnimeByName(animeName)
-    }
-
-    fun getMALAnimeById(id: Int) = makeRequest {
-        MALClient.getAnimeById(id)
-    }
 
     fun searchAnime(animeName: String) = animeDao.searchAnime(animeName)
 
