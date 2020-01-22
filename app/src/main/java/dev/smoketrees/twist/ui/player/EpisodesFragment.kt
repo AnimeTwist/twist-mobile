@@ -72,7 +72,7 @@ class EpisodesFragment : Fragment() {
 
                         anime_title.text = detailsEntity.title
                         anime_episodes.text = "${detailsEntity.episodeList.size} episodes"
-                        anime_rating.text = "Score: ${detailsEntity.score}/10"
+                        anime_rating.text = "Score: ${detailsEntity.score}%"
                         detailsEntity.airing?.let { ongoing ->
                             if (ongoing) anime_ongoing_text.show() else anime_ongoing_text.hide()
                         }
