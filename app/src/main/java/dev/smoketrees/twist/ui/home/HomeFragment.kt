@@ -147,7 +147,7 @@ class HomeFragment : Fragment() {
 
                                     Result.Status.SUCCESS -> {
                                         if (!trendingList.data.isNullOrEmpty()) {
-                                            trendingAdapter.updateData(trendingList.data)
+                                            trendingAdapter.updateData(trendingList.data.shuffled())
                                         }
                                         spinkit.hide()
                                         top_airing_recyclerview.show()

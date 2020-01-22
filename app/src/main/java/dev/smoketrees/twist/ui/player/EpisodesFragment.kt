@@ -7,7 +7,6 @@ import android.text.method.ScrollingMovementMethod
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.view.isNotEmpty
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
@@ -17,7 +16,6 @@ import com.bumptech.glide.Glide
 import dev.smoketrees.twist.R
 import dev.smoketrees.twist.adapters.EpisodeListAdapter
 import dev.smoketrees.twist.model.twist.Result
-import dev.smoketrees.twist.ui.home.AnimeViewModel
 import dev.smoketrees.twist.utils.hide
 import dev.smoketrees.twist.utils.show
 import dev.smoketrees.twist.utils.toast
@@ -28,8 +26,6 @@ class EpisodesFragment : Fragment() {
 
     private val args: EpisodesFragmentArgs by navArgs()
     private val viewModel by sharedViewModel<EpisodesViewModel>()
-    private val animeViewModel by sharedViewModel<AnimeViewModel>()
-//    private val slug = args.slugName!!
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -71,7 +67,6 @@ class EpisodesFragment : Fragment() {
 
                 Result.Status.SUCCESS -> {
                     it.data?.let { detailsEntity ->
-
                         anime_title.text = detailsEntity.title
                         anime_episodes.text = "${detailsEntity.episodeList.size} episodes"
                         anime_description.text = detailsEntity.synopsis
