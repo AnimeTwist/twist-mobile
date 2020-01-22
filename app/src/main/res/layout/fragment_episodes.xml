@@ -20,9 +20,8 @@
         <ImageView
             android:id="@+id/anime_image"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="172dp"
             android:scaleType="fitXY"
-            android:maxHeight="150dp"
             android:adjustViewBounds="true"
             android:src="@drawable/ic_launcher_background"
             android:visibility="gone"
@@ -54,10 +53,27 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="40dp"
         android:visibility="gone"
+        android:textAppearance="@style/TextAppearance.AppCompat.Small"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/anime_title"
         app:layout_constraintTop_toBottomOf="@+id/anime_title"
         tools:text="26 episodes"
+        tools:visibility="visible" />
+
+    <TextView
+        android:id="@+id/anime_description"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="40dp"
+        android:maxHeight="86dp"
+        android:scrollbars="vertical"
+        android:fadingEdge="vertical"
+        android:visibility="gone"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/anime_title"
+        app:layout_constraintTop_toBottomOf="@+id/anime_episodes"
+        tools:text="His name is Nero, the man who will someday become a mafia boss. He is also the target of revenge by Avilio, whose family was murdered. In order to carry out his revenge, Avilio will have to kill his friend."
         tools:visibility="visible" />
 
 
@@ -65,7 +81,7 @@
         android:id="@+id/anime_rating"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:textAppearance="@style/TextAppearance.MaterialComponents.Headline5"
         android:visibility="gone"
@@ -73,7 +89,7 @@
         app:layout_constraintEnd_toStartOf="@+id/anime_ongoing_text"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/anime_episodes"
-        app:layout_constraintTop_toBottomOf="@+id/anime_episodes"
+        app:layout_constraintTop_toBottomOf="@+id/anime_description"
         tools:text="87.35%"
         tools:visibility="visible" />
 

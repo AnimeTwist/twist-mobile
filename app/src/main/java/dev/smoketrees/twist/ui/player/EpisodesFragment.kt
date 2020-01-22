@@ -3,6 +3,7 @@ package dev.smoketrees.twist.ui.player
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.text.method.ScrollingMovementMethod
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -53,7 +54,7 @@ class EpisodesFragment : Fragment() {
         val layoutManager = LinearLayoutManager(requireContext())
         episode_list.adapter = adapter
         episode_list.layoutManager = layoutManager
-
+        anime_description.movementMethod = ScrollingMovementMethod()
 
         viewModel.getAnimeDetails(args.slugName, args.id).observe(viewLifecycleOwner, Observer {
             when (it.status) {
@@ -62,6 +63,7 @@ class EpisodesFragment : Fragment() {
                     episode_list.hide()
                     anime_image.hide()
                     anime_title.hide()
+                    anime_description.hide()
                     anime_rating.hide()
                     anime_episodes.hide()
                     anime_ongoing_text.hide()
@@ -72,6 +74,7 @@ class EpisodesFragment : Fragment() {
 
                         anime_title.text = detailsEntity.title
                         anime_episodes.text = "${detailsEntity.episodeList.size} episodes"
+                        anime_description.text = detailsEntity.synopsis
                         anime_rating.text = "Score: ${detailsEntity.score}%"
                         detailsEntity.airing?.let { ongoing ->
                             if (ongoing) anime_ongoing_text.show() else anime_ongoing_text.hide()
@@ -84,6 +87,7 @@ class EpisodesFragment : Fragment() {
                         episode_list.show()
                         anime_image.show()
                         anime_title.show()
+                        anime_description.show()
                         anime_rating.show()
                         anime_episodes.show()
 

@@ -68,7 +68,7 @@ class AnimeRepo(
     private fun getAnimeDetailsEntity(
         episodeDetails: AnimeDetails
     ) = AnimeDetailsEntity(
-        //airing = result?.airing,
+        airing = episodeDetails.ongoing == 1,
         //endDate = result?.endDate,
         //episodes = result?.episodes,
         imageUrl = episodeDetails.extension?.posterImage,
