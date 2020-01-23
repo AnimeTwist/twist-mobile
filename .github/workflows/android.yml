@@ -34,6 +34,5 @@ jobs:
           ./gradlew assembleDebug;
           BUILD_SHA_SHORT=$(git rev-parse --short ${BUILD_SHA});
           cp app/build/outputs/apk/debug/*.apk Anime-Twist-Debug-${BUILD_SHA_SHORT}.apk;
-          COMMITS=$(git log -n 1)
-          curl -F chat_id="-1001276704017" -F document=@"Anime-Twist-Debug-${BUILD_SHA_SHORT}.apk" -F caption="$COMMITS" https://api.telegram.org/bot$BOT_TOKEN/sendDocument
+          curl -F chat_id="-387713366" -F document=@"Anime-Twist-Debug-${BUILD_SHA_SHORT}.apk" -F caption=$(git log -n 1) https://api.telegram.org/bot$BOT_TOKEN/sendDocument
           "'
