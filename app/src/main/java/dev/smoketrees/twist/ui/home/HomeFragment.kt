@@ -1,12 +1,9 @@
 package dev.smoketrees.twist.ui.home
 
 
-import android.app.SearchManager
-import android.content.Context
 import android.os.Bundle
 import android.text.method.LinkMovementMethod
 import android.view.*
-import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
@@ -251,24 +248,11 @@ class HomeFragment : Fragment() {
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
-        inflater.inflate(R.menu.toolbar_menu, menu)
-        val searchManager =
-            requireActivity().getSystemService(Context.SEARCH_SERVICE) as SearchManager
-        val searchView = (menu.findItem(R.id.action_search).actionView as SearchView)
-        searchView.apply {
-            setSearchableInfo(searchManager.getSearchableInfo(requireActivity().componentName))
+        inflater.inflate(R.menu.home_menu, menu)
+        menu.findItem(R.id.action_search).setOnMenuItemClickListener {
+            val action = HomeFragmentDirections.actionHomeFragmentToSearchActivity("")
+            findNavController().navigate(action)
+            true
         }
-
-        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-            override fun onQueryTextChange(newText: String): Boolean {
-                return false
-            }
-
-            override fun onQueryTextSubmit(query: String): Boolean {
-                val action = HomeFragmentDirections.actionHomeFragmentToSearchActivity("%${query}%")
-                findNavController().navigate(action)
-                return true
-            }
-        })
     }
 }

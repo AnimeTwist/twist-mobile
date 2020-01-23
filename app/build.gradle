@@ -127,8 +127,10 @@ dependencies {
     // html rendering
     implementation "org.sufficientlysecure:html-textview:3.9"
 
+    // Fuzzy search
+    implementation "me.xdrop:fuzzywuzzy:1.2.0"
 }
 
-def byteArrayLiteral(String string) {
+static def byteArrayLiteral(String string) {
     return "new byte[] { " + string.bytes.join(", ") + "}"
 }

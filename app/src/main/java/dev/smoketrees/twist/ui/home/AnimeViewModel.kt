@@ -1,8 +1,6 @@
 package dev.smoketrees.twist.ui.home
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.switchMap
+import androidx.lifecycle.*
 import androidx.paging.LivePagedListBuilder
 import androidx.paging.PagedList
 import dev.smoketrees.twist.model.twist.AnimeItem
@@ -13,8 +11,10 @@ import dev.smoketrees.twist.repository.AnimeRepo
 
 class AnimeViewModel(private val repo: AnimeRepo) : ViewModel() {
     fun getAllAnime() = repo.getAllAnime()
-    fun searchAnime(animeName: String) = repo.searchAnime(animeName)
     fun getMotd() = repo.getMotd()
+
+    val searchResults: MutableLiveData<List<AnimeItem>> = MutableLiveData()
+    val searchQuery = MutableLiveData<String>()
 
     var areAllLoaded = false
 
