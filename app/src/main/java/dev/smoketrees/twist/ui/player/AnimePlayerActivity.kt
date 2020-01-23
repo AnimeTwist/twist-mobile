@@ -10,6 +10,7 @@ import android.content.pm.ActivityInfo
 import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
+import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
@@ -26,7 +27,6 @@ import dev.smoketrees.twist.utils.CryptoHelper
 import dev.smoketrees.twist.utils.hide
 import dev.smoketrees.twist.utils.show
 import dev.smoketrees.twist.utils.toast
-import io.karn.notify.Notify
 import kotlinx.android.synthetic.main.activity_anime_player.*
 import kotlinx.android.synthetic.main.exo_playback_control_view.*
 import org.koin.android.viewmodel.ext.android.viewModel
@@ -80,7 +80,7 @@ class AnimePlayerActivity : AppCompatActivity() {
                         val decryptedUrl =
                             CryptoHelper.decryptSourceUrl(this, it?.data?.get(epNo - 1)?.source!!)
 
-                        val downloadUrl = Uri.parse("https://twist.moe${decryptedUrl}")
+                        val downloadUrl = Uri.parse("https://at-cdn.bunny.sh${decryptedUrl}")
                         val downloadManager = getSystemService(DOWNLOAD_SERVICE) as DownloadManager
 
                         val request = DownloadManager.Request(downloadUrl)
@@ -89,7 +89,7 @@ class AnimePlayerActivity : AppCompatActivity() {
                             .setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE)
                             .setDestinationInExternalPublicDir(
                                 Environment.DIRECTORY_MOVIES,
-                                "$slug-$epNo.mkv"
+                                "$slug-episode-$epNo.mkv"
                             )
                             .addRequestHeader("Referer", viewModel.referer)
 
@@ -116,8 +116,8 @@ class AnimePlayerActivity : AppCompatActivity() {
                     Result.Status.SUCCESS -> {
                         val decryptedUrl =
                             CryptoHelper.decryptSourceUrl(this, it?.data?.get(epNo - 1)?.source!!)
-
-                        play(Uri.parse("https://twist.moe${decryptedUrl}"))
+                        Log.d("TAG", Uri.parse("https://at-cdn.bunny.sh${decryptedUrl}").toString())
+                        play(Uri.parse("https://at-cdn.bunny.sh${decryptedUrl}"))
 
                     }
 

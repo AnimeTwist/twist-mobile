@@ -1,13 +1,11 @@
 package dev.smoketrees.twist.api
 
-import android.content.Context
 import dev.smoketrees.twist.BuildConfig
-import dev.smoketrees.twist.R
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import java.util.concurrent.TimeUnit
 
-fun getOkHttpClient(context: Context): OkHttpClient {
+fun getOkHttpClient(): OkHttpClient {
 
     val httpClient = OkHttpClient.Builder()
 

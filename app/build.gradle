@@ -21,8 +21,8 @@ android {
         applicationId "dev.smoketrees.twist"
         minSdkVersion 19
         targetSdkVersion 29
-        versionCode 8
-        versionName "2.0-prod5"
+        versionCode 10
+        versionName "2.2-prod7"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
         resValue("string", "source_decrypt_key", secretProperties["decrypt_key"])
@@ -37,13 +37,6 @@ android {
     }
     buildTypes {
         release {
-            minifyEnabled true
-            shrinkResources true
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-            multiDexEnabled = true
-        }
-
-        debug {
             minifyEnabled true
             shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
@@ -76,7 +69,7 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
 
-    implementation "androidx.fragment:fragment-ktx:1.2.0-rc04"
+    implementation "androidx.fragment:fragment-ktx:1.2.0-rc05"
 
     // Lifecycle components
     implementation "androidx.lifecycle:lifecycle-extensions:2.2.0-rc03"
@@ -128,18 +121,10 @@ dependencies {
     // multidex
     implementation 'com.android.support:multidex:1.0.3'
 
-    // expandable textview
-    implementation 'com.ms-square:expandableTextView:0.1.4'
-
     // android system permissions
     implementation 'com.github.quickpermissions:quickpermissions-kotlin:0.4.0'
-
-    // easy notifications
-    implementation "io.karn:notify:1.3.0"
 
     // html rendering
     implementation "org.sufficientlysecure:html-textview:3.9"
 
-//     viewpager2
-//    implementation 'androidx.viewpager2:viewpager2:1.0.0'
 }

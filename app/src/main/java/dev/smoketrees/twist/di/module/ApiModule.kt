@@ -3,7 +3,6 @@ package dev.smoketrees.twist.di.module
 import dev.smoketrees.twist.api.anime.AnimeWebClient
 import dev.smoketrees.twist.api.anime.AnimeWebService
 import dev.smoketrees.twist.api.getOkHttpClient
-import org.koin.android.ext.koin.androidContext
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
 import retrofit2.Retrofit
@@ -13,7 +12,7 @@ private const val TWIST_BASE_URL = "https://twist.suzuha.moe/"
 private const val TWIST_API = "TWIST_API"
 
 val apiModule = module {
-    factory { getOkHttpClient(androidContext()) }
+    factory { getOkHttpClient() }
 
     single(named(TWIST_API)) {
         Retrofit.Builder()
