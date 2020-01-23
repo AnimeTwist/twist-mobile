@@ -25,7 +25,7 @@ android {
         versionName "2.2-prod7"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
-        resValue("string", "source_decrypt_key", secretProperties["decrypt_key"])
+        buildConfigField("byte[]", "CRYPTO_KEY", byteArrayLiteral(secretProperties["decrypt_key"]))
 
         javaCompileOptions {
             annotationProcessorOptions {
@@ -127,4 +127,8 @@ dependencies {
     // html rendering
     implementation "org.sufficientlysecure:html-textview:3.9"
 
+}
+
+def byteArrayLiteral(String string) {
+    return "new byte[] { " + string.bytes.join(", ") + "}"
 }

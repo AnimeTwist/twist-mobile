@@ -77,8 +77,7 @@ class AnimePlayerActivity : AppCompatActivity() {
                     }
 
                     Result.Status.SUCCESS -> {
-                        val decryptedUrl =
-                            CryptoHelper.decryptSourceUrl(this, it?.data?.get(epNo - 1)?.source!!)
+                        val decryptedUrl = CryptoHelper.decryptSourceUrl(it?.data?.get(epNo - 1)?.source!!)
 
                         val downloadUrl = Uri.parse("https://at-cdn.bunny.sh${decryptedUrl}")
                         val downloadManager = getSystemService(DOWNLOAD_SERVICE) as DownloadManager
@@ -115,7 +114,7 @@ class AnimePlayerActivity : AppCompatActivity() {
 
                     Result.Status.SUCCESS -> {
                         val decryptedUrl =
-                            CryptoHelper.decryptSourceUrl(this, it?.data?.get(epNo - 1)?.source!!)
+                            CryptoHelper.decryptSourceUrl(it?.data?.get(epNo - 1)?.source!!)
                         Log.d("TAG", Uri.parse("https://at-cdn.bunny.sh${decryptedUrl}").toString())
                         play(Uri.parse("https://at-cdn.bunny.sh${decryptedUrl}"))
 

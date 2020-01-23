@@ -2,6 +2,7 @@ package dev.smoketrees.twist.utils
 
 import android.content.Context
 import androidx.annotation.Keep
+import dev.smoketrees.twist.BuildConfig
 import dev.smoketrees.twist.R
 import java.nio.charset.StandardCharsets
 import java.security.DigestException
@@ -71,9 +72,7 @@ object CryptoHelper {
         }
     }
 
-    fun decryptSourceUrl(context: Context, sourceUrl: String): String {
-        val secret = context.getString(R.string.source_decrypt_key)
-
+    fun decryptSourceUrl(sourceUrl: String): String {
         val cipherData = android.util.Base64.decode(sourceUrl, android.util.Base64.DEFAULT)
         val saltData = Arrays.copyOfRange(cipherData, 8, 16)
 
@@ -85,7 +84,7 @@ object CryptoHelper {
         }
 
         val keyAndIV =
-            generateKeyAndIV(32, 16, 1, saltData, secret.toByteArray(StandardCharsets.UTF_8), md5!!)
+            generateKeyAndIV(32, 16, 1, saltData, BuildConfig.CRYPTO_KEY, md5!!)
         val key = SecretKeySpec(keyAndIV[0], "AES")
         val iv = IvParameterSpec(keyAndIV[1])
 
