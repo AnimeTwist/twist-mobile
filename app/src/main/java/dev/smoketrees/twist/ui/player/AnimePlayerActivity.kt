@@ -77,27 +77,38 @@ class AnimePlayerActivity : AppCompatActivity() {
                     }
 
                     Result.Status.SUCCESS -> {
-                        val decryptedUrl = CryptoHelper.decryptSourceUrl(it?.data?.get(epNo - 1)?.source!!)
+                        if (it != null) {
+                            if (!it.data.isNullOrEmpty()) {
+                                val decryptedUrl =
+                                    it.data[epNo - 1].source?.let { src ->
+                                        CryptoHelper.decryptSourceUrl(
+                                            src
+                                        )
+                                    }
 
-                        val downloadUrl = Uri.parse("https://at-cdn.bunny.sh${decryptedUrl}")
-                        val downloadManager = getSystemService(DOWNLOAD_SERVICE) as DownloadManager
+                                val downloadUrl =
+                                    Uri.parse("https://at-cdn.bunny.sh${decryptedUrl}")
+                                val downloadManager =
+                                    getSystemService(DOWNLOAD_SERVICE) as DownloadManager
 
-                        val request = DownloadManager.Request(downloadUrl)
-                            .setTitle("Downloading $slug-$epNo")
-                            .setDescription("Downloading episode $epNo")
-                            .setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE)
-                            .setDestinationInExternalPublicDir(
-                                Environment.DIRECTORY_MOVIES,
-                                "$slug-episode-$epNo.mkv"
-                            )
-                            .addRequestHeader("Referer", viewModel.referer)
+                                val request = DownloadManager.Request(downloadUrl)
+                                    .setTitle("Downloading $slug-$epNo")
+                                    .setDescription("Downloading episode $epNo")
+                                    .setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE)
+                                    .setDestinationInExternalPublicDir(
+                                        Environment.DIRECTORY_MOVIES,
+                                        "$slug-episode-$epNo.mkv"
+                                    )
+                                    .addRequestHeader("Referer", viewModel.referer)
 
-                        viewModel.downloadID = downloadManager.enqueue(request)
-                        finish()
+                                viewModel.downloadID = downloadManager.enqueue(request)
+                                finish()
+                            }
+                        }
                     }
 
                     Result.Status.ERROR -> {
-                        toast(it.message!!)
+                        toast(it.message.toString())
                     }
                 }
             })
@@ -113,15 +124,23 @@ class AnimePlayerActivity : AppCompatActivity() {
                     }
 
                     Result.Status.SUCCESS -> {
-                        val decryptedUrl =
-                            CryptoHelper.decryptSourceUrl(it?.data?.get(epNo - 1)?.source!!)
-                        Log.d("TAG", Uri.parse("https://at-cdn.bunny.sh${decryptedUrl}").toString())
-                        play(Uri.parse("https://at-cdn.bunny.sh${decryptedUrl}"))
+                        if (it != null) {
+                            if (!it.data.isNullOrEmpty()) {
+                                val decryptedUrl =
+                                    it.data[epNo - 1].source?.let { src ->
+                                        CryptoHelper.decryptSourceUrl(
+                                            src
+                                        )
+                                    }
+                                play(Uri.parse("https://at-cdn.bunny.sh${decryptedUrl}"))
+                            }
+                        }
+
 
                     }
 
                     Result.Status.ERROR -> {
-                        toast(it.message!!)
+                        toast(it.message.toString())
                     }
                 }
             })
