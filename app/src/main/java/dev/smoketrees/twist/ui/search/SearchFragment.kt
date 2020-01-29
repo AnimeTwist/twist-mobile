@@ -73,19 +73,20 @@ class SearchFragment : Fragment(), CoroutineScope {
             when (it.status) {
                 Result.Status.SUCCESS -> anime = it.data ?: emptyList()
                 Result.Status.ERROR -> anime = emptyList()
+                else -> {}
             }
         }
 
         launch(Dispatchers.IO) {
-            viewModel.searchQuery.asFlow().collect {
+            viewModel.searchQuery.asFlow().collect { searchString ->
                 viewModel.searchResults.postValue((FuzzySearch.extractAll(
-                    it,
+                    searchString,
                     anime,
                     ToStringFunction { it.title },
                     WinklerWeightedRatio(),
                     65
                 ) + FuzzySearch.extractAll(
-                        it,
+                        searchString,
                     anime,
                         ToStringFunction { it.altTitle },
                         WinklerWeightedRatio(),

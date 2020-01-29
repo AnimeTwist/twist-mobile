@@ -21,8 +21,8 @@ android {
         applicationId "dev.smoketrees.twist"
         minSdkVersion 19
         targetSdkVersion 29
-        versionCode 10
-        versionName "2.2-prod7"
+        versionCode 11
+        versionName "2.3-prod8"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
         buildConfigField("byte[]", "CRYPTO_KEY", byteArrayLiteral(secretProperties["decrypt_key"]))
@@ -69,16 +69,16 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
 
-    implementation "androidx.fragment:fragment-ktx:1.2.0-rc05"
+    implementation "androidx.fragment:fragment-ktx:1.2.0"
 
     // Lifecycle components
-    implementation "androidx.lifecycle:lifecycle-extensions:2.2.0-rc03"
-    implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.2.0-rc03"
-    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0-rc03"
+    implementation "androidx.lifecycle:lifecycle-extensions:2.2.0"
+    implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.2.0"
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0"
 
     // Navigation component
-    implementation "androidx.navigation:navigation-fragment-ktx:2.1.0"
-    implementation "androidx.navigation:navigation-ui-ktx:2.1.0"
+    implementation "androidx.navigation:navigation-fragment-ktx:2.2.0"
+    implementation "androidx.navigation:navigation-ui-ktx:2.2.0"
 
     // Paging support
     implementation "androidx.paging:paging-runtime-ktx:2.1.1"

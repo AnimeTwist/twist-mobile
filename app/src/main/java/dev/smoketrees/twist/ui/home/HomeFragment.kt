@@ -20,8 +20,6 @@ import org.koin.android.viewmodel.ext.android.sharedViewModel
 
 
 class HomeFragment : Fragment() {
-
-
     private val viewModel by sharedViewModel<AnimeViewModel>()
 
     override fun onCreateView(
@@ -239,7 +237,6 @@ class HomeFragment : Fragment() {
                 }
 
                 else -> {
-
                 }
             }
         })

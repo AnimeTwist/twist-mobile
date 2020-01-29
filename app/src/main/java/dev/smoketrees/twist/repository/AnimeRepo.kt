@@ -27,9 +27,7 @@ class AnimeRepo(
     fun getAllAnime() = makeRequestAndSave(
         databaseQuery = { animeDao.getAllAnime() },
         networkCall = { webClient.getAllAnime() },
-        saveCallResult = {
-            animeDao.saveAnime(it)
-        }
+        saveCallResult = { animeDao.saveAnime(it) }
     )
 
     fun getTrendingAnime(limit: Int) = makeRequest {
