@@ -22,7 +22,7 @@ android {
         minSdkVersion 19
         targetSdkVersion 29
         versionCode 11
-        versionName "2.3-prod8"
+        versionName "2.2.1-prod8"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
         buildConfigField("byte[]", "CRYPTO_KEY", byteArrayLiteral(secretProperties["decrypt_key"]))

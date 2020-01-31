@@ -1,13 +1,8 @@
 package dev.smoketrees.twist.api.anime
 
-import dev.smoketrees.twist.model.twist.AnimeDetails
-import dev.smoketrees.twist.model.twist.AnimeItem
-import dev.smoketrees.twist.model.twist.AnimeSource
-import dev.smoketrees.twist.model.twist.Motd
+import dev.smoketrees.twist.model.twist.*
 import retrofit2.Response
-import retrofit2.http.GET
-import retrofit2.http.Path
-import retrofit2.http.Query
+import retrofit2.http.*
 
 interface AnimeWebService {
     @GET("anime")
@@ -41,4 +36,10 @@ interface AnimeWebService {
 
     @GET("motd")
     suspend fun getMotd(): Response<Motd>
+
+    @POST("auth/signin")
+    suspend fun signIn(@Body loginDetails: LoginDetails): Response<LoginResponse>
+
+    @POST("auth/signup")
+    suspend fun signUp(@Body registerDetails: RegisterDetails): Response<LoginResponse>
 }
