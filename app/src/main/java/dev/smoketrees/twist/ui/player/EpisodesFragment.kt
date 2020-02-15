@@ -12,6 +12,7 @@ import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import dev.smoketrees.twist.R
 import dev.smoketrees.twist.adapters.EpisodeListAdapter
@@ -47,10 +48,19 @@ class EpisodesFragment : Fragment() {
             )
             findNavController().navigate(action)
         }
+
         val layoutManager = LinearLayoutManager(requireContext())
         episode_list.adapter = adapter
         episode_list.layoutManager = layoutManager
         anime_description.movementMethod = ScrollingMovementMethod()
+
+        // FAB to scroll to very bottom
+        scroll_fab.setOnClickListener {
+            episode_list.smoothScrollToPosition(adapter.itemCount - 1)
+        }
+        adapter.onBottomReachedListener = {
+            scroll_fab.hide()
+        }
 
         viewModel.getAnimeDetails(args.slugName, args.id).observe(viewLifecycleOwner, Observer {
             when (it.status) {
@@ -63,6 +73,7 @@ class EpisodesFragment : Fragment() {
                     anime_rating.hide()
                     anime_episodes.hide()
                     anime_ongoing_text.hide()
+                    scroll_fab.hide()
                 }
 
                 Result.Status.SUCCESS -> {
@@ -89,6 +100,10 @@ class EpisodesFragment : Fragment() {
                         if (detailsEntity.episodeList.isNotEmpty()) {
                             adapter.updateData(it.data.episodeList)
                         }
+
+                        if (layoutManager.findLastCompletelyVisibleItemPosition() < adapter.itemCount - 1) {
+                            scroll_fab.show()
+                        }
                     }
                 }
 
@@ -99,4 +114,5 @@ class EpisodesFragment : Fragment() {
             }
         })
     }
+
 }

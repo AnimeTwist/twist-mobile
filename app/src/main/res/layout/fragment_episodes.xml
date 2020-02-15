@@ -21,11 +21,11 @@
             android:id="@+id/anime_image"
             android:layout_width="wrap_content"
             android:layout_height="172dp"
-            android:scaleType="fitXY"
             android:adjustViewBounds="true"
+            android:contentDescription="@string/anime_poster_image_desc"
+            android:scaleType="fitXY"
             android:src="@drawable/ic_launcher_background"
             android:visibility="gone"
-            android:contentDescription="@string/anime_poster_image_desc"
             tools:visibility="visible" />
 
     </androidx.cardview.widget.CardView>
@@ -38,8 +38,8 @@
         android:layout_marginEnd="40dp"
         android:ellipsize="end"
         android:maxLines="2"
-        android:textColor="@color/colorAccent"
         android:textAppearance="@style/TextAppearance.AppCompat.Title"
+        android:textColor="@color/colorAccent"
         android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -53,8 +53,8 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="40dp"
-        android:visibility="gone"
         android:textAppearance="@style/TextAppearance.AppCompat.Small"
+        android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/anime_title"
         app:layout_constraintTop_toBottomOf="@+id/anime_title"
@@ -66,11 +66,11 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="40dp"
+        android:fadingEdge="vertical"
         android:maxHeight="86dp"
         android:scrollbars="vertical"
-        android:fadingEdge="vertical"
-        android:visibility="gone"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+        android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/anime_title"
         app:layout_constraintTop_toBottomOf="@+id/anime_episodes"
@@ -108,17 +108,38 @@
         tools:text="ONGOING"
         tools:visibility="visible" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/episode_list"
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:id="@+id/coordinator"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginTop="16dp"
-        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/image_card"
-        tools:layout_editor_absoluteX="35dp"
-        tools:listitem="@layout/episode_item"
-        tools:visibility="visible" />
+        app:layout_constraintTop_toBottomOf="@+id/image_card">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/episode_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone"
+            tools:layout_editor_absoluteX="35dp"
+            tools:listitem="@layout/episode_item"
+            tools:visibility="visible" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/scroll_fab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
+            android:layout_margin="16dp"
+            android:src="@drawable/ic_keyboard_arrow_down"
+            android:visibility="invisible"
+            app:backgroundTint="@color/colorAccent"
+            app:fabSize="mini"
+            app:layout_anchor="@id/episode_list"
+            app:layout_anchorGravity="bottom|right|end"
+            tools:visibility="visible" />
+
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
     <com.github.ybq.android.spinkit.SpinKitView
         android:id="@+id/episode_spinkit"
@@ -131,5 +152,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
