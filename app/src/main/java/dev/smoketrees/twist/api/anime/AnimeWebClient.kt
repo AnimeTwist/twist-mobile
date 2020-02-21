@@ -1,6 +1,8 @@
 package dev.smoketrees.twist.api.anime
 
 import dev.smoketrees.twist.api.BaseApiClient
+import dev.smoketrees.twist.model.twist.LoginDetails
+import dev.smoketrees.twist.model.twist.RegisterDetails
 
 class AnimeWebClient(private val webService: AnimeWebService) : BaseApiClient() {
     suspend fun getAllAnime() = getResult {
@@ -38,5 +40,13 @@ class AnimeWebClient(private val webService: AnimeWebService) : BaseApiClient() 
 
     suspend fun getMotd() = getResult {
         webService.getMotd()
+    }
+
+    suspend fun signIn(loginDetails: LoginDetails) = getResult {
+        webService.signIn(loginDetails)
+    }
+
+    suspend fun signUp(registerDetails: RegisterDetails) = getResult {
+        webService.signUp(registerDetails)
     }
 }

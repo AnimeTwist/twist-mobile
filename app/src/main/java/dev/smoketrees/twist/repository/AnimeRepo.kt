@@ -8,10 +8,7 @@ import androidx.lifecycle.liveData
 import dev.smoketrees.twist.api.anime.AnimeWebClient
 import dev.smoketrees.twist.db.AnimeDao
 import dev.smoketrees.twist.db.AnimeDetailsDao
-import dev.smoketrees.twist.model.twist.AnimeDetails
-import dev.smoketrees.twist.model.twist.AnimeDetailsEntity
-import dev.smoketrees.twist.model.twist.AnimeItem
-import dev.smoketrees.twist.model.twist.Result
+import dev.smoketrees.twist.model.twist.*
 import dev.smoketrees.twist.utils.search.WinklerWeightedRatio
 import kotlinx.coroutines.Dispatchers
 import me.xdrop.fuzzywuzzy.FuzzySearch
@@ -99,5 +96,13 @@ class AnimeRepo(
 
     fun kitsuRequest(pageLimit: Int, sort: String, offset: Int) = makeRequest {
         webClient.kitsuRequest(pageLimit, sort, offset)
+    }
+
+    fun signIn(loginDetails: LoginDetails) = makeRequest {
+        webClient.signIn(loginDetails)
+    }
+
+    fun signUp(registerDetails: RegisterDetails) = makeRequest {
+        webClient.signUp(registerDetails)
     }
 }

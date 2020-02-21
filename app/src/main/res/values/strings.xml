@@ -10,4 +10,19 @@
     <string name="no_search_results_text">NANI? This must be the work of an enemy stand! No results were found.</string>
     <string name="anime_poster_image_desc">Anime poster</string>
     <string name="top_rated_header_text">Top rated</string>
+    <string name="log_in_menutext">Log in</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="home_bottom_menuitem">Home</string>
+    <string name="acct_bottom_menuitem">Account</string>
+    <string name="username_til_hint">Username</string>
+    <string name="password_til_hint">Password</string>
+    <string name="email_til_hint">Email</string>
+    <string name="password_confirm_til_hint">Enter password again</string>
+    <string name="register_fab">Register</string>
+    <string name="email_err">Enter a valid email.</string>
+    <string name="pass_match_err">Passwords do not match</string>
+    <string name="pass_len_err">Password must be greater than 7 characters</string>
+    <string name="sign_up_text">Sign up</string>
 </resources>

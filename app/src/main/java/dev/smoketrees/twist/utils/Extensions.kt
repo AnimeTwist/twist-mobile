@@ -3,6 +3,7 @@ package dev.smoketrees.twist.utils
 import android.app.Activity
 import android.content.Context
 import android.util.DisplayMetrics
+import android.util.Patterns
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -23,15 +24,15 @@ fun ViewGroup.inflate(layoutRes: Int): View {
 }
 
 fun View.hide() {
-    this.visibility = View.GONE
+    visibility = View.GONE
 }
 
 fun View.invisible() {
-    this.visibility = View.INVISIBLE
+    visibility = View.INVISIBLE
 }
 
 fun View.show() {
-    this.visibility = View.VISIBLE
+    visibility = View.VISIBLE
 }
 
 fun Fragment.hideKeyboard() {
@@ -55,13 +56,13 @@ fun Fragment.longToast(message: String) {
     requireContext().longToast(message)
 }
 
-fun Activity.getHeight() : Int {
+fun Activity.getHeight(): Int {
     val displayMetrics = DisplayMetrics();
     this.windowManager.defaultDisplay.getMetrics(displayMetrics)
     return displayMetrics.heightPixels
 }
 
-fun Activity.getWidth() : Int {
+fun Activity.getWidth(): Int {
     val displayMetrics = DisplayMetrics();
     this.windowManager.defaultDisplay.getMetrics(displayMetrics)
     return displayMetrics.widthPixels
@@ -73,4 +74,12 @@ fun Fragment.getHeight(): Int {
 
 fun Fragment.getWidth(): Int {
     return requireActivity().getWidth()
+}
+
+fun String.isValidEmail(): Boolean {
+    return isNotEmpty() && Patterns.EMAIL_ADDRESS.matcher(this).matches()
+}
+
+fun String.isValidPass(): Boolean {
+    return length >= 7
 }

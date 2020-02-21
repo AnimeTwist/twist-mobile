@@ -251,5 +251,11 @@ class HomeFragment : Fragment() {
             findNavController().navigate(action)
             true
         }
+
+        menu.findItem(R.id.action_account).setOnMenuItemClickListener {
+            val action = HomeFragmentDirections.actionHomeFragmentToAccountFragment()
+            findNavController().navigate(action)
+            true
+        }
     }
 }

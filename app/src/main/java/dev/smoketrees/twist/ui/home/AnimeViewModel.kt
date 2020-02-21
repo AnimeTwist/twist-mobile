@@ -4,6 +4,8 @@ import androidx.lifecycle.*
 import androidx.paging.LivePagedListBuilder
 import androidx.paging.PagedList
 import dev.smoketrees.twist.model.twist.AnimeItem
+import dev.smoketrees.twist.model.twist.LoginDetails
+import dev.smoketrees.twist.model.twist.RegisterDetails
 import dev.smoketrees.twist.model.twist.Result
 import dev.smoketrees.twist.pagination.FilteredKitsuDataSourceFactory
 import dev.smoketrees.twist.pagination.KitsuDataSourceFactory
@@ -23,6 +25,9 @@ class AnimeViewModel(private val repo: AnimeRepo) : ViewModel() {
     var topRatedAnime: LiveData<PagedList<AnimeItem>>
 
     fun getTrendingAnime(limit: Int) = repo.getTrendingAnime(limit)
+
+    fun signIn(loginDetails: LoginDetails) = repo.signIn(loginDetails)
+    fun signUp(registerDetails: RegisterDetails) = repo.signUp(registerDetails)
 
     init {
         val topAiringDataSourceFactory =
