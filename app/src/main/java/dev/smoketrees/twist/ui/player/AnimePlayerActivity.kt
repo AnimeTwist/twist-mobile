@@ -87,7 +87,7 @@ class AnimePlayerActivity : AppCompatActivity() {
                                     }
 
                                 val downloadUrl =
-                                    Uri.parse("https://at-cdn.bunny.sh${decryptedUrl}")
+                                    Uri.parse("https://twistcdn.bunny.sh${decryptedUrl}")
                                 val downloadManager =
                                     getSystemService(DOWNLOAD_SERVICE) as DownloadManager
 
@@ -132,7 +132,7 @@ class AnimePlayerActivity : AppCompatActivity() {
                                             src
                                         )
                                     }
-                                play(Uri.parse("https://at-cdn.bunny.sh${decryptedUrl}"))
+                                play(Uri.parse("https://twistcdn.bunny.sh${decryptedUrl}"))
                             }
                         }
 
