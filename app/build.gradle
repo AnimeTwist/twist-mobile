@@ -21,8 +21,8 @@ android {
         applicationId "dev.smoketrees.twist"
         minSdkVersion 19
         targetSdkVersion 29
-        versionCode 11
-        versionName "2.2.1-prod8"
+        versionCode 12
+        versionName "2.2.2-prod9"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
         buildConfigField("byte[]", "CRYPTO_KEY", byteArrayLiteral(secretProperties["decrypt_key"]))
@@ -69,7 +69,7 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
 
-    implementation "androidx.fragment:fragment-ktx:1.2.1"
+    implementation "androidx.fragment:fragment-ktx:1.2.2"
 
     // Lifecycle components
     implementation "androidx.lifecycle:lifecycle-extensions:2.2.0"
@@ -108,11 +108,11 @@ dependencies {
     implementation 'com.github.ybq:Android-SpinKit:1.4.0'
 
     // Room for database stuff
-    implementation "androidx.room:room-runtime:2.2.3"
-    kapt "androidx.room:room-compiler:2.2.3"
+    implementation "androidx.room:room-runtime:2.2.4"
+    kapt "androidx.room:room-compiler:2.2.4"
 
     // optional - Kotlin Extensions and Coroutines support for Room
-    implementation "androidx.room:room-ktx:2.2.3"
+    implementation "androidx.room:room-ktx:2.2.4"
 
     // glide for image loading
     implementation 'com.github.bumptech.glide:glide:4.10.0'
