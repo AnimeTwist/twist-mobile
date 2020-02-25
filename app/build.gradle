@@ -19,7 +19,7 @@ android {
     buildToolsVersion "29.0.3"
     defaultConfig {
         applicationId "dev.smoketrees.twist"
-        minSdkVersion 19
+        minSdkVersion 21
         targetSdkVersion 29
         versionCode 12
         versionName "2.2.2-prod9"
