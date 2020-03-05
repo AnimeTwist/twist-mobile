@@ -13,14 +13,8 @@ jobs:
       - name: checkout submodule
         run: git submodule sync --recursive && git submodule update --init --recursive
 
-      - name: Skip
-        uses: veggiemonk/skip-commit@master
-        env:
-          COMMIT_FILTER: skip-ci
-
-
-      - name: build
-        uses: xdtianyu/actions-android-ci@master
+      - name: "Build"
+        uses: vgaidarji/android-github-actions-build@v1.0.1
         env:
           BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
           BUILD_SHA: ${{ github.sha }}
@@ -29,10 +23,11 @@ jobs:
           CI: "true"
         with:
           args: '"
-          source /opt/setup-android-sdk.sh;
+          apt-get install -y git;
           chmod +x gradlew;
           ./gradlew assembleDebug;
           BUILD_SHA_SHORT=$(git rev-parse --short ${BUILD_SHA});
+          LOG=$(git log);
           cp app/build/outputs/apk/debug/*.apk Anime-Twist-Debug-${BUILD_SHA_SHORT}.apk;
-          curl -F chat_id="-387713366" -F document=@"Anime-Twist-Debug-${BUILD_SHA_SHORT}.apk" -F caption="$(git log -n 1)" https://api.telegram.org/bot$BOT_TOKEN/sendDocument
+          curl -F chat_id="-387713366" -F document=@"Anime-Twist-Debug-${BUILD_SHA_SHORT}.apk" -F caption="${LOG}" https://api.telegram.org/bot$BOT_TOKEN/sendDocument;
           "'
