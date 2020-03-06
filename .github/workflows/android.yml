@@ -23,11 +23,11 @@ jobs:
           CI: "true"
         with:
           args: '"
+          apt-get update;
           apt-get install -y git;
           chmod +x gradlew;
           ./gradlew assembleDebug;
           BUILD_SHA_SHORT=$(git rev-parse --short ${BUILD_SHA});
-          LOG=$(git log);
           cp app/build/outputs/apk/debug/*.apk Anime-Twist-Debug-${BUILD_SHA_SHORT}.apk;
-          curl -F chat_id="-387713366" -F document=@"Anime-Twist-Debug-${BUILD_SHA_SHORT}.apk" -F caption="${LOG}" https://api.telegram.org/bot$BOT_TOKEN/sendDocument;
+          curl -F chat_id="-387713366" -F document=@"Anime-Twist-Debug-${BUILD_SHA_SHORT}.apk" -F caption="$(git log --pretty HEAD^..HEAD)" https://api.telegram.org/bot$BOT_TOKEN/sendDocument;
           "'
