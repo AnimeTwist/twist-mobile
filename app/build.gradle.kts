@@ -44,6 +44,11 @@ android {
 
     }
     buildTypes {
+        getByName("debug") {
+            applicationIdSuffix = ".debug"
+
+        }
+
         getByName("release") {
             isMinifyEnabled = true
             proguardFile(getDefaultProguardFile("proguard-android-optimize.txt"))
