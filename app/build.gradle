@@ -6,7 +6,7 @@ apply plugin: 'androidx.navigation.safeargs.kotlin'
 
 // load our secrets
 def secretProperties = new Properties()
-if ("$System.env.CI" != "true") {
+if ("$System.env.CI".toString() != "true") {
     def secretsFile = rootProject.file("secrets.properties")
     secretProperties.load(new FileInputStream(secretsFile))
 } else {
@@ -65,7 +65,7 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.1.0'
     implementation 'androidx.core:core-ktx:1.2.0'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
-    testImplementation 'junit:junit:4.12'
+    testImplementation 'junit:junit:4.13'
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
 
