@@ -46,7 +46,6 @@ android {
     buildTypes {
         getByName("debug") {
             applicationIdSuffix = ".debug"
-
         }
 
         getByName("release") {
@@ -140,9 +139,4 @@ dependencies {
 
     // Fuzzy search
     implementation(Libraries.fuzzy)
-}
-
-object {
-    fun byteArrayLiteral(string: String) =
-        "new byte[] {" + string.toByteArray().joinToString() + "}"
 }
