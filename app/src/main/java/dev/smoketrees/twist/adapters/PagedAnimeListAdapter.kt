@@ -1,6 +1,7 @@
 package dev.smoketrees.twist.adapters
 
 import android.content.Context
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -40,9 +41,12 @@ class PagedAnimeListAdapter(
             holder.anime_image.setImageDrawable(null)
         } else {
             val circularProgressDrawable = CircularProgressDrawable(context)
-            circularProgressDrawable.strokeWidth = 7f
-            circularProgressDrawable.centerRadius = 40f
-            circularProgressDrawable.start()
+            circularProgressDrawable.apply {
+                setColorSchemeColors(Color.rgb(105, 240, 174))
+                strokeWidth = 10f
+                centerRadius = 40f
+                start()
+            }
             Glide.with(context).load(item.nejireExtension?.poster_image)
                 .placeholder(circularProgressDrawable).into(holder.anime_image)
         }
