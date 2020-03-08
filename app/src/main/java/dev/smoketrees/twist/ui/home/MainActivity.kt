@@ -9,12 +9,15 @@ import androidx.core.content.ContextCompat
 import dev.smoketrees.twist.R
 import kotlinx.android.synthetic.main.activity_main.*
 import androidx.navigation.findNavController
+import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.NavigationUI
 import androidx.navigation.ui.setupActionBarWithNavController
 
 
 class MainActivity : AppCompatActivity() {
+
+    private val navController by lazy { (supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment).findNavController() }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,8 +33,8 @@ class MainActivity : AppCompatActivity() {
         )
         toolbar_text.text = spannable
 
-        setupActionBarWithNavController(nav_host_fragment.findNavController())
+        setupActionBarWithNavController(navController)
     }
 
-    override fun onSupportNavigateUp() = findNavController(R.id.nav_host_fragment).navigateUp()
+    override fun onSupportNavigateUp() = navController.navigateUp()
 }
