@@ -12,14 +12,15 @@ import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import dev.smoketrees.twist.R
 import dev.smoketrees.twist.adapters.EpisodeListAdapter
 import dev.smoketrees.twist.model.twist.Result
+import dev.smoketrees.twist.ui.home.MainActivity
 import dev.smoketrees.twist.utils.hide
 import dev.smoketrees.twist.utils.show
 import dev.smoketrees.twist.utils.toast
+import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_episodes.*
 import org.koin.android.viewmodel.ext.android.sharedViewModel
 
@@ -28,10 +29,14 @@ class EpisodesFragment : Fragment() {
     private val args: EpisodesFragmentArgs by navArgs()
     private val viewModel by sharedViewModel<EpisodesViewModel>()
 
+    private val fab by lazy { (requireActivity() as MainActivity).scroll_fab }
+    private val appBar by lazy { (requireActivity() as MainActivity).appbar }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        appBar.setExpanded(true, true)
         return inflater.inflate(R.layout.fragment_episodes, container, false)
     }
 
@@ -54,12 +59,13 @@ class EpisodesFragment : Fragment() {
         episode_list.layoutManager = layoutManager
         anime_description.movementMethod = ScrollingMovementMethod()
 
+        fab.show()
         // FAB to scroll to very bottom
-        scroll_fab.setOnClickListener {
+        fab.setOnClickListener {
             episode_list.smoothScrollToPosition(adapter.itemCount - 1)
         }
         adapter.onBottomReachedListener = {
-            scroll_fab.hide()
+            fab.hide()
         }
 
         viewModel.getAnimeDetails(args.slugName, args.id).observe(viewLifecycleOwner, Observer {
@@ -73,7 +79,7 @@ class EpisodesFragment : Fragment() {
                     anime_rating.hide()
                     anime_episodes.hide()
                     anime_ongoing_text.hide()
-                    scroll_fab.hide()
+                    fab.hide()
                 }
 
                 Result.Status.SUCCESS -> {
@@ -102,7 +108,7 @@ class EpisodesFragment : Fragment() {
                         }
 
                         if (layoutManager.findLastCompletelyVisibleItemPosition() < adapter.itemCount - 1) {
-                            scroll_fab.show()
+                            fab.show()
                         }
                     }
                 }
@@ -113,6 +119,11 @@ class EpisodesFragment : Fragment() {
                 }
             }
         })
+    }
+
+    override fun onDestroyView() {
+        fab.hide()
+        super.onDestroyView()
     }
 
 }
