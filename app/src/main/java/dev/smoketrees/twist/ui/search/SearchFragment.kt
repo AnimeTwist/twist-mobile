@@ -5,7 +5,6 @@ import android.content.Context
 import android.os.Bundle
 import android.view.*
 import androidx.appcompat.widget.SearchView
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.asFlow
 import androidx.lifecycle.observe
 import androidx.navigation.fragment.findNavController
@@ -15,12 +14,11 @@ import dev.smoketrees.twist.R
 import dev.smoketrees.twist.adapters.SearchListAdapter
 import dev.smoketrees.twist.model.twist.AnimeItem
 import dev.smoketrees.twist.model.twist.Result
+import dev.smoketrees.twist.ui.base.BaseFragment
 import dev.smoketrees.twist.ui.home.AnimeViewModel
-import dev.smoketrees.twist.ui.home.MainActivity
 import dev.smoketrees.twist.utils.hide
 import dev.smoketrees.twist.utils.search.WinklerWeightedRatio
 import dev.smoketrees.twist.utils.show
-import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_search.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -28,15 +26,14 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import me.xdrop.fuzzywuzzy.FuzzySearch
 import me.xdrop.fuzzywuzzy.ToStringFunction
-import org.koin.android.viewmodel.ext.android.sharedViewModel
 
-class SearchFragment : Fragment(), CoroutineScope {
+class SearchFragment :
+    BaseFragment<AnimeViewModel>(R.layout.fragment_search, AnimeViewModel::class, true),
+    CoroutineScope {
     private val args: SearchFragmentArgs by navArgs()
-    private val viewModel: AnimeViewModel by sharedViewModel()
     private var anime = emptyList<AnimeItem>()
 
     override val coroutineContext = Dispatchers.Main
-    private val appBar by lazy { (requireActivity() as MainActivity).appbar }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -44,7 +41,7 @@ class SearchFragment : Fragment(), CoroutineScope {
         savedInstanceState: Bundle?
     ): View? {
         setHasOptionsMenu(true)
-        return inflater.inflate(R.layout.fragment_search, container, false)
+        return super.onCreateView(inflater, container, savedInstanceState)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
