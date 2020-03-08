@@ -125,20 +125,6 @@
             tools:listitem="@layout/episode_item"
             tools:visibility="visible" />
 
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/scroll_fab"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom|end"
-            android:layout_margin="16dp"
-            android:src="@drawable/ic_keyboard_arrow_down"
-            android:visibility="invisible"
-            app:backgroundTint="@color/colorAccent"
-            app:fabSize="mini"
-            app:layout_anchor="@id/episode_list"
-            app:layout_anchorGravity="bottom|right|end"
-            tools:visibility="visible" />
-
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
     <com.github.ybq.android.spinkit.SpinKitView

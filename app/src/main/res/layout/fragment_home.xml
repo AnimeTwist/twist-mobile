@@ -20,8 +20,6 @@
             android:layout_height="wrap_content"
             tools:layout_editor_absoluteX="0dp"
             tools:layout_editor_absoluteY="182dp">
-
-
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/banner_container"
                 android:layout_width="match_parent"

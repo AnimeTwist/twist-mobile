@@ -6,7 +6,8 @@ import android.os.Bundle
 import android.view.*
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.*
+import androidx.lifecycle.asFlow
+import androidx.lifecycle.observe
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -15,9 +16,11 @@ import dev.smoketrees.twist.adapters.SearchListAdapter
 import dev.smoketrees.twist.model.twist.AnimeItem
 import dev.smoketrees.twist.model.twist.Result
 import dev.smoketrees.twist.ui.home.AnimeViewModel
+import dev.smoketrees.twist.ui.home.MainActivity
 import dev.smoketrees.twist.utils.hide
 import dev.smoketrees.twist.utils.search.WinklerWeightedRatio
 import dev.smoketrees.twist.utils.show
+import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_search.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -33,6 +36,7 @@ class SearchFragment : Fragment(), CoroutineScope {
     private var anime = emptyList<AnimeItem>()
 
     override val coroutineContext = Dispatchers.Main
+    private val appBar by lazy { (requireActivity() as MainActivity).appbar }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -66,6 +70,7 @@ class SearchFragment : Fragment(), CoroutineScope {
                 search_recyclerview.hide()
                 spinkit.hide()
                 no_results_text.show()
+                appBar.setExpanded(true, true)
             }
         }
 
@@ -73,7 +78,8 @@ class SearchFragment : Fragment(), CoroutineScope {
             when (it.status) {
                 Result.Status.SUCCESS -> anime = it.data ?: emptyList()
                 Result.Status.ERROR -> anime = emptyList()
-                else -> {}
+                else -> {
+                }
             }
         }
 
@@ -86,12 +92,12 @@ class SearchFragment : Fragment(), CoroutineScope {
                     WinklerWeightedRatio(),
                     65
                 ) + FuzzySearch.extractAll(
-                        searchString,
+                    searchString,
                     anime,
-                        ToStringFunction { it.altTitle },
-                        WinklerWeightedRatio(),
-                        65
-                    )).sortedByDescending { it.score }.map { it.referent })
+                    ToStringFunction { it.altTitle },
+                    WinklerWeightedRatio(),
+                    65
+                )).sortedByDescending { it.score }.map { it.referent })
             }
         }
     }

@@ -15,6 +15,7 @@ import dev.smoketrees.twist.model.twist.Result
 import dev.smoketrees.twist.utils.hide
 import dev.smoketrees.twist.utils.show
 import dev.smoketrees.twist.utils.toast
+import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_home.*
 import org.koin.android.viewmodel.ext.android.sharedViewModel
 
@@ -22,11 +23,14 @@ import org.koin.android.viewmodel.ext.android.sharedViewModel
 class HomeFragment : Fragment() {
     private val viewModel by sharedViewModel<AnimeViewModel>()
 
+    private val appBar by lazy { (requireActivity() as MainActivity).appbar }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
+        appBar.setExpanded(true, true)
         setHasOptionsMenu(true)
         return inflater.inflate(R.layout.fragment_home, container, false)
     }
