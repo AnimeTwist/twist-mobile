@@ -33,11 +33,7 @@ class EpisodesFragment :
         super.onViewCreated(view, savedInstanceState)
 
         val adapter = EpisodeListAdapter(requireActivity()) { ep, shouldDownload ->
-            val action = EpisodesFragmentDirections.actionEpisodesFragmentToAnimePlayerActivity(
-                slugName = args.slugName,
-                episodeNo = ep.number!!,
-                shouldDownload = shouldDownload
-            )
+            val action = EpisodesFragmentDirections.actionEpisodesFragmentToAnimePlayerActivity(args.slugName, ep.number!!, shouldDownload)
             findNavController().navigate(action)
         }
 

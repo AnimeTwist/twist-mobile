@@ -41,8 +41,8 @@ android {
         javaCompileOptions {
             annotationProcessorOptions { arguments = mapOf("room.incremental" to "true") }
         }
-
     }
+
     buildTypes {
         getByName("debug") {
             applicationIdSuffix = ".debug"
@@ -66,7 +66,13 @@ android {
         jvmTarget = "1.8"
     }
 
-    androidExtensions.isExperimental = true
+    androidExtensions {
+        isExperimental = true
+    }
+
+    buildFeatures {
+        viewBinding = true
+    }
 }
 
 kapt {

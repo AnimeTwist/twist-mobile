@@ -38,20 +38,10 @@ class AnimePlayerActivity : AppCompatActivity() {
     private val viewModel by viewModel<PlayerViewModel>()
     private lateinit var player: ExoPlayer
 
-    private val onDownloadComplete: BroadcastReceiver = object : BroadcastReceiver() {
-        override fun onReceive(
-            context: Context?,
-            intent: Intent
-        ) { //Fetching the download id received with the broadcast
-
-        }
-    }
-
     @SuppressLint("SourceLockedOrientationActivity")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_anime_player)
-        registerReceiver(onDownloadComplete, IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE))
         requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
         exo_rotate_icon.setOnClickListener {
             if (viewModel.portrait) {
@@ -66,6 +56,8 @@ class AnimePlayerActivity : AppCompatActivity() {
         val slug = args.slugName
         val epNo = args.episodeNo
         val shouldDownload = args.shouldDownload
+
+        Log.d("Should_download", shouldDownload.toString())
 
         viewModel.referer = "https://twist.moe/a/$slug/$epNo"
 
@@ -100,6 +92,8 @@ class AnimePlayerActivity : AppCompatActivity() {
                                         "$slug-episode-$epNo.mkv"
                                     )
                                     .addRequestHeader("Referer", viewModel.referer)
+
+                                Log.d("DOWNLOAD", downloadUrl.toString())
 
                                 viewModel.downloadID = downloadManager.enqueue(request)
                                 finish()
@@ -225,6 +219,5 @@ class AnimePlayerActivity : AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
         player.release()
-        unregisterReceiver(onDownloadComplete)
     }
 }
