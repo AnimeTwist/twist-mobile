@@ -4,10 +4,7 @@ package dev.smoketrees.twist.ui.player
 import android.annotation.SuppressLint
 import android.os.Bundle
 import android.text.method.ScrollingMovementMethod
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -16,30 +13,20 @@ import com.bumptech.glide.Glide
 import dev.smoketrees.twist.R
 import dev.smoketrees.twist.adapters.EpisodeListAdapter
 import dev.smoketrees.twist.model.twist.Result
+import dev.smoketrees.twist.ui.base.BaseFragment
 import dev.smoketrees.twist.ui.home.MainActivity
 import dev.smoketrees.twist.utils.hide
 import dev.smoketrees.twist.utils.show
 import dev.smoketrees.twist.utils.toast
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_episodes.*
-import org.koin.android.viewmodel.ext.android.sharedViewModel
 
-class EpisodesFragment : Fragment() {
+class EpisodesFragment :
+    BaseFragment<EpisodesViewModel>(R.layout.fragment_episodes, EpisodesViewModel::class) {
 
     private val args: EpisodesFragmentArgs by navArgs()
-    private val viewModel by sharedViewModel<EpisodesViewModel>()
 
     private val fab by lazy { (requireActivity() as MainActivity).scroll_fab }
-    private val appBar by lazy { (requireActivity() as MainActivity).appbar }
-
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        appBar.setExpanded(true, true)
-        return inflater.inflate(R.layout.fragment_episodes, container, false)
-    }
-
 
     @SuppressLint("SetTextI18n")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

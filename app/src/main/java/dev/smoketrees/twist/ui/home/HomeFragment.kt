@@ -4,7 +4,6 @@ package dev.smoketrees.twist.ui.home
 import android.os.Bundle
 import android.text.method.LinkMovementMethod
 import android.view.*
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -12,27 +11,21 @@ import dev.smoketrees.twist.R
 import dev.smoketrees.twist.adapters.AnimeListAdapter
 import dev.smoketrees.twist.adapters.PagedAnimeListAdapter
 import dev.smoketrees.twist.model.twist.Result
+import dev.smoketrees.twist.ui.base.BaseFragment
 import dev.smoketrees.twist.utils.hide
 import dev.smoketrees.twist.utils.show
 import dev.smoketrees.twist.utils.toast
-import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_home.*
-import org.koin.android.viewmodel.ext.android.sharedViewModel
 
 
-class HomeFragment : Fragment() {
-    private val viewModel by sharedViewModel<AnimeViewModel>()
-
-    private val appBar by lazy { (requireActivity() as MainActivity).appbar }
+class HomeFragment : BaseFragment<AnimeViewModel>(R.layout.fragment_home, AnimeViewModel::class, true) {
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        appBar.setExpanded(true, true)
         setHasOptionsMenu(true)
-        return inflater.inflate(R.layout.fragment_home, container, false)
+        return super.onCreateView(inflater, container, savedInstanceState)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
