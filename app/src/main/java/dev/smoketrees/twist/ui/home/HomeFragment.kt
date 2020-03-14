@@ -7,18 +7,24 @@ import android.view.*
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import dev.smoketrees.twist.BR
 import dev.smoketrees.twist.R
 import dev.smoketrees.twist.adapters.AnimeListAdapter
 import dev.smoketrees.twist.adapters.PagedAnimeListAdapter
+import dev.smoketrees.twist.databinding.FragmentHomeBinding
 import dev.smoketrees.twist.model.twist.Result
 import dev.smoketrees.twist.ui.base.BaseFragment
 import dev.smoketrees.twist.utils.hide
-import dev.smoketrees.twist.utils.show
 import dev.smoketrees.twist.utils.toast
-import kotlinx.android.synthetic.main.fragment_home.*
 
 
-class HomeFragment : BaseFragment<AnimeViewModel>(R.layout.fragment_home, AnimeViewModel::class, true) {
+class HomeFragment : BaseFragment<FragmentHomeBinding, AnimeViewModel>(
+    R.layout.fragment_home,
+    AnimeViewModel::class,
+    true
+) {
+
+    override val bindingVariable = BR.homeViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -32,9 +38,9 @@ class HomeFragment : BaseFragment<AnimeViewModel>(R.layout.fragment_home, AnimeV
         super.onViewCreated(view, savedInstanceState)
 
 
-        motd_body_text.movementMethod = LinkMovementMethod.getInstance()
-        dismiss_banner_button.setOnClickListener {
-            banner_container.hide()
+        dataBinding.motdBodyText.movementMethod = LinkMovementMethod.getInstance()
+        dataBinding.dismissBannerButton.setOnClickListener {
+            dataBinding.bannerContainer.hide()
         }
 
         val topAiringAdapter = PagedAnimeListAdapter(requireContext()) {
@@ -47,7 +53,7 @@ class HomeFragment : BaseFragment<AnimeViewModel>(R.layout.fragment_home, AnimeV
         }
         val topAiringLayoutManager =
             LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
-        top_airing_recyclerview.apply {
+        dataBinding.topAiringRecyclerview.apply {
             adapter = topAiringAdapter
             layoutManager = topAiringLayoutManager
         }
@@ -62,7 +68,7 @@ class HomeFragment : BaseFragment<AnimeViewModel>(R.layout.fragment_home, AnimeV
         }
         val trendingLayoutManager =
             LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
-        trending_recyclerview.apply {
+        dataBinding.trendingRecyclerview.apply {
             adapter = trendingAdapter
             layoutManager = trendingLayoutManager
         }
@@ -77,7 +83,7 @@ class HomeFragment : BaseFragment<AnimeViewModel>(R.layout.fragment_home, AnimeV
         }
         val topRatedLayoutManager =
             LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
-        top_rated_recyclerview.apply {
+        dataBinding.topRatedRecyclerview.apply {
             adapter = topRatedAdapter
             layoutManager = topRatedLayoutManager
         }
@@ -88,33 +94,13 @@ class HomeFragment : BaseFragment<AnimeViewModel>(R.layout.fragment_home, AnimeV
             viewModel.getAllAnime().observe(viewLifecycleOwner, Observer {
                 when (it.status) {
                     Result.Status.LOADING -> {
-                        spinkit.show()
-                        top_airing_recyclerview.hide()
-                        banner_container.hide()
-
-                        top_airing_text.hide()
-                        top_airing_recyclerview.hide()
-
-                        trending_text.hide()
-                        trending_recyclerview.hide()
-
-                        top_rated_text.hide()
-                        top_rated_recyclerview.hide()
+                        showLoader()
+                        dataBinding.hasResult = false
                     }
 
                     Result.Status.SUCCESS -> {
-                        spinkit.hide()
-                        top_airing_recyclerview.show()
-                        banner_container.show()
-
-                        top_airing_text.show()
-                        top_airing_recyclerview.show()
-
-                        trending_text.show()
-                        trending_recyclerview.show()
-
-                        top_rated_text.show()
-                        top_rated_recyclerview.show()
+                        hideLoader()
+                        dataBinding.hasResult = true
 
                         viewModel.getAllAnime().removeObservers(viewLifecycleOwner)
                         viewModel.areAllLoaded = true
@@ -123,36 +109,16 @@ class HomeFragment : BaseFragment<AnimeViewModel>(R.layout.fragment_home, AnimeV
                             .observe(viewLifecycleOwner, Observer { trendingList ->
                                 when (trendingList.status) {
                                     Result.Status.LOADING -> {
-                                        spinkit.show()
-                                        top_airing_recyclerview.hide()
-                                        banner_container.hide()
-
-                                        top_airing_text.hide()
-                                        top_airing_recyclerview.hide()
-
-                                        trending_text.hide()
-                                        trending_recyclerview.hide()
-
-                                        top_rated_text.hide()
-                                        top_rated_recyclerview.hide()
+                                        showLoader()
+                                        dataBinding.hasResult = false
                                     }
 
                                     Result.Status.SUCCESS -> {
                                         if (!trendingList.data.isNullOrEmpty()) {
                                             trendingAdapter.updateData(trendingList.data.shuffled())
                                         }
-                                        spinkit.hide()
-                                        top_airing_recyclerview.show()
-                                        banner_container.show()
-
-                                        top_airing_text.show()
-                                        top_airing_recyclerview.show()
-
-                                        trending_text.show()
-                                        trending_recyclerview.show()
-
-                                        top_rated_text.show()
-                                        top_rated_recyclerview.show()
+                                        hideLoader()
+                                        dataBinding.hasResult = true
                                     }
 
                                     Result.Status.ERROR -> {
@@ -177,36 +143,16 @@ class HomeFragment : BaseFragment<AnimeViewModel>(R.layout.fragment_home, AnimeV
             viewModel.getTrendingAnime(40).observe(viewLifecycleOwner, Observer { trendingList ->
                 when (trendingList.status) {
                     Result.Status.LOADING -> {
-                        spinkit.show()
-                        top_airing_recyclerview.hide()
-                        banner_container.hide()
-
-                        top_airing_text.hide()
-                        top_airing_recyclerview.hide()
-
-                        trending_text.hide()
-                        trending_recyclerview.hide()
-
-                        top_rated_text.hide()
-                        top_rated_recyclerview.hide()
+                        showLoader()
+                        dataBinding.hasResult = false
                     }
 
                     Result.Status.SUCCESS -> {
                         if (!trendingList.data.isNullOrEmpty()) {
                             trendingAdapter.updateData(trendingList.data)
                         }
-                        spinkit.hide()
-                        top_airing_recyclerview.show()
-                        banner_container.show()
-
-                        top_airing_text.show()
-                        top_airing_recyclerview.show()
-
-                        trending_text.show()
-                        trending_recyclerview.show()
-
-                        top_rated_text.show()
-                        top_rated_recyclerview.show()
+                        hideLoader()
+                        dataBinding.hasResult = true
                     }
 
                     Result.Status.ERROR -> {
@@ -225,8 +171,8 @@ class HomeFragment : BaseFragment<AnimeViewModel>(R.layout.fragment_home, AnimeV
         viewModel.getMotd().observe(viewLifecycleOwner, Observer {
             when (it.status) {
                 Result.Status.SUCCESS -> {
-                    motd_title_text.text = it.data?.title
-                    motd_body_text.setHtml(it.data?.message.toString())
+                    dataBinding.motdTitleText.text = it.data?.title
+                    dataBinding.motdBodyText.setHtml(it.data?.message.toString())
                 }
 
                 Result.Status.ERROR -> {
@@ -248,11 +194,5 @@ class HomeFragment : BaseFragment<AnimeViewModel>(R.layout.fragment_home, AnimeV
             findNavController().navigate(action)
             true
         }
-
-//        menu.findItem(R.id.action_account).setOnMenuItemClickListener {
-//            val action = HomeFragmentDirections.actionHomeFragmentToAccountFragment()
-//            findNavController().navigate(action)
-//            true
-//        }
     }
 }

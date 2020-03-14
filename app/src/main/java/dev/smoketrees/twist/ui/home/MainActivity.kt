@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import dev.smoketrees.twist.R
@@ -13,6 +14,8 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.NavigationUI
 import androidx.navigation.ui.setupActionBarWithNavController
+import dev.smoketrees.twist.utils.hide
+import dev.smoketrees.twist.utils.show
 
 
 class MainActivity : AppCompatActivity() {
@@ -37,4 +40,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onSupportNavigateUp() = navController.navigateUp()
+
+    fun showLoader() = spinkit.show()
+
+    fun hideLoader() = spinkit.hide()
 }
