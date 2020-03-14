@@ -12,6 +12,7 @@ import dev.smoketrees.twist.R
 import dev.smoketrees.twist.adapters.AnimeListAdapter
 import dev.smoketrees.twist.adapters.PagedAnimeListAdapter
 import dev.smoketrees.twist.databinding.FragmentHomeBinding
+import dev.smoketrees.twist.model.twist.AnimeItem
 import dev.smoketrees.twist.model.twist.Result
 import dev.smoketrees.twist.ui.base.BaseFragment
 import dev.smoketrees.twist.utils.hide
@@ -43,14 +44,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, AnimeViewModel>(
             dataBinding.bannerContainer.hide()
         }
 
-        val topAiringAdapter = PagedAnimeListAdapter(requireContext()) {
-            val action =
-                HomeFragmentDirections.actionHomeFragmentToEpisodesFragment(
-                    it.slug!!.slug!!,
-                    it.id!!
-                )
-            findNavController().navigate(action)
-        }
+        val topAiringAdapter = PagedAnimeListAdapter(requireContext()) { navigate(it) }
         val topAiringLayoutManager =
             LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
         dataBinding.topAiringRecyclerview.apply {
@@ -58,14 +52,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, AnimeViewModel>(
             layoutManager = topAiringLayoutManager
         }
 
-        val trendingAdapter = AnimeListAdapter(requireContext()) {
-            val action =
-                HomeFragmentDirections.actionHomeFragmentToEpisodesFragment(
-                    it.slug!!.slug!!,
-                    it.id!!
-                )
-            findNavController().navigate(action)
-        }
+        val trendingAdapter = AnimeListAdapter(requireContext()) { navigate(it) }
         val trendingLayoutManager =
             LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
         dataBinding.trendingRecyclerview.apply {
@@ -73,14 +60,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, AnimeViewModel>(
             layoutManager = trendingLayoutManager
         }
 
-        val topRatedAdapter = PagedAnimeListAdapter(requireContext()) {
-            val action =
-                HomeFragmentDirections.actionHomeFragmentToEpisodesFragment(
-                    it.slug!!.slug!!,
-                    it.id!!
-                )
-            findNavController().navigate(action)
-        }
+        val topRatedAdapter = PagedAnimeListAdapter(requireContext()) { navigate(it) }
         val topRatedLayoutManager =
             LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
         dataBinding.topRatedRecyclerview.apply {
@@ -184,6 +164,15 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, AnimeViewModel>(
             }
         })
 
+    }
+
+    private fun navigate(anime: AnimeItem) {
+        val action =
+            HomeFragmentDirections.actionHomeFragmentToEpisodesFragment(
+                anime.slug!!.slug!!,
+                anime.id!!
+            )
+        findNavController().navigate(action)
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
