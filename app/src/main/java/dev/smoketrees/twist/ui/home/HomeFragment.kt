@@ -27,6 +27,10 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, AnimeViewModel>(
 
     override val bindingVariable = BR.homeViewModel
 
+    private val topAiringAdapter by lazy { PagedAnimeListAdapter(requireContext()) { navigate(it) } }
+    private val trendingAdapter by lazy { AnimeListAdapter(requireContext()) { navigate(it) } }
+    private val topRatedAdapter by lazy { PagedAnimeListAdapter(requireContext()) { navigate(it) } }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -35,39 +39,8 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, AnimeViewModel>(
         return super.onCreateView(inflater, container, savedInstanceState)
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-
-        dataBinding.motdBodyText.movementMethod = LinkMovementMethod.getInstance()
-        dataBinding.dismissBannerButton.setOnClickListener {
-            dataBinding.bannerContainer.hide()
-        }
-
-        val topAiringAdapter = PagedAnimeListAdapter(requireContext()) { navigate(it) }
-        val topAiringLayoutManager =
-            LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
-        dataBinding.topAiringRecyclerview.apply {
-            adapter = topAiringAdapter
-            layoutManager = topAiringLayoutManager
-        }
-
-        val trendingAdapter = AnimeListAdapter(requireContext()) { navigate(it) }
-        val trendingLayoutManager =
-            LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
-        dataBinding.trendingRecyclerview.apply {
-            adapter = trendingAdapter
-            layoutManager = trendingLayoutManager
-        }
-
-        val topRatedAdapter = PagedAnimeListAdapter(requireContext()) { navigate(it) }
-        val topRatedLayoutManager =
-            LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
-        dataBinding.topRatedRecyclerview.apply {
-            adapter = topRatedAdapter
-            layoutManager = topRatedLayoutManager
-        }
-
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
 
         // only load all anime once
         if (!viewModel.areAllLoaded) {
@@ -163,7 +136,21 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, AnimeViewModel>(
                 }
             }
         })
+    }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        dataBinding.motdBodyText.movementMethod = LinkMovementMethod.getInstance()
+        dataBinding.dismissBannerButton.setOnClickListener {
+            dataBinding.bannerContainer.hide()
+        }
+
+        dataBinding.topAiringRecyclerview.adapter = topAiringAdapter
+
+        dataBinding.trendingRecyclerview.adapter = trendingAdapter
+
+        dataBinding.topRatedRecyclerview.adapter = topRatedAdapter
     }
 
     private fun navigate(anime: AnimeItem) {

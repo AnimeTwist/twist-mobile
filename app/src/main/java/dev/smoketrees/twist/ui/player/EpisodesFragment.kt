@@ -34,11 +34,8 @@ class EpisodesFragment :
 
     private val fab by lazy { (requireActivity() as MainActivity).scroll_fab }
 
-    @SuppressLint("SetTextI18n")
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        val adapter = EpisodeListAdapter(requireActivity()) { ep, shouldDownload ->
+    private val episodeAdapter by lazy {
+        EpisodeListAdapter(requireActivity()) { ep, shouldDownload ->
             val action = EpisodesFragmentDirections.actionEpisodesFragmentToAnimePlayerActivity(
                 args.slugName,
                 ep.number!!,
@@ -46,23 +43,12 @@ class EpisodesFragment :
             )
             findNavController().navigate(action)
         }
+    }
 
-        val layoutManager = LinearLayoutManager(requireContext())
+    private val linearLayoutManager by lazy { LinearLayoutManager(requireContext()) }
 
-        dataBinding.episodeList.apply {
-            this.adapter = adapter
-            this.layoutManager = layoutManager
-        }
-        dataBinding.animeDescription.movementMethod = ScrollingMovementMethod()
-
-        fab.show()
-        // FAB to scroll to very bottom
-        fab.setOnClickListener {
-            dataBinding.episodeList.smoothScrollToPosition(adapter.itemCount - 1)
-        }
-        adapter.onBottomReachedListener = {
-            fab.hide()
-        }
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
 
         viewModel.getAnimeDetails(args.slugName, args.id).observe(viewLifecycleOwner, Observer {
             when (it.status) {
@@ -92,10 +78,10 @@ class EpisodesFragment :
                         dataBinding.hasResult = true
 
                         if (detailsEntity.episodeList.isNotEmpty()) {
-                            adapter.updateData(it.data.episodeList)
+                            episodeAdapter.updateData(it.data.episodeList)
                         }
 
-                        if (layoutManager.findLastCompletelyVisibleItemPosition() < adapter.itemCount - 1) {
+                        if (linearLayoutManager.findLastCompletelyVisibleItemPosition() < episodeAdapter.itemCount - 1) {
                             fab.show()
                         }
                     }
@@ -107,6 +93,26 @@ class EpisodesFragment :
                 }
             }
         })
+    }
+
+    @SuppressLint("SetTextI18n")
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        dataBinding.episodeList.apply {
+            this.adapter = episodeAdapter
+            this.layoutManager = linearLayoutManager
+        }
+        dataBinding.animeDescription.movementMethod = ScrollingMovementMethod()
+
+        fab.show()
+        // FAB to scroll to very bottom
+        fab.setOnClickListener {
+            dataBinding.episodeList.smoothScrollToPosition(episodeAdapter.itemCount - 1)
+        }
+        episodeAdapter.onBottomReachedListener = {
+            fab.hide()
+        }
     }
 
     override fun onDestroyView() {

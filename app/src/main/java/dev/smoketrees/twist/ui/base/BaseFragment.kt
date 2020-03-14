@@ -29,7 +29,7 @@ abstract class BaseFragment<DB : ViewDataBinding, VM : ViewModel>(
 
     protected val viewModel: VM by lazy { if (share) sharedViewModel(clazz) else viewModel(clazz) }.value
 
-    private val ctx by lazy { requireContext() }
+    protected val ctx by lazy { requireContext() }
 
     private val m: Lazy<VM> by lazy { sharedViewModel(clazz) }
 
