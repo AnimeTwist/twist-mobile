@@ -12,7 +12,6 @@
     <string name="top_rated_header_text">Top rated</string>
     <string name="log_in_menutext">Log in</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="home_bottom_menuitem">Home</string>
     <string name="acct_bottom_menuitem">Account</string>
@@ -25,4 +24,5 @@
     <string name="pass_match_err">Passwords do not match</string>
     <string name="pass_len_err">Password must be greater than 7 characters</string>
     <string name="sign_up_text">Sign up</string>
+    <string name="toggle_switch_theme">Switch theme</string>
 </resources>
