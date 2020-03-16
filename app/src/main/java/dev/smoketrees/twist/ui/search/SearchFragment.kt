@@ -6,21 +6,20 @@ import android.os.Bundle
 import android.view.*
 import androidx.appcompat.widget.SearchView
 import androidx.lifecycle.asFlow
+import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.observe
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
+import dev.smoketrees.twist.BR
 import dev.smoketrees.twist.R
 import dev.smoketrees.twist.adapters.SearchListAdapter
+import dev.smoketrees.twist.databinding.FragmentSearchBinding
 import dev.smoketrees.twist.model.twist.AnimeItem
 import dev.smoketrees.twist.model.twist.Result
 import dev.smoketrees.twist.ui.base.BaseFragment
 import dev.smoketrees.twist.ui.home.AnimeViewModel
-import dev.smoketrees.twist.utils.hide
 import dev.smoketrees.twist.utils.search.WinklerWeightedRatio
-import dev.smoketrees.twist.utils.show
-import kotlinx.android.synthetic.main.fragment_search.*
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
@@ -28,12 +27,26 @@ import me.xdrop.fuzzywuzzy.FuzzySearch
 import me.xdrop.fuzzywuzzy.ToStringFunction
 
 class SearchFragment :
-    BaseFragment<AnimeViewModel>(R.layout.fragment_search, AnimeViewModel::class, true),
-    CoroutineScope {
+    BaseFragment<FragmentSearchBinding, AnimeViewModel>(
+        R.layout.fragment_search,
+        AnimeViewModel::class,
+        true
+    ) {
+
+    override val bindingVariable = BR.searchViewModel
+
     private val args: SearchFragmentArgs by navArgs()
     private var anime = emptyList<AnimeItem>()
 
-    override val coroutineContext = Dispatchers.Main
+    private val adapter by lazy {
+        SearchListAdapter {
+            val action = SearchFragmentDirections.actionSearchActivityToEpisodesFragment(
+                it.slug!!.slug!!,
+                it.id!!
+            )
+            findNavController().navigate(action)
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -44,31 +57,18 @@ class SearchFragment :
         return super.onCreateView(inflater, container, savedInstanceState)
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        val layoutManager = LinearLayoutManager(requireContext())
-        val adapter = SearchListAdapter {
-            val action = SearchFragmentDirections.actionSearchActivityToEpisodesFragment(
-                it.slug!!.slug!!,
-                it.id!!
-            )
-            findNavController().navigate(action)
-        }
-        search_recyclerview.adapter = adapter
-        search_recyclerview.layoutManager = layoutManager
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
 
         viewModel.searchResults.observe(viewLifecycleOwner) {
             if (it.isNotEmpty()) {
-                search_recyclerview.show()
-                no_results_text.hide()
-                spinkit.hide()
+                dataBinding.hasResult = true
                 adapter.updateData(it)
             } else {
-                search_recyclerview.hide()
-                spinkit.hide()
-                no_results_text.show()
+                dataBinding.hasResult = false
                 appBar.setExpanded(true, true)
             }
+            hideLoader()
         }
 
         viewModel.getAllAnime().observe(viewLifecycleOwner) {
@@ -79,8 +79,14 @@ class SearchFragment :
                 }
             }
         }
+    }
 
-        launch(Dispatchers.IO) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        dataBinding.searchRecyclerview.adapter = adapter
+
+        lifecycleScope.launch(Dispatchers.IO) {
             viewModel.searchQuery.asFlow().collect { searchString ->
                 viewModel.searchResults.postValue((FuzzySearch.extractAll(
                     searchString,

@@ -1,5 +1,7 @@
 package dev.smoketrees.twist.utils
 
+import android.animation.Animator
+import android.animation.AnimatorListenerAdapter
 import android.app.Activity
 import android.content.Context
 import android.util.DisplayMetrics
@@ -23,16 +25,26 @@ fun ViewGroup.inflate(layoutRes: Int): View {
     return LayoutInflater.from(context).inflate(layoutRes, this, false)
 }
 
-fun View.hide() {
-    visibility = View.GONE
+fun View.hide(duration: Long = 300) {
+    animate().alpha(0.0f).setDuration(duration).setListener(object : AnimatorListenerAdapter() {
+        override fun onAnimationEnd(animation: Animator?) {
+            super.onAnimationEnd(animation)
+            visibility = View.GONE
+        }
+    })
 }
 
 fun View.invisible() {
     visibility = View.INVISIBLE
 }
 
-fun View.show() {
-    visibility = View.VISIBLE
+fun View.show(duration: Long = 300) {
+    animate().alpha(1.0f).setDuration(duration).setListener(object : AnimatorListenerAdapter() {
+        override fun onAnimationEnd(animation: Animator?) {
+            super.onAnimationEnd(animation)
+            visibility = View.VISIBLE
+        }
+    })
 }
 
 fun Fragment.hideKeyboard() {
