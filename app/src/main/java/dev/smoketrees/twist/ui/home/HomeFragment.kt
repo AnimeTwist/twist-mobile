@@ -4,7 +4,6 @@ package dev.smoketrees.twist.ui.home
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.text.method.LinkMovementMethod
-import android.util.Log
 import android.view.*
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.content.edit

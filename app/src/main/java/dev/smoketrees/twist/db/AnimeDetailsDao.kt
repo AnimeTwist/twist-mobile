@@ -1,9 +1,11 @@
 package dev.smoketrees.twist.db
 
 import androidx.lifecycle.LiveData
-import androidx.room.*
+import androidx.room.Dao
+import androidx.room.Insert
+import androidx.room.OnConflictStrategy
+import androidx.room.Query
 import dev.smoketrees.twist.model.twist.AnimeDetailsEntity
-import dev.smoketrees.twist.model.twist.Episode
 
 @Dao
 interface AnimeDetailsDao {

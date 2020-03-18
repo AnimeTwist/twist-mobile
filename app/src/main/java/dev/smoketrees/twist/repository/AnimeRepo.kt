@@ -2,19 +2,10 @@ package dev.smoketrees.twist.repository
 
 
 import android.util.Log
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.Observer
-import androidx.lifecycle.liveData
 import dev.smoketrees.twist.api.anime.AnimeWebClient
 import dev.smoketrees.twist.db.AnimeDao
 import dev.smoketrees.twist.db.AnimeDetailsDao
 import dev.smoketrees.twist.model.twist.*
-import dev.smoketrees.twist.utils.search.WinklerWeightedRatio
-import kotlinx.coroutines.Dispatchers
-import me.xdrop.fuzzywuzzy.FuzzySearch
-import me.xdrop.fuzzywuzzy.ToStringFunction
-import me.xdrop.fuzzywuzzy.model.BoundExtractedResult
-import kotlin.math.roundToInt
 
 class AnimeRepo(
     val webClient: AnimeWebClient,
