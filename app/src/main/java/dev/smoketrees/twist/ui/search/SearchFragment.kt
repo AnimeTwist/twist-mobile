@@ -10,7 +10,6 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.observe
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import androidx.recyclerview.widget.LinearLayoutManager
 import dev.smoketrees.twist.BR
 import dev.smoketrees.twist.R
 import dev.smoketrees.twist.adapters.SearchListAdapter

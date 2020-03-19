@@ -1,7 +1,6 @@
 package dev.smoketrees.twist.adapters
 
 import android.Manifest
-import android.annotation.SuppressLint
 import android.app.Activity
 import android.view.LayoutInflater
 import android.view.View
@@ -10,7 +9,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.livinglifetechway.quickpermissions_kotlin.runWithPermissions
 import dev.smoketrees.twist.R
 import dev.smoketrees.twist.model.twist.Episode
-import dev.smoketrees.twist.ui.player.EpisodesFragment
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.episode_item.*
 
@@ -34,13 +32,13 @@ class EpisodeListAdapter(
 
     override fun getItemCount() = episodeList.size
 
-    @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: EpisodeViewHolder, position: Int) {
         if (position == episodeList.size - 1) {
             onBottomReachedListener(position)
         }
 
-        holder.episode_text.text = "Episode no ${episodeList[position].number!!}"
+        holder.episode_text.text =
+            activity.getString(R.string.episode_number_xxx, episodeList[position].number!!)
         holder.containerView.setOnClickListener {
             listener(episodeList[position], false)
         }

@@ -58,6 +58,7 @@
                             android:layout_margin="8dp"
                             android:background="@android:color/transparent"
                             android:src="@drawable/ic_dismiss"
+                            android:tint="@color/colorAccent"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
 

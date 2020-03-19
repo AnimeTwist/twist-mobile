@@ -1,10 +1,10 @@
 package dev.smoketrees.twist
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import dev.smoketrees.twist.model.twist.RegisterDetails
 import dev.smoketrees.twist.model.twist.Result

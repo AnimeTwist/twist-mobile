@@ -1,6 +1,5 @@
 package dev.smoketrees.twist
 
-import android.app.Application
 import androidx.multidex.MultiDexApplication
 import dev.smoketrees.twist.di.appComponent
 import org.koin.android.ext.koin.androidContext

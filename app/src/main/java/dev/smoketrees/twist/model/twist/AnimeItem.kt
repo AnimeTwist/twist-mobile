@@ -1,7 +1,6 @@
 package dev.smoketrees.twist.model.twist
 
 import androidx.annotation.Keep
-import androidx.annotation.NonNull
 import androidx.recyclerview.widget.DiffUtil
 import androidx.room.*
 import com.google.gson.annotations.Expose

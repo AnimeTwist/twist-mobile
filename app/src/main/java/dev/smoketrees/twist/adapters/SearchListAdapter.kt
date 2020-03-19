@@ -1,6 +1,5 @@
 package dev.smoketrees.twist.adapters
 
-import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -28,7 +27,6 @@ class SearchListAdapter(val listener: (AnimeItem) -> Unit) :
 
     override fun getItemCount() = animeList.size
 
-    @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: SearchViewHolder, position: Int) {
         val item = animeList[position]
         holder.anime_name.text = item.title

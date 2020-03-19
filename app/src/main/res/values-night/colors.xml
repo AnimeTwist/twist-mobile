@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Color for dark theme -->
+    <color name="colorPrimary">#2ED583</color>
+    <color name="colorPrimaryDark">#0EA85D</color>
+    <color name="colorAccent">#2ED583</color>
+
+    <color name="colorBackground">#1d1f3e</color>
+    <color name="colorCardBackground">#262845</color>
+    <color name="toolbar_text_color">#69F0AE</color>
+
+    <color name="colorText">#FAFAFA</color>
+</resources>
