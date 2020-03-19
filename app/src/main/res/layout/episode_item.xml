@@ -30,6 +30,7 @@
             android:layout_marginEnd="16dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:padding="8dp"
             android:background="@android:color/transparent"
             android:src="@drawable/ic_file_download"
             app:layout_constraintBottom_toBottomOf="@+id/episode_text"
