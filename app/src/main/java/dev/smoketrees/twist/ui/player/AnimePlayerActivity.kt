@@ -82,7 +82,7 @@ class AnimePlayerActivity : AppCompatActivity() {
                                 val request = DownloadManager.Request(downloadUrl)
                                     .setTitle("Downloading $slug-$epNo")
                                     .setDescription("Downloading episode $epNo")
-                                    .setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE)
+                                    .setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
                                     .setDestinationInExternalPublicDir(
                                         Environment.DIRECTORY_MOVIES,
                                         "$slug-episode-$epNo.mkv"
