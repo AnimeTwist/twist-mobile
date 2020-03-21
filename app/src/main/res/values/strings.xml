@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Anime Twist</string>
+    <string name="app_name" translatable="false">Anime Twist</string>
     <string name="seasonal_anime_title">Top airing</string>
     <string name="header_title">Fall season has started!</string>
     <string name="header_text">We\'re adding over 50 new ongoing shows to Anime Twist this season. Find out if your favourite new anime will be added here <a href="https://bit.ly/2SKsfpC\" target="_blank\">https://bit.ly/2SKsfpC</a></string>
@@ -12,7 +12,6 @@
     <string name="top_rated_header_text">Top rated</string>
     <string name="log_in_menutext">Log in</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="home_bottom_menuitem">Home</string>
     <string name="acct_bottom_menuitem">Account</string>
@@ -25,4 +24,8 @@
     <string name="pass_match_err">Passwords do not match</string>
     <string name="pass_len_err">Password must be greater than 7 characters</string>
     <string name="sign_up_text">Sign up</string>
+    <string name="toggle_switch_theme">Switch theme</string>
+    <string name="ep_count">%d episodes</string>
+    <string name="score_value">Score: %s</string>
+    <string name="episode_number_xxx">Episode number %d</string>
 </resources>

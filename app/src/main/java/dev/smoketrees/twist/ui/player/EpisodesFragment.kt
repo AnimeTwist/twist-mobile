@@ -1,7 +1,6 @@
 package dev.smoketrees.twist.ui.player
 
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import android.text.method.ScrollingMovementMethod
 import android.view.View
@@ -18,7 +17,6 @@ import dev.smoketrees.twist.model.twist.Result
 import dev.smoketrees.twist.ui.base.BaseFragment
 import dev.smoketrees.twist.ui.home.MainActivity
 import dev.smoketrees.twist.utils.hide
-import dev.smoketrees.twist.utils.show
 import dev.smoketrees.twist.utils.toast
 import kotlinx.android.synthetic.main.activity_main.*
 
@@ -60,16 +58,11 @@ class EpisodesFragment :
 
                 Result.Status.SUCCESS -> {
                     it.data?.let { detailsEntity ->
-                        dataBinding.apply {
-                            animeTitle.text = detailsEntity.title
-                            animeEpisodes.text = "${detailsEntity.episodeList.size} episodes"
-                            animeDescription.text = detailsEntity.synopsis
-                            animeRating.text = "Score: ${detailsEntity.score}%"
-                        }
+                        dataBinding.anime = detailsEntity
 
-                        detailsEntity.airing?.let { ongoing ->
+/*                        detailsEntity.airing?.let { ongoing ->
                             if (ongoing) dataBinding.animeOngoingText.show() else dataBinding.animeOngoingText.hide()
-                        }
+                        }*/
                         Glide.with(requireContext())
                             .load(detailsEntity.imageUrl)
                             .into(dataBinding.animeImage)
@@ -95,7 +88,6 @@ class EpisodesFragment :
         })
     }
 
-    @SuppressLint("SetTextI18n")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 

@@ -48,7 +48,7 @@
         android:layout_height="wrap_content"
         android:visibility="gone"
         android:layout_gravity="center"
-        app:SpinKit_Color="@color/colorPrimary" />
+        app:SpinKit_Color="?attr/colorPrimary" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/scroll_fab"
@@ -58,7 +58,7 @@
         android:layout_margin="16dp"
         android:src="@drawable/ic_keyboard_arrow_down"
         android:visibility="invisible"
-        app:backgroundTint="@color/colorAccent"
+        app:backgroundTint="?attr/colorSecondary"
         app:fabSize="mini"
         app:layout_anchor="@id/nav_host_fragment"
         app:layout_anchorGravity="bottom|right|end"

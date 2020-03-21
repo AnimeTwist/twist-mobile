@@ -1,12 +1,14 @@
 package dev.smoketrees.twist.ui.home
 
 
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.text.method.LinkMovementMethod
 import android.view.*
+import androidx.appcompat.app.AppCompatDelegate
+import androidx.core.content.edit
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.LinearLayoutManager
 import dev.smoketrees.twist.BR
 import dev.smoketrees.twist.R
 import dev.smoketrees.twist.adapters.AnimeListAdapter
@@ -15,8 +17,10 @@ import dev.smoketrees.twist.databinding.FragmentHomeBinding
 import dev.smoketrees.twist.model.twist.AnimeItem
 import dev.smoketrees.twist.model.twist.Result
 import dev.smoketrees.twist.ui.base.BaseFragment
+import dev.smoketrees.twist.utils.Constants
 import dev.smoketrees.twist.utils.hide
 import dev.smoketrees.twist.utils.toast
+import org.koin.android.ext.android.inject
 
 
 class HomeFragment : BaseFragment<FragmentHomeBinding, AnimeViewModel>(
@@ -24,6 +28,8 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, AnimeViewModel>(
     AnimeViewModel::class,
     true
 ) {
+
+    private val pref by inject<SharedPreferences>()
 
     override val bindingVariable = BR.homeViewModel
 
@@ -165,10 +171,30 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, AnimeViewModel>(
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
         inflater.inflate(R.menu.home_menu, menu)
-        menu.findItem(R.id.action_search).setOnMenuItemClickListener {
-            val action = HomeFragmentDirections.actionHomeFragmentToSearchActivity("")
-            findNavController().navigate(action)
-            true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.action_search -> {
+                val action = HomeFragmentDirections.actionHomeFragmentToSearchActivity("")
+                findNavController().navigate(action)
+            }
+            R.id.action_day_night -> {
+                // Toggle the theme preference
+                pref.edit {
+                    putBoolean(
+                        Constants.PreferenceKeys.IS_DAY,
+                        !pref.getBoolean(Constants.PreferenceKeys.IS_DAY, true)
+                    )
+                }
+                // Set theme
+                if (pref.getBoolean(Constants.PreferenceKeys.IS_DAY, true)) {
+                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+                } else {
+                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+                }
+            }
         }
+        return super.onOptionsItemSelected(item)
     }
 }
