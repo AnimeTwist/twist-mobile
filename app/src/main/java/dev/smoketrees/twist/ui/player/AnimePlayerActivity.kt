@@ -61,8 +61,12 @@ class AnimePlayerActivity : AppCompatActivity() {
         }
 
         val slug = args.slugName
+        val name = args.displayName
         val epNo = args.episodeNo
         val shouldDownload = args.shouldDownload
+
+        // Show information about episode
+        exo_ep_info.text = String.format(resources.getString(R.string.episode_info), name, epNo)
 
         Log.d("Should_download", shouldDownload.toString())
 

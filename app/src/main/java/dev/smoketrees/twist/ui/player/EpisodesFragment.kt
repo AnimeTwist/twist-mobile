@@ -13,6 +13,7 @@ import dev.smoketrees.twist.BR
 import dev.smoketrees.twist.R
 import dev.smoketrees.twist.adapters.EpisodeListAdapter
 import dev.smoketrees.twist.databinding.FragmentEpisodesBinding
+import dev.smoketrees.twist.di.module.repoModule
 import dev.smoketrees.twist.model.twist.Result
 import dev.smoketrees.twist.ui.base.BaseFragment
 import dev.smoketrees.twist.ui.home.MainActivity
@@ -36,6 +37,7 @@ class EpisodesFragment :
         EpisodeListAdapter(requireActivity()) { ep, _ ->
             val action = EpisodesFragmentDirections.actionEpisodesFragmentToAnimePlayerActivity(
                 args.slugName,
+                dataBinding.anime!!.title!!,
                 ep.number!!,
                 false
             )
