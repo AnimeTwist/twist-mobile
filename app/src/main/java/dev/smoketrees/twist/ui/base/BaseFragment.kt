@@ -10,7 +10,10 @@ import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModel
 import dev.smoketrees.twist.ui.home.MainActivity
+import dev.smoketrees.twist.utils.Messages
 import dev.smoketrees.twist.utils.autoCleared
+import dev.smoketrees.twist.utils.hide
+import dev.smoketrees.twist.utils.show
 import kotlinx.android.synthetic.main.activity_main.*
 import org.koin.android.viewmodel.ext.android.sharedViewModel
 import org.koin.android.viewmodel.ext.android.viewModel
@@ -37,6 +40,9 @@ abstract class BaseFragment<DB : ViewDataBinding, VM : ViewModel>(
 
     protected fun showLoader() = (requireActivity() as MainActivity).showLoader()
     protected fun hideLoader() = (requireActivity() as MainActivity).hideLoader()
+
+    protected fun notice(err_code: Int?) = (requireActivity() as MainActivity).notice(err_code)
+    protected fun noticeClear() = (requireActivity() as MainActivity).noticeClear()
 
     override fun onCreateView(
         inflater: LayoutInflater,

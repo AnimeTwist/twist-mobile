@@ -19,7 +19,7 @@
             app:popExitAnim="@anim/right_out" />
         <action
             android:id="@+id/action_homeFragment_to_searchActivity"
-            app:destination="@id/searchActivity"
+            app:destination="@id/searchFragment"
             app:enterAnim="@anim/right_in"
             app:exitAnim="@anim/left_out"
             app:popEnterAnim="@anim/left_in"
@@ -62,10 +62,9 @@
             app:argType="integer" />
     </fragment>
     <fragment
-        android:id="@+id/searchActivity"
+        android:id="@+id/searchFragment"
         android:name="dev.smoketrees.twist.ui.search.SearchFragment"
-        android:label="activity_search"
-        tools:layout="@layout/fragment_search">
+        android:label="fragment_search">
         <action
             android:id="@+id/action_searchActivity_to_episodesFragment"
             app:destination="@id/episodesFragment" />
