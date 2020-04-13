@@ -6,13 +6,10 @@ import android.os.Bundle
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
-import android.widget.Toolbar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
-import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.content.ContextCompat
 import androidx.core.content.edit
-import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.isVisible
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
@@ -20,7 +17,10 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.appbar.MaterialToolbar
 import dev.smoketrees.twist.R
-import dev.smoketrees.twist.utils.*
+import dev.smoketrees.twist.utils.Constants
+import dev.smoketrees.twist.utils.Messages
+import dev.smoketrees.twist.utils.hide
+import dev.smoketrees.twist.utils.show
 import kotlinx.android.synthetic.main.activity_main.*
 import org.koin.android.ext.android.inject
 

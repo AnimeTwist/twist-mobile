@@ -10,10 +10,7 @@ import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModel
 import dev.smoketrees.twist.ui.home.MainActivity
-import dev.smoketrees.twist.utils.Messages
 import dev.smoketrees.twist.utils.autoCleared
-import dev.smoketrees.twist.utils.hide
-import dev.smoketrees.twist.utils.show
 import kotlinx.android.synthetic.main.activity_main.*
 import org.koin.android.viewmodel.ext.android.sharedViewModel
 import org.koin.android.viewmodel.ext.android.viewModel

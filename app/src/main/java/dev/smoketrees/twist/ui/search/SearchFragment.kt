@@ -55,13 +55,11 @@ class SearchFragment :
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        Log.e("onCreateView", "EXECUTED")
         setHasOptionsMenu(true)
         return super.onCreateView(inflater, container, savedInstanceState)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
-        Log.e("onActivityCreated", "EXECUTED")
         super.onActivityCreated(savedInstanceState)
 
         viewModel.searchResults.observe(viewLifecycleOwner) {
@@ -72,7 +70,6 @@ class SearchFragment :
                 dataBinding.hasResult = false
                 appBar.setExpanded(true, true)
             }
-            Log.e("Updated shown data", it.size.toString() + " " + menuCreated + " " + viewModel.searchQuery.value)
             hideLoader()
         }
 
@@ -88,7 +85,6 @@ class SearchFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        Log.e("onViewCreated", "EXECUTED")
 
         dataBinding.searchRecyclerview.adapter = adapter
 
@@ -114,7 +110,6 @@ class SearchFragment :
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        Log.e("onCreateOptionsMenu", "EXECUTED")
         super.onCreateOptionsMenu(menu, inflater)
         inflater.inflate(R.menu.toolbar_menu, menu)
         val searchManager =
@@ -126,18 +121,12 @@ class SearchFragment :
         // Handle query changes
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextChange(query: String): Boolean {
-                if (menuCreated) {
-                    viewModel.searchQuery.postValue(query)
-                    Log.e("onQueryTextChange", query)
-                }
+                if (menuCreated) viewModel.searchQuery.postValue(query)
                 return true
             }
 
             override fun onQueryTextSubmit(query: String): Boolean {
-                if (menuCreated) {
-                    viewModel.searchQuery.postValue(query)
-                    Log.e("onQueryTextSubmit", query)
-                }
+                if (menuCreated) viewModel.searchQuery.postValue(query)
                 return false
             }
         })

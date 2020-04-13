@@ -7,12 +7,9 @@ import android.text.method.LinkMovementMethod
 import android.util.Log
 import android.view.*
 import androidx.appcompat.app.AppCompatDelegate
-import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.content.edit
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
-import com.google.android.material.appbar.AppBarLayout
-import com.google.android.material.appbar.AppBarLayout.Behavior.DragCallback
 import dev.smoketrees.twist.BR
 import dev.smoketrees.twist.R
 import dev.smoketrees.twist.adapters.AnimeListAdapter
@@ -24,7 +21,6 @@ import dev.smoketrees.twist.ui.base.BaseFragment
 import dev.smoketrees.twist.utils.Constants
 import dev.smoketrees.twist.utils.hide
 import dev.smoketrees.twist.utils.show
-import kotlinx.android.synthetic.main.activity_main.*
 import org.koin.android.ext.android.inject
 
 
