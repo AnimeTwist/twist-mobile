@@ -3,11 +3,11 @@ import java.io.FileInputStream
 
 
 plugins {
-    id(BuildPlugins.androidApplication)
-    id(BuildPlugins.kotlinAndroid)
-    id(BuildPlugins.kotlinAndroidExtensions)
-    id(BuildPlugins.kotlinKapt)
-    id(BuildPlugins.navigationPlugin)
+    id("com.android.application")
+    id("kotlin-android")
+    id("kotlin-android-extensions")
+    id("kotlin-kapt")
+    id("androidx.navigation.safeargs.kotlin")
 }
 
 val secretProperties = Properties()
@@ -20,14 +20,14 @@ if (System.getenv("CI") != "true") {
 
 
 android {
-    compileSdkVersion(AndroidSdk.compile)
+    compileSdkVersion(29)
     buildToolsVersion("29.0.3")
     defaultConfig {
         applicationId = "dev.smoketrees.twist"
-        minSdkVersion(AndroidSdk.min)
-        targetSdkVersion(AndroidSdk.target)
-        versionCode = 12
-        versionName = "2.2.2-prod9"
+        minSdkVersion(21)
+        targetSdkVersion(29)
+        versionCode = 13
+        versionName = "2.2.3-prod10"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         multiDexEnabled = true
         buildConfigField(
@@ -39,7 +39,9 @@ android {
         )
 
         javaCompileOptions {
-            annotationProcessorOptions { arguments = mapOf("room.incremental" to "true") }
+            annotationProcessorOptions {
+                arguments(mapOf("room.incremental" to "true"))
+            }
         }
     }
 
@@ -80,69 +82,68 @@ kapt {
 }
 
 dependencies {
-    implementation(Libraries.kotlinStdLib)
-    implementation(Libraries.appCompat)
-    implementation(Libraries.coreKtx)
-    implementation(Libraries.legacySupport)
-
-    implementation(Libraries.fragment)
+    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.3.72")
+    implementation("androidx.appcompat:appcompat:1.1.0")
+    implementation("androidx.core:core-ktx:1.3.0")
+    implementation("androidx.legacy:legacy-support-v4:1.0.0")
+    implementation("androidx.fragment:fragment-ktx:1.2.5")
 
     // Lifecycle components
-    implementation(Libraries.lifecycleExtensions)
-    implementation(Libraries.liveDataKtx)
-    implementation(Libraries.viewModel)
+    implementation("androidx.lifecycle:lifecycle-extensions:2.2.0")
+    implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.2.0")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0")
 
     // Navigation component
-    implementation(Libraries.navFragment)
-    implementation(Libraries.navUi)
+    implementation("androidx.navigation:navigation-fragment-ktx:2.3.0")
+    implementation("androidx.navigation:navigation-ui-ktx:2.3.0")
 
     // Paging support
-    implementation(Libraries.pagingRuntime)
+    implementation("androidx.paging:paging-runtime-ktx:2.1.2")
 
     // Koin for DI
-    implementation(Libraries.koin)
+    implementation("org.koin:koin-android-viewmodel:2.0.1")
 
     // Networking stuff
-    implementation(Libraries.gson)
-    implementation(Libraries.retrofit)
-    implementation(Libraries.gsonConverter)
-    implementation(Libraries.okHttpInterceptor)
+    implementation("com.google.code.gson:gson:2.8.5")
+    implementation("com.squareup.retrofit2:retrofit:2.6.2")
+    implementation("com.squareup.retrofit2:converter-gson:2.6.2")
+    implementation("com.squareup.okhttp3:logging-interceptor:4.2.2")
 
     // UI
-    implementation(Libraries.constraintLayout)
-    implementation(Libraries.recyclerView)
-    implementation(Libraries.materialComponents)
-    implementation(Libraries.materialDialogs)
+    implementation("androidx.constraintlayout:constraintlayout:1.1.3")
+    implementation("androidx.recyclerview:recyclerview:1.2.0-alpha04")
+    implementation("com.google.android.material:material:1.1.0")
+    implementation("com.afollestad.material-dialogs:core:3.1.1")
 
     // apache commons
-    implementation(Libraries.apacheCommons)
+    implementation("org.apache.commons:commons-lang3:3.9")
 
     // Exoplayer - stream video
-    implementation(Libraries.exoplayer)
+    implementation("com.google.android.exoplayer:exoplayer:2.11.6")
 
     // Spinkit - loading animations
-    implementation(Libraries.spinKit)
+    implementation("com.github.ybq:Android-SpinKit:1.4.0")
 
     // Room for database stuff
-    implementation(Libraries.room)
-    kapt(Libraries.roomKapt)
+    implementation("androidx.room:room-runtime:2.2.5")
+    kapt("androidx.room:room-compiler:2.2.5")
 
     // optional - Kotlin Extensions and Coroutines support for Room
-    implementation(Libraries.roomKtx)
+    implementation("androidx.room:room-ktx:2.2.5")
 
     // glide for image loading
-    implementation(Libraries.glide)
-    kapt(Libraries.glideKapt)
+    implementation("com.github.bumptech.glide:glide:4.10.0")
+    kapt("com.github.bumptech.glide:compiler:4.10.0")
 
     // multidex
-    implementation(Libraries.multidex)
+    implementation("com.android.support:multidex:1.0.3")
 
     // android system permissions
-    implementation(Libraries.quickPerms)
+    implementation("com.github.quickpermissions:quickpermissions-kotlin:0.4.0")
 
     // html rendering
-    implementation(Libraries.htmlTextView)
+    implementation("org.sufficientlysecure:html-textview:3.9")
 
     // Fuzzy search
-    implementation(Libraries.fuzzy)
+    implementation("me.xdrop:fuzzywuzzy:1.2.0")
 }
