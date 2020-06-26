@@ -2,13 +2,13 @@
 <resources>
 
     <!-- Color for dark theme -->
-    <color name="colorPrimary">#69F0AE</color>
-    <color name="colorPrimaryDark">#69F0AE</color>
-    <color name="colorAccent">#69F0AE</color>
+    <color name="colorPrimary">#3B916E</color>
+    <color name="colorPrimaryDark">#3B916E</color>
+    <color name="colorAccent">#3B916E</color>
 
     <color name="colorBackground">#FFF</color>
     <color name="colorCardBackground">#FAFAFA</color>
-    <color name="toolbar_text_color">#69F0AE</color>
+    <color name="toolbar_text_color">#3B916E</color>
 
     <color name="colorText">#212121</color>
 </resources>

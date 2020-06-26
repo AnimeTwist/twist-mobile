@@ -175,6 +175,12 @@ class AnimePlayerActivity : AppCompatActivity() {
                     Player.STATE_READY -> {
                         progressBar.hide()
                     }
+                    Player.STATE_ENDED -> {
+                        finish()
+                    }
+                    Player.STATE_IDLE -> {
+                        // do nothing
+                    }
                 }
             }
         })
