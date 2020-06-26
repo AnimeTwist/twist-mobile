@@ -14,6 +14,7 @@ import androidx.navigation.navArgs
 import com.google.android.exoplayer2.ExoPlayer
 import com.google.android.exoplayer2.ExoPlayerFactory
 import com.google.android.exoplayer2.Player
+import com.google.android.exoplayer2.SimpleExoPlayer
 import com.google.android.exoplayer2.source.ProgressiveMediaSource
 import com.google.android.exoplayer2.upstream.DefaultHttpDataSourceFactory
 import com.google.android.exoplayer2.util.Util
@@ -40,12 +41,23 @@ class AnimePlayerActivity : AppCompatActivity() {
         setContentView(R.layout.activity_anime_player)
         requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
         exo_rotate_icon.setOnClickListener {
-            if (viewModel.portrait) {
-                requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
-                viewModel.portrait = false
-            } else {
-                requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
-                viewModel.portrait = true
+            when(viewModel.orientation) {
+                ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE -> {
+                    viewModel.orientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+                    requestedOrientation = viewModel.orientation
+                }
+                ActivityInfo.SCREEN_ORIENTATION_PORTRAIT -> {
+                    viewModel.orientation = ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE
+                    requestedOrientation = viewModel.orientation
+                }
+                ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE -> {
+                    viewModel.orientation = ActivityInfo.SCREEN_ORIENTATION_REVERSE_PORTRAIT
+                    requestedOrientation = viewModel.orientation
+                }
+                ActivityInfo.SCREEN_ORIENTATION_REVERSE_PORTRAIT -> {
+                    viewModel.orientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
+                    requestedOrientation = viewModel.orientation
+                }
             }
         }
 
@@ -55,7 +67,8 @@ class AnimePlayerActivity : AppCompatActivity() {
 
         Log.d("Should_download", shouldDownload.toString())
 
-        viewModel.referer = "https://twist.moe/a/$slug/$epNo"
+        val referer = "https://twist.moe/a/$slug/$epNo"
+        viewModel.referer = referer
 
         if (shouldDownload) {
             viewModel.getAnimeSources(slug).observe(this, Observer {
@@ -69,9 +82,7 @@ class AnimePlayerActivity : AppCompatActivity() {
                             if (!it.data.isNullOrEmpty()) {
                                 val decryptedUrl =
                                     it.data[epNo - 1].source?.let { src ->
-                                        CryptoHelper.decryptSourceUrl(
-                                            src
-                                        )
+                                        CryptoHelper.decryptSourceUrl(src)
                                     }
 
                                 val downloadUrl =
@@ -87,7 +98,7 @@ class AnimePlayerActivity : AppCompatActivity() {
                                         Environment.DIRECTORY_MOVIES,
                                         "$slug-episode-$epNo.mkv"
                                     )
-                                    .addRequestHeader("Referer", viewModel.referer)
+                                    .addRequestHeader("Referer", referer)
 
                                 Log.d("DOWNLOAD", downloadUrl.toString())
 
@@ -104,7 +115,7 @@ class AnimePlayerActivity : AppCompatActivity() {
             })
         }
 
-        player = ExoPlayerFactory.newSimpleInstance(this)
+        player = SimpleExoPlayer.Builder(this).build()
 
         if (viewModel.currUri == null) {
             viewModel.getAnimeSources(slug).observe(this, Observer {
@@ -125,8 +136,6 @@ class AnimePlayerActivity : AppCompatActivity() {
                                 play(Uri.parse("https://twistcdn.bunny.sh${decryptedUrl}"))
                             }
                         }
-
-
                     }
 
                     Result.Status.ERROR -> {

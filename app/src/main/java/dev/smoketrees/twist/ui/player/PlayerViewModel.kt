@@ -1,5 +1,6 @@
 package dev.smoketrees.twist.ui.player
 
+import android.content.pm.ActivityInfo
 import android.net.Uri
 import androidx.lifecycle.ViewModel
 import dev.smoketrees.twist.repository.AnimeRepo
@@ -12,7 +13,7 @@ class PlayerViewModel(private val repo: AnimeRepo) : ViewModel() {
     var playbackPosition = 0L
     var currUri: Uri? = null
     var referer = ""
-    var portrait = false
+    var orientation: Int = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
 
     var downloadID = 0L
 
