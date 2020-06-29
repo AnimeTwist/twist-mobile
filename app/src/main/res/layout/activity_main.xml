@@ -32,7 +32,7 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <androidx.fragment.app.FragmentContainerView
+    <fragment
         android:id="@+id/nav_host_fragment"
         android:name="androidx.navigation.fragment.NavHostFragment"
         android:layout_width="match_parent"
@@ -62,5 +62,6 @@
         app:fabSize="mini"
         app:layout_anchor="@id/nav_host_fragment"
         app:layout_anchorGravity="bottom|right|end"
-        tools:visibility="visible" />
+        tools:visibility="visible"
+        android:contentDescription="@string/scroll_fab_content_desc" />
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

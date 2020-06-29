@@ -1,27 +1,27 @@
-package dev.smoketrees.twist
+package dev.smoketrees.twist.ui.auth
 
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.edit
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
+import dev.smoketrees.twist.R
 import dev.smoketrees.twist.model.twist.RegisterDetails
 import dev.smoketrees.twist.model.twist.Result
 import dev.smoketrees.twist.ui.home.AnimeViewModel
-import dev.smoketrees.twist.utils.hide
-import dev.smoketrees.twist.utils.isValidEmail
-import dev.smoketrees.twist.utils.show
-import dev.smoketrees.twist.utils.toast
+import dev.smoketrees.twist.utils.*
 import kotlinx.android.synthetic.main.fragment_account.*
+import org.koin.android.ext.android.inject
 import org.koin.android.viewmodel.ext.android.sharedViewModel
 
-/**
- * A simple [Fragment] subclass.
- */
 class AccountFragment : Fragment() {
 
     private val viewModel: AnimeViewModel by sharedViewModel()
+    private val pref: SharedPreferences by inject()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -33,7 +33,8 @@ class AccountFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        register_fab.setOnClickListener {
+
+        register_button.setOnClickListener {
             email_til.error = null
             username_til.error = null
             password_til.error = null
@@ -43,31 +44,31 @@ class AccountFragment : Fragment() {
             val email = email_til.editText?.text.toString()
             val pass = password_til.editText?.text.toString()
             val confirmPass = password_til_confirm.editText?.text.toString()
-            var flag = false
+            var formValidationFailed = false
 
             if (!email.isValidEmail()) {
                 email_til.error = getString(R.string.email_err)
-                flag = true
+                formValidationFailed = true
             }
 
             if (pass != confirmPass) {
                 password_til.error = getString(R.string.pass_match_err)
                 password_til_confirm.error = password_til.error
-                flag = true
+                formValidationFailed = true
             }
 
             if (pass.length < 7) {
                 password_til.error = getString(R.string.pass_len_err)
-                flag = true
+                formValidationFailed = true
             }
 
             val usernameRegex = Regex("^[a-zA-Z\\-_]{4,20}$")
             if (!usernameRegex.containsMatchIn(username)) {
-                username_til.error = "4-20 letters/dashes/underscores"
-                flag = true
+                username_til.error = getString(R.string.username_error)
+                formValidationFailed = true
             }
 
-            if (flag) {
+            if (formValidationFailed) {
                 return@setOnClickListener
             }
 
@@ -75,35 +76,46 @@ class AccountFragment : Fragment() {
 
             viewModel.signUp(regDetails).observe(viewLifecycleOwner, Observer {
                 when (it.status) {
-                    Result.Status.LOADING -> {
-                        username_til.hide()
-                        email_til.hide()
-                        password_til.hide()
-                        password_til_confirm.hide()
-                        register_fab.hide()
-                        spinkit.show()
-                    }
+                    Result.Status.LOADING -> hideViews()
 
                     Result.Status.SUCCESS -> {
-                        username_til.show()
-                        email_til.show()
-                        password_til.show()
-                        password_til_confirm.show()
-                        register_fab.show()
-                        spinkit.hide()
+                        showViews()
+                        pref.edit { putBoolean(Constants.PreferenceKeys.IS_LOGGED_IN, true) }
+                        findNavController()
+                            .navigate(AccountFragmentDirections.actionAccountFragmentToHomeFragment())
                     }
 
                     Result.Status.ERROR -> {
-                        username_til.show()
-                        email_til.show()
-                        password_til.show()
-                        password_til_confirm.show()
-                        register_fab.show()
-                        spinkit.hide()
+                        showViews()
                         toast(it.message.toString())
                     }
                 }
             })
         }
+        already_registered.setOnClickListener {
+            findNavController().navigateUp()
+        }
+    }
+
+    private fun hideViews() {
+        signup_text.hide()
+        username_til.hide()
+        email_til.hide()
+        password_til.hide()
+        password_til_confirm.hide()
+        register_button.hide()
+        already_registered.hide()
+        spinkit.show()
+    }
+
+    private fun showViews() {
+        signup_text.show()
+        username_til.show()
+        email_til.show()
+        password_til.show()
+        password_til_confirm.show()
+        register_button.show()
+        already_registered.show()
+        spinkit.hide()
     }
 }
