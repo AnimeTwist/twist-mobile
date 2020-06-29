@@ -34,7 +34,7 @@ class MainActivity : AppCompatActivity() {
         setSupportActionBar(toolbar)
 
         supportActionBar?.setDisplayShowTitleEnabled(false)
-        val spannable = SpannableString("twist.moe")
+        val spannable = SpannableString(getString(R.string.twist_moe))
         spannable.setSpan(
             ForegroundColorSpan(ContextCompat.getColor(this, R.color.toolbar_text_color)),
             6, 9,

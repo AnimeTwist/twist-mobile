@@ -2,9 +2,15 @@ package dev.smoketrees.twist.ui.auth
 
 import android.content.SharedPreferences
 import android.os.Bundle
+import android.text.Spannable
+import android.text.SpannableString
+import android.text.style.ForegroundColorSpan
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.core.content.edit
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -17,7 +23,9 @@ import dev.smoketrees.twist.utils.Constants
 import dev.smoketrees.twist.utils.hide
 import dev.smoketrees.twist.utils.show
 import dev.smoketrees.twist.utils.toast
+import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_login.*
+import kotlinx.android.synthetic.main.fragment_login.spinkit
 import org.koin.android.ext.android.inject
 import org.koin.android.viewmodel.ext.android.sharedViewModel
 
@@ -40,6 +48,14 @@ class LoginFragment : Fragment() {
             findNavController()
                 .navigate(LoginFragmentDirections.actionLoginFragmentToHomeFragment())
         }
+
+        val spannable = SpannableString(getString(R.string.twist_moe))
+        spannable.setSpan(
+            ForegroundColorSpan(ContextCompat.getColor(requireContext(), R.color.toolbar_text_color)),
+            6, 9,
+            Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+        )
+        login_text.text = spannable
 
         login_button.setOnClickListener {
             email_til.error = null
@@ -71,6 +87,7 @@ class LoginFragment : Fragment() {
                     Result.Status.SUCCESS -> {
                         showViews()
                         pref.edit { putBoolean(Constants.PreferenceKeys.IS_LOGGED_IN, true) }
+                        (activity as AppCompatActivity?)!!.supportActionBar!!.show()
                         findNavController()
                             .navigate(LoginFragmentDirections.actionLoginFragmentToHomeFragment())
                     }
@@ -105,5 +122,10 @@ class LoginFragment : Fragment() {
         login_button.show()
         not_registered.show()
         spinkit.hide()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        (activity as AppCompatActivity?)!!.supportActionBar!!.hide()
     }
 }

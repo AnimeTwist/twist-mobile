@@ -10,29 +10,31 @@
         android:id="@+id/login_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="32dp"
-        android:text="@string/log_in_menutext"
-        android:textAppearance="@style/TextAppearance.MaterialComponents.Headline4"
-        android:textColor="@color/colorAccent"
+        android:text="@string/twist_moe"
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Headline3"
+        android:textColor="@color/colorText"
+        app:layout_constraintBottom_toTopOf="@+id/email_til"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.4"
+        app:layout_constraintVertical_chainStyle="packed" />
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/email_til"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="48dp"
         android:layout_marginEnd="24dp"
+        android:layout_marginStart="24dp"
         android:hint="@string/username_email_til"
+        android:orientation="vertical"
         app:layout_constraintBottom_toTopOf="@+id/password_til"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/login_text"
-        app:layout_constraintVertical_bias="0.0"
-        app:layout_constraintVertical_chainStyle="packed">
+        tools:layout_editor_absoluteX="24dp">
 
         <com.google.android.material.textfield.TextInputEditText
             android:layout_width="match_parent"
@@ -43,16 +45,14 @@
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/password_til"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
         android:layout_marginTop="16dp"
-        android:layout_marginEnd="24dp"
         android:hint="@string/password_til_hint"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toTopOf="@+id/login_button"
+        app:layout_constraintEnd_toEndOf="@id/email_til"
+        app:layout_constraintStart_toStartOf="@id/email_til"
         app:layout_constraintTop_toBottomOf="@+id/email_til"
         app:passwordToggleEnabled="true">
 
@@ -69,7 +69,8 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:text="@string/log_in_menutext"
-        app:layout_constraintStart_toStartOf="@+id/password_til"
+        app:layout_constraintBottom_toTopOf="@+id/not_registered"
+        app:layout_constraintEnd_toEndOf="@id/password_til"
         app:layout_constraintTop_toBottomOf="@+id/password_til" />
 
     <TextView
@@ -79,7 +80,8 @@
         android:layout_marginTop="16dp"
         android:text="@string/account_not_exist"
         android:textColor="@color/colorAccent"
-        app:layout_constraintStart_toStartOf="@+id/login_button"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@id/login_button"
         app:layout_constraintTop_toBottomOf="@+id/login_button" />
 
     <com.github.ybq.android.spinkit.SpinKitView
@@ -92,5 +94,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:layout_editor_absoluteX="206dp"
+        tools:layout_editor_absoluteY="366dp" />
 </androidx.constraintlayout.widget.ConstraintLayout>

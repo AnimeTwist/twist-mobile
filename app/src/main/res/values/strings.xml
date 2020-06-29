@@ -34,4 +34,5 @@
     <string name="username_email_til">Username/Email</string>
     <string name="username_error">4-20 letters/dashes/underscores</string>
     <string name="email_username_error">Must not be blank!</string>
+    <string name="twist_moe">twist.moe</string>
 </resources>
