@@ -1,5 +1,6 @@
 package dev.smoketrees.twist.adapters
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -36,10 +37,11 @@ class SearchListAdapter(val listener: (AnimeItem) -> Unit) :
             holder.anime_alt_title.text = it
         }
         if (item.ongoing == 1) {
-            holder.anime_ongoing.show()
+            holder.anime_ongoing.show(0)
         } else {
-            holder.anime_ongoing.hide()
+            holder.anime_ongoing.hide(0)
         }
+
         holder.containerView.setOnClickListener {
             listener(animeList[position])
         }
