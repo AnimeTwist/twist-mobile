@@ -20,10 +20,6 @@ import dev.smoketrees.twist.model.twist.Result
 import dev.smoketrees.twist.ui.home.AnimeViewModel
 import dev.smoketrees.twist.utils.*
 import kotlinx.android.synthetic.main.fragment_account.*
-import kotlinx.android.synthetic.main.fragment_account.email_til
-import kotlinx.android.synthetic.main.fragment_account.password_til
-import kotlinx.android.synthetic.main.fragment_account.spinkit
-import kotlinx.android.synthetic.main.fragment_login.*
 import org.koin.android.ext.android.inject
 import org.koin.android.viewmodel.ext.android.sharedViewModel
 
