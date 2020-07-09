@@ -42,7 +42,7 @@ class AnimeViewModel(private val repo: AnimeRepo) : ViewModel() {
     val searchResults: MutableLiveData<List<AnimeItem>> = MutableLiveData()
     val searchQuery = MutableLiveData<String>()
 
-    var areAllLoaded = false
+    var areAllLoaded = MutableLiveData<Boolean>(false)
 
     var topAiringAnime: LiveData<PagedList<AnimeItem>>
     var topAiringAnimeNetworkState: LiveData<Result<List<AnimeItem>?>>

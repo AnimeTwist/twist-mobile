@@ -45,9 +45,7 @@
         android:layout_height="match_parent"
         app:defaultNavHost="true"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        app:navGraph="@navigation/nav_graph">
-
-    </androidx.fragment.app.FragmentContainerView>
+        app:navGraph="@navigation/nav_graph" />
 
     <com.github.ybq.android.spinkit.SpinKitView
         android:id="@+id/spinkit"
@@ -106,6 +104,7 @@
         app:fabSize="mini"
         app:layout_anchor="@id/nav_host_fragment"
         app:layout_anchorGravity="bottom|right|end"
-        tools:visibility="visible" />
+        tools:visibility="visible"
+        android:contentDescription="@string/scroll_fab_content_desc" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
