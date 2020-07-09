@@ -57,7 +57,6 @@
                             android:layout_margin="8dp"
                             android:background="@android:color/transparent"
                             android:src="@drawable/ic_dismiss"
-                            android:tint="@color/colorAccent"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
 
@@ -71,7 +70,6 @@
                             android:layout_marginEnd="4dp"
                             android:text="@string/header_title"
                             android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
-                            android:textColor="@color/colorAccent"
                             app:layout_constraintEnd_toStartOf="@+id/dismiss_banner_button"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
