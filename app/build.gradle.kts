@@ -132,8 +132,8 @@ dependencies {
     implementation("androidx.room:room-ktx:2.2.5")
 
     // glide for image loading
-    implementation("com.github.bumptech.glide:glide:4.10.0")
-    kapt("com.github.bumptech.glide:compiler:4.10.0")
+    implementation("com.github.bumptech.glide:glide:4.11.0")
+    kapt("com.github.bumptech.glide:compiler:4.11.0")
 
     // multidex
     implementation("com.android.support:multidex:1.0.3")
