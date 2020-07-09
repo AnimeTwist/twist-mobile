@@ -63,13 +63,16 @@
 
                         <TextView
                             android:id="@+id/motd_title_text"
-                            android:layout_width="wrap_content"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="16dp"
+                            app:layout_constraintHorizontal_bias="0.0"
                             android:layout_marginTop="16dp"
+                            android:layout_marginEnd="4dp"
                             android:text="@string/header_title"
                             android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
                             android:textColor="@color/colorAccent"
+                            app:layout_constraintEnd_toStartOf="@+id/dismiss_banner_button"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
 
