@@ -33,11 +33,11 @@ class EpisodesFragment :
     private val fab by lazy { (requireActivity() as MainActivity).scroll_fab }
 
     private val episodeAdapter by lazy {
-        EpisodeListAdapter(requireActivity()) { ep, shouldDownload ->
+        EpisodeListAdapter(requireActivity()) { ep, _ ->
             val action = EpisodesFragmentDirections.actionEpisodesFragmentToAnimePlayerActivity(
                 args.slugName,
                 ep.number!!,
-                shouldDownload
+                false
             )
             findNavController().navigate(action)
         }
