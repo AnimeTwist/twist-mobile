@@ -1,22 +1,41 @@
 package dev.smoketrees.twist.ui.home
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.switchMap
+import androidx.lifecycle.*
 import androidx.paging.LivePagedListBuilder
 import androidx.paging.PagedList
-import dev.smoketrees.twist.model.twist.AnimeItem
-import dev.smoketrees.twist.model.twist.LoginDetails
-import dev.smoketrees.twist.model.twist.RegisterDetails
-import dev.smoketrees.twist.model.twist.Result
+import dev.smoketrees.twist.model.twist.*
 import dev.smoketrees.twist.pagination.FilteredKitsuDataSourceFactory
 import dev.smoketrees.twist.pagination.KitsuDataSourceFactory
 import dev.smoketrees.twist.repository.AnimeRepo
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class AnimeViewModel(private val repo: AnimeRepo) : ViewModel() {
-    fun getAllAnime() = repo.getAllAnime()
-    fun getMotd() = repo.getMotd()
+    private val _dbAnime = repo.getAllDbAnime()
+    private val _dbTrendingAnime = repo.getDbTrendingAnime()
+    val motdLiveData = repo.getMotd()
+    val allAnimeLivedata = MediatorLiveData<Result<List<AnimeItem>>>()
+    val trendingAnimeLiveData = MediatorLiveData<Result<List<TrendingAnimeItem>>>()
+
+    fun getAllAnime() = viewModelScope.launch(Dispatchers.IO) {
+        val result = repo.getAllNetworkAnime()
+        when(result.status) {
+            Result.Status.SUCCESS -> {
+                result.data?.let { repo.saveAnime(it) }
+            }
+            else -> {}
+        }
+    }
+
+    fun getTrendingAnime(limit: Int) = viewModelScope.launch(Dispatchers.IO) {
+        val result = repo.getNetworkTrendingAnime(limit)
+        when(result.status) {
+            Result.Status.SUCCESS -> {
+                result.data?.let { repo.saveTrendingAnime(it) }
+            }
+            else -> {}
+        }
+    }
 
     val searchResults: MutableLiveData<List<AnimeItem>> = MutableLiveData()
     val searchQuery = MutableLiveData<String>()
@@ -27,12 +46,18 @@ class AnimeViewModel(private val repo: AnimeRepo) : ViewModel() {
     var topAiringAnimeNetworkState: LiveData<Result<List<AnimeItem>?>>
     var topRatedAnime: LiveData<PagedList<AnimeItem>>
 
-    fun getTrendingAnime(limit: Int) = repo.getTrendingAnime(limit)
-
     fun signIn(loginDetails: LoginDetails) = repo.signIn(loginDetails)
     fun signUp(registerDetails: RegisterDetails) = repo.signUp(registerDetails)
 
     init {
+        allAnimeLivedata.addSource(_dbAnime) {
+            allAnimeLivedata.value = if (it.isEmpty()) Result.loading() else Result.success(it)
+        }
+
+        trendingAnimeLiveData.addSource(_dbTrendingAnime) {
+            trendingAnimeLiveData.value = if (it.isEmpty()) Result.loading() else Result.success(it)
+        }
+
         val topAiringDataSourceFactory =
             FilteredKitsuDataSourceFactory(repo.webClient, "-user_count", "current")
         topAiringAnimeNetworkState = topAiringDataSourceFactory.animeLiveDataSource.switchMap {

@@ -47,59 +47,14 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, AnimeViewModel>(
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+        showLoader()
+        dataBinding.hasResult = false
 
-        // only load all anime once
-        if (!viewModel.areAllLoaded) {
-            viewModel.getAllAnime().observe(viewLifecycleOwner, Observer {
-                when (it.status) {
-                    Result.Status.LOADING -> {
-                        showLoader()
-                        dataBinding.hasResult = false
-                    }
+        viewModel.getAllAnime()
+        viewModel.getTrendingAnime(40)
 
-                    Result.Status.SUCCESS -> {
-                        hideLoader()
-                        dataBinding.hasResult = true
-
-                        viewModel.getAllAnime().removeObservers(viewLifecycleOwner)
-                        viewModel.areAllLoaded = true
-
-                        viewModel.getTrendingAnime(40)
-                            .observe(viewLifecycleOwner, Observer { trendingList ->
-                                when (trendingList.status) {
-                                    Result.Status.LOADING -> {
-                                        showLoader()
-                                        dataBinding.hasResult = false
-                                    }
-
-                                    Result.Status.SUCCESS -> {
-                                        if (!trendingList.data.isNullOrEmpty()) {
-                                            trendingAdapter.updateData(trendingList.data.shuffled())
-                                        }
-                                        hideLoader()
-                                        dataBinding.hasResult = true
-                                    }
-
-                                    Result.Status.ERROR -> {
-                                        toast(trendingList.message.toString())
-                                    }
-                                }
-                            })
-                        viewModel.topAiringAnime.observe(viewLifecycleOwner, Observer { pagedList ->
-                            topAiringAdapter.submitList(pagedList)
-                        })
-                        viewModel.topRatedAnime.observe(viewLifecycleOwner, Observer { pagedList ->
-                            topRatedAdapter.submitList(pagedList)
-                        })
-                    }
-
-                    Result.Status.ERROR -> {
-                        toast(it.message.toString())
-                    }
-                }
-            })
-        } else {
-            viewModel.getTrendingAnime(40).observe(viewLifecycleOwner, Observer { trendingList ->
+        viewModel.trendingAnimeLiveData
+            .observe(viewLifecycleOwner, Observer { trendingList ->
                 when (trendingList.status) {
                     Result.Status.LOADING -> {
                         showLoader()
@@ -108,10 +63,10 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, AnimeViewModel>(
 
                     Result.Status.SUCCESS -> {
                         if (!trendingList.data.isNullOrEmpty()) {
+                            hideLoader()
+                            dataBinding.hasResult = true
                             trendingAdapter.updateData(trendingList.data)
                         }
-                        hideLoader()
-                        dataBinding.hasResult = true
                     }
 
                     Result.Status.ERROR -> {
@@ -119,15 +74,14 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, AnimeViewModel>(
                     }
                 }
             })
-            viewModel.topAiringAnime.observe(viewLifecycleOwner, Observer { pagedList ->
-                topAiringAdapter.submitList(pagedList)
-            })
-            viewModel.topRatedAnime.observe(viewLifecycleOwner, Observer { pagedList ->
-                topRatedAdapter.submitList(pagedList)
-            })
-        }
+        viewModel.topAiringAnime.observe(viewLifecycleOwner, Observer { pagedList ->
+            topAiringAdapter.submitList(pagedList)
+        })
+        viewModel.topRatedAnime.observe(viewLifecycleOwner, Observer { pagedList ->
+            topRatedAdapter.submitList(pagedList)
+        })
 
-        viewModel.getMotd().observe(viewLifecycleOwner, Observer {
+        viewModel.motdLiveData.observe(viewLifecycleOwner, Observer {
             when (it.status) {
                 Result.Status.SUCCESS -> {
                     dataBinding.motdTitleText.text = it.data?.title
@@ -148,14 +102,9 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, AnimeViewModel>(
         super.onViewCreated(view, savedInstanceState)
 
         dataBinding.motdBodyText.movementMethod = LinkMovementMethod.getInstance()
-        dataBinding.dismissBannerButton.setOnClickListener {
-            dataBinding.bannerContainer.hide()
-        }
-
+        dataBinding.dismissBannerButton.setOnClickListener { dataBinding.bannerContainer.hide() }
         dataBinding.topAiringRecyclerview.adapter = topAiringAdapter
-
         dataBinding.trendingRecyclerview.adapter = trendingAdapter
-
         dataBinding.topRatedRecyclerview.adapter = topRatedAdapter
     }
 

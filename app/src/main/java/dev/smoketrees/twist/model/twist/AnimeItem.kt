@@ -9,7 +9,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder
 
 @Keep
 @Entity
-class AnimeItem {
+open class AnimeItem {
 
     @PrimaryKey
     @ColumnInfo(name = "uid")

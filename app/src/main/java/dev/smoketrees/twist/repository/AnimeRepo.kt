@@ -5,22 +5,31 @@ import android.util.Log
 import dev.smoketrees.twist.api.anime.AnimeWebClient
 import dev.smoketrees.twist.db.AnimeDao
 import dev.smoketrees.twist.db.AnimeDetailsDao
+import dev.smoketrees.twist.db.TrendingAnimeDao
 import dev.smoketrees.twist.model.twist.*
 
 class AnimeRepo(
     val webClient: AnimeWebClient,
     private val animeDao: AnimeDao,
-    private val episodeDao: AnimeDetailsDao
+    private val episodeDao: AnimeDetailsDao,
+    private val trendingAnimeDao: TrendingAnimeDao
 ) : BaseRepo() {
-    fun getAllAnime() = makeRequestAndSave(
-        databaseQuery = { animeDao.getAllAnime() },
-        networkCall = { webClient.getAllAnime() },
-        saveCallResult = { animeDao.saveAnime(it) }
-    )
+//    fun getAllAnime() = makeRequestAndSave(
+//        databaseQuery = { animeDao.getAllAnime() },
+//        networkCall = { webClient.getAllAnime() },
+//        saveCallResult = { animeDao.saveAnime(it) }
+//    )
 
-    fun getTrendingAnime(limit: Int) = makeRequest {
-        webClient.getTrendingAnime(limit)
-    }
+    fun getAllDbAnime() = animeDao.getAllAnime()
+    suspend fun getAllNetworkAnime() = webClient.getAllAnime()
+    suspend fun saveAnime(animeItems: List<AnimeItem>) = animeDao.saveAnime(animeItems)
+    suspend fun saveTrendingAnime(animeItems: List<TrendingAnimeItem>) =
+        trendingAnimeDao.saveTrendingAnime(animeItems)
+
+
+    suspend fun getNetworkTrendingAnime(limit: Int) = webClient.getTrendingAnime(limit)
+
+    fun getDbTrendingAnime() = trendingAnimeDao.getTrendingAnime()
 
     fun getMotd() = makeRequest {
         webClient.getMotd()

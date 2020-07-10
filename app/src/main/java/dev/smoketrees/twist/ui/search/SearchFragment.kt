@@ -70,7 +70,7 @@ class SearchFragment :
             hideLoader()
         }
 
-        viewModel.getAllAnime().observe(viewLifecycleOwner) {
+        viewModel.allAnimeLivedata.observe(viewLifecycleOwner) {
             when (it.status) {
                 Result.Status.SUCCESS -> anime = it.data ?: emptyList()
                 Result.Status.ERROR -> anime = emptyList()

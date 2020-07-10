@@ -32,7 +32,7 @@ interface AnimeWebService {
     @GET("list/trending/anime")
     suspend fun getTrendingAnime(
         @Query("limit") limit: Int
-    ): Response<List<AnimeItem>>
+    ): Response<List<TrendingAnimeItem>>
 
     @GET("motd")
     suspend fun getMotd(): Response<Motd>

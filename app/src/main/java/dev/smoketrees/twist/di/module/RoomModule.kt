@@ -14,4 +14,5 @@ val roomModule = module {
 
     single { get<AnimeDb>().animeDao() }
     single { get<AnimeDb>().episodeDao() }
+    single { get<AnimeDb>().trendingAnimeDao() }
 }
