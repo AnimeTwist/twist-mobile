@@ -12,9 +12,11 @@ class Motd : Serializable {
     @SerializedName("id")
     @Expose
     var id: Int? = null
+
     @SerializedName("title")
     @Expose
     var title: String? = null
+
     @SerializedName("message")
     @Expose
     var message: String? = null

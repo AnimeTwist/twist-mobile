@@ -48,7 +48,6 @@ class MainActivity : AppCompatActivity() {
     override fun onSupportNavigateUp() = navController.navigateUp()
 
     fun showLoader() = spinkit.show()
-
     fun hideLoader() = spinkit.hide(500)
 
     private fun checkAndApplyTheme() {

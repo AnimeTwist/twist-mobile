@@ -22,16 +22,20 @@ class Episode {
     @SerializedName("anime_id")
     @Expose
     var animeId: Int? = null
+
     @SerializedName("created_at")
     @Expose
     var createdAt: String? = null
+
     @SerializedName("id")
     @ColumnInfo(name = "ep_id")
     @Expose
     var id: Int? = null
+
     @SerializedName("number")
     @Expose
     var number: Int? = null
+
     @SerializedName("updated_at")
     @Expose
     var updatedAt: String? = null

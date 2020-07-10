@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="homeViewModel"
             type="dev.smoketrees.twist.ui.home.AnimeViewModel" />

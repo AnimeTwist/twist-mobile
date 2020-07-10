@@ -16,7 +16,7 @@ class EpisodeListTypeConverter {
             return emptyList()
         }
 
-        val listType = object : TypeToken<List<Episode>>() { }.type
+        val listType = object : TypeToken<List<Episode>>() {}.type
         return gson.fromJson(data, listType)
     }
 

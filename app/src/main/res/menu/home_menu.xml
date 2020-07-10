@@ -14,9 +14,9 @@
         android:title="@string/toggle_switch_theme"
         app:showAsAction="ifRoom" />
 
-<!--    <item-->
-<!--        android:id="@+id/action_account"-->
-<!--        android:icon="@drawable/ic_account_circle"-->
-<!--        android:title="@string/acct_bottom_menuitem"-->
-<!--        app:showAsAction="ifRoom"/>-->
+    <!--    <item-->
+    <!--        android:id="@+id/action_account"-->
+    <!--        android:icon="@drawable/ic_account_circle"-->
+    <!--        android:title="@string/acct_bottom_menuitem"-->
+    <!--        app:showAsAction="ifRoom"/>-->
 </menu>

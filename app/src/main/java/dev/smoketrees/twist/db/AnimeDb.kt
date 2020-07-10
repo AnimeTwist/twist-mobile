@@ -7,7 +7,11 @@ import dev.smoketrees.twist.model.twist.AnimeDetailsEntity
 import dev.smoketrees.twist.model.twist.AnimeItem
 import dev.smoketrees.twist.model.twist.TrendingAnimeItem
 
-@Database(entities = [AnimeItem::class, AnimeDetailsEntity::class, TrendingAnimeItem::class], version = 3, exportSchema = false)
+@Database(
+    entities = [AnimeItem::class, AnimeDetailsEntity::class, TrendingAnimeItem::class],
+    version = 3,
+    exportSchema = false
+)
 @TypeConverters(EpisodeListTypeConverter::class)
 abstract class AnimeDb : RoomDatabase() {
     abstract fun animeDao(): AnimeDao

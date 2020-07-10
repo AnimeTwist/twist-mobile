@@ -48,7 +48,12 @@ class LoginFragment : Fragment() {
 
         val spannable = SpannableString(getString(R.string.twist_moe))
         spannable.setSpan(
-            ForegroundColorSpan(ContextCompat.getColor(requireContext(), R.color.toolbar_text_color)),
+            ForegroundColorSpan(
+                ContextCompat.getColor(
+                    requireContext(),
+                    R.color.toolbar_text_color
+                )
+            ),
             6, 9,
             Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
         )

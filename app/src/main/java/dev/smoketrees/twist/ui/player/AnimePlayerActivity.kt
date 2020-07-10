@@ -41,7 +41,7 @@ class AnimePlayerActivity : AppCompatActivity() {
         setContentView(R.layout.activity_anime_player)
         requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
         exo_rotate_icon.setOnClickListener {
-            when(viewModel.orientation) {
+            when (viewModel.orientation) {
                 ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE -> {
                     viewModel.orientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
                     requestedOrientation = viewModel.orientation

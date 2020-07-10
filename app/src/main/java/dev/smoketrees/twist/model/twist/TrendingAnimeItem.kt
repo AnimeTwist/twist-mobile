@@ -2,9 +2,7 @@ package dev.smoketrees.twist.model.twist
 
 import androidx.annotation.Keep
 import androidx.recyclerview.widget.DiffUtil
-import androidx.room.*
-import com.google.gson.annotations.Expose
-import com.google.gson.annotations.SerializedName
+import androidx.room.Entity
 import org.apache.commons.lang3.builder.ToStringBuilder
 
 @Keep
@@ -13,11 +11,17 @@ class TrendingAnimeItem : AnimeItem() {
     companion object {
         var DIFF_CALLBACK: DiffUtil.ItemCallback<TrendingAnimeItem> =
             object : DiffUtil.ItemCallback<TrendingAnimeItem>() {
-                override fun areItemsTheSame(oldItem: TrendingAnimeItem, newItem: TrendingAnimeItem): Boolean {
+                override fun areItemsTheSame(
+                    oldItem: TrendingAnimeItem,
+                    newItem: TrendingAnimeItem
+                ): Boolean {
                     return oldItem.id == newItem.id
                 }
 
-                override fun areContentsTheSame(oldItem: TrendingAnimeItem, newItem: TrendingAnimeItem): Boolean {
+                override fun areContentsTheSame(
+                    oldItem: TrendingAnimeItem,
+                    newItem: TrendingAnimeItem
+                ): Boolean {
                     return oldItem.id == newItem.id
                 }
             }

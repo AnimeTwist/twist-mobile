@@ -14,7 +14,8 @@ import kotlin.reflect.KProperty
  *
  * Accessing this variable in a destroyed fragment will throw NPE.
  */
-class AutoClearedValue<T : Any>(val fragment: Fragment) : ReadWriteProperty<Fragment, T>, LifecycleObserver {
+class AutoClearedValue<T : Any>(val fragment: Fragment) : ReadWriteProperty<Fragment, T>,
+    LifecycleObserver {
     private var _value: T? = null
 
     override fun getValue(thisRef: Fragment, property: KProperty<*>): T {

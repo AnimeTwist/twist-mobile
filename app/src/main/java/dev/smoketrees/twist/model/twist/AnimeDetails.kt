@@ -11,42 +11,55 @@ class AnimeDetails {
     @SerializedName("id")
     @Expose
     var id: Int? = null
+
     @SerializedName("title")
     @Expose
     var title: String? = null
+
     @SerializedName("alt_title")
     @Expose
     var altTitle: String? = null
+
     @SerializedName("description")
     @Expose
     var description: String? = null
+
     @SerializedName("episodes")
     @Expose
     var episodes: List<Episode>? = null
+
     @SerializedName("season")
     @Expose
     var season: Int? = null
+
     @SerializedName("ongoing")
     @Expose
     var ongoing: Int? = null
+
     @SerializedName("hb_id")
     @Expose
     var hbId: Int? = null
+
     @SerializedName("hidden")
     @Expose
     var hidden: Int? = null
+
     @SerializedName("mal_id")
     @Expose
     var malId: Int? = null
+
     @SerializedName("created_at")
     @Expose
     var createdAt: String? = null
+
     @SerializedName("updated_at")
     @Expose
     var updatedAt: String? = null
+
     @SerializedName("slug")
     @Expose
     var slug: Slug? = null
+
     @SerializedName("nejire_extension")
     @Expose
     var extension: DetailsNejireExtension? = null
@@ -68,9 +81,11 @@ class DetailsNejireExtension {
     @SerializedName("poster_image")
     @Expose
     var posterImage: String? = null
+
     @SerializedName("cover_image")
     @Expose
     var coverImage: String? = null
+
     @SerializedName("avg_score")
     @Expose
     var avgScore: Double? = null

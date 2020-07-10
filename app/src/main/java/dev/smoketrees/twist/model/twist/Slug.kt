@@ -11,15 +11,19 @@ class Slug {
     @SerializedName("anime_id")
     @Expose
     var animeId: Int? = null
+
     @SerializedName("created_at")
     @Expose
     var createdAt: String? = null
+
     @SerializedName("id")
     @Expose
     var id: Int? = null
+
     @SerializedName("slug")
     @Expose
     var slug: String? = null
+
     @SerializedName("updated_at")
     @Expose
     var updatedAt: String? = null

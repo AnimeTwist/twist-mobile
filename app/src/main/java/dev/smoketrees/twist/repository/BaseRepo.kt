@@ -44,7 +44,8 @@ open class BaseRepo {
                 emit(Result.error(response.message!!))
                 emitSource(source)
             }
-            else -> {}
+            else -> {
+            }
         }
     }
 }

@@ -19,21 +19,23 @@ class AnimeViewModel(private val repo: AnimeRepo) : ViewModel() {
 
     fun getAllAnime() = viewModelScope.launch(Dispatchers.IO) {
         val result = repo.getAllNetworkAnime()
-        when(result.status) {
+        when (result.status) {
             Result.Status.SUCCESS -> {
                 result.data?.let { repo.saveAnime(it) }
             }
-            else -> {}
+            else -> {
+            }
         }
     }
 
     fun getTrendingAnime(limit: Int) = viewModelScope.launch(Dispatchers.IO) {
         val result = repo.getNetworkTrendingAnime(limit)
-        when(result.status) {
+        when (result.status) {
             Result.Status.SUCCESS -> {
                 result.data?.let { repo.saveTrendingAnime(it) }
             }
-            else -> {}
+            else -> {
+            }
         }
     }
 

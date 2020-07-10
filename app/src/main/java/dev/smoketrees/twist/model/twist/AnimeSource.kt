@@ -11,18 +11,23 @@ class AnimeSource {
     @SerializedName("id")
     @Expose
     var id: Int? = null
+
     @SerializedName("source")
     @Expose
     var source: String? = null
+
     @SerializedName("number")
     @Expose
     var number: Int? = null
+
     @SerializedName("anime_id")
     @Expose
     var animeId: Int? = null
+
     @SerializedName("created_at")
     @Expose
     var createdAt: String? = null
+
     @SerializedName("updated_at")
     @Expose
     var updatedAt: String? = null
