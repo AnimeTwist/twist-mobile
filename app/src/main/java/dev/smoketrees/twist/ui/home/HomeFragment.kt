@@ -82,7 +82,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, AnimeViewModel>(
                                     }
 
                                     Result.Status.ERROR -> {
-                                        Log.e("ObtainTrending", it.message.toString())
+                                        toast(it.message.toString())
                                     }
                                 }
                             })

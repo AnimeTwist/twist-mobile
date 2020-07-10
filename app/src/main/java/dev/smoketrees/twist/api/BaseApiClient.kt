@@ -3,6 +3,8 @@ package dev.smoketrees.twist.api
 import dev.smoketrees.twist.BuildConfig
 import dev.smoketrees.twist.model.twist.Result
 import retrofit2.Response
+import java.net.ConnectException
+import java.net.SocketTimeoutException
 
 open class BaseApiClient {
 
@@ -21,10 +23,16 @@ open class BaseApiClient {
             }
         } catch (e: Exception) {
             val errorMessage = e.message ?: e.toString()
-            return if (BuildConfig.DEBUG) {
-                Result.error("111 Network called failed with message $errorMessage")
-            } else {
-                Result.error("111 Check your internet connection!")
+            return when (e) {
+                is SocketTimeoutException -> {
+                    Result.error("408 Timed out!")
+                }
+                is ConnectException -> {
+                    Result.error("111 Check your internet connection!")
+                }
+                else -> {
+                    Result.error(errorMessage)
+                }
             }
         }
     }
