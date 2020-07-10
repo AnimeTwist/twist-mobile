@@ -7,6 +7,7 @@
     android:layout_height="match_parent">
 
     <LinearLayout
+        android:id="@+id/linearLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
@@ -20,56 +21,57 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center"
-            android:orientation="horizontal"
-            android:paddingTop="4dp">
+            android:gravity="center_vertical"
+            android:orientation="horizontal" >
 
-            <ImageButton
-                android:id="@id/exo_prev"
-                style="@style/ExoMediaButton.Previous" />
-
-            <ImageButton
-                android:id="@id/exo_rew"
-                style="@style/ExoMediaButton.Rewind" />
-
-            <ImageButton
-                android:id="@id/exo_repeat_toggle"
-                style="@style/ExoMediaButton" />
+            <TextView
+                android:id="@+id/exo_current_episode"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="5dp"
+                android:fontFamily="@font/lato_thin"
+                android:textAlignment="center"
+                android:textAllCaps="false"
+                android:textColor="#FFFFFF"
+                android:typeface="sans"
+                tools:text="EPX" />
 
             <ImageButton
                 android:id="@id/exo_play"
-                style="@style/ExoMediaButton.Play" />
-
-            <ImageButton
-                android:id="@id/exo_pause"
-                style="@style/ExoMediaButton.Pause" />
-
-            <ImageButton
-                android:id="@id/exo_ffwd"
-                style="@style/ExoMediaButton.FastForward" />
+                style="@style/ExoMediaButton.Play"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:contentDescription="Play/Pause control of episode"
+                android:paddingStart="8dp"
+                android:paddingTop="8dp"
+                android:paddingEnd="8dp"
+                android:paddingBottom="8dp"
+                android:src="@drawable/ic_at_play" />
 
             <ImageButton
                 android:id="@id/exo_next"
-                style="@style/ExoMediaButton.Next" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
-            android:gravity="center_vertical"
-            android:orientation="horizontal">
+                style="@style/ExoMediaButton.Next"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:contentDescription="Skip episode"
+                android:paddingStart="8dp"
+                android:paddingTop="8dp"
+                android:paddingEnd="8dp"
+                android:paddingBottom="8dp"
+                android:src="@drawable/ic_at_forward" />
 
             <TextView
                 android:id="@id/exo_position"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:fontFamily="@font/lato_thin"
                 android:includeFontPadding="false"
-                android:paddingLeft="4dp"
-                android:paddingRight="4dp"
                 android:textColor="#FFBEBEBE"
                 android:textSize="14sp"
-                android:textStyle="bold" />
+                android:textStyle="normal" />
 
             <View
                 android:id="@id/exo_progress_placeholder"
@@ -81,25 +83,40 @@
                 android:id="@id/exo_duration"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:fontFamily="@font/lato_thin"
                 android:includeFontPadding="false"
-                android:paddingLeft="4dp"
-                android:paddingRight="4dp"
                 android:textColor="#FFBEBEBE"
                 android:textSize="14sp"
-                android:textStyle="bold" />
+                android:textStyle="normal" />
+
+            <ImageView
+                android:id="@+id/exo_rotate_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:contentDescription="Rotate screen"
+                android:paddingStart="8dp"
+                android:paddingTop="8dp"
+                android:paddingEnd="12dp"
+                android:paddingBottom="8dp"
+                android:src="@drawable/ic_screen_rotation" />
+
         </LinearLayout>
     </LinearLayout>
 
-    <ImageView
-        android:id="@+id/exo_rotate_icon"
-        android:layout_width="32dp"
-        android:layout_height="32dp"
-        android:adjustViewBounds="true"
-        android:layout_marginEnd="32dp"
-        android:layout_marginTop="32dp"
-        android:scaleType="fitXY"
-        android:src="@drawable/ic_screen_rotation"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    <TextView
+        android:id="@+id/exo_ep_info"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="16dp"
+        android:fontFamily="@font/lato_thin"
+        android:paddingStart="1dp"
+        android:paddingEnd="128dp"
+        android:textColor="#FFFFFF"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="non" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

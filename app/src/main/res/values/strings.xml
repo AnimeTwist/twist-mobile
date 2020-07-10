@@ -28,6 +28,7 @@
     <string name="ep_count">%d episodes</string>
     <string name="score_value">Score: %s</string>
     <string name="episode_number_xxx">Episode number %d</string>
+	<string name="episode_info">EP%d</string>
     <string name="existing_account_login_text">Already have an account? Log in</string>
     <string name="scroll_fab_content_desc">Scroll down to bottom of anime list</string>
     <string name="account_not_exist">Don\'t have an account? Register</string>
