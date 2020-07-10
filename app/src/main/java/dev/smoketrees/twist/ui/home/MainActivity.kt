@@ -37,7 +37,7 @@ class MainActivity : AppCompatActivity() {
         val spannable = SpannableString(getString(R.string.twist_moe))
         spannable.setSpan(
             ForegroundColorSpan(ContextCompat.getColor(this, R.color.toolbar_text_color)),
-            6, 9,
+            6, 11,
             Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
         )
         toolbar_text.text = spannable
