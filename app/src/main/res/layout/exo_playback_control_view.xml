@@ -50,6 +50,18 @@
                 android:src="@drawable/ic_at_play" />
 
             <ImageButton
+                android:id="@id/exo_pause"
+                style="@style/ExoMediaButton.Pause"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:contentDescription="Play/Pause control of episode"
+                android:paddingStart="8dp"
+                android:paddingTop="8dp"
+                android:paddingEnd="8dp"
+                android:paddingBottom="8dp"
+                android:src="@drawable/ic_at_pause" />
+
+            <ImageButton
                 android:id="@id/exo_next"
                 style="@style/ExoMediaButton.Next"
                 android:layout_width="wrap_content"
