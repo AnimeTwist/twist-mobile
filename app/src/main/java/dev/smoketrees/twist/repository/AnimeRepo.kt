@@ -7,6 +7,7 @@ import dev.smoketrees.twist.db.AnimeDao
 import dev.smoketrees.twist.db.AnimeDetailsDao
 import dev.smoketrees.twist.db.TrendingAnimeDao
 import dev.smoketrees.twist.model.twist.*
+import dev.smoketrees.twist.utils.Messages
 
 class AnimeRepo(
     val webClient: AnimeWebClient,
@@ -65,7 +66,7 @@ class AnimeRepo(
                 getAnimeDetailsEntity(episodeResult.data!!)
             )
         } else {
-            Result.error("")
+            Result.error(Messages.Message(null, ""))
         }
     }
 

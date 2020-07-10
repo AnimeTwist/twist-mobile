@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.content.ContextCompat
@@ -22,6 +23,7 @@ import dev.smoketrees.twist.utils.Messages
 import dev.smoketrees.twist.utils.hide
 import dev.smoketrees.twist.utils.show
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.fragment_home.*
 import org.koin.android.ext.android.inject
 
 
@@ -55,7 +57,11 @@ class MainActivity : AppCompatActivity() {
     fun hideLoader() = spinkit.hide(500)
 
     fun notice(errCode: Int?) {
-        val noticeObject = if (errCode != null) Messages.NOTICES[errCode]!! else Messages.DEFAULT_NOTICE
+        if (errCode == null) {
+            noticeClear()
+            return
+        }
+        val noticeObject = if (errCode == 0) Messages.DEFAULT_NOTICE else Messages.NOTICES[errCode]!!
 
         if (noticeObject.icon != null) {
             notice_icon.setImageDrawable(ContextCompat.getDrawable(this, noticeObject.icon))

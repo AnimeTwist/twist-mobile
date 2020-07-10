@@ -46,10 +46,19 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, AnimeViewModel>(
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        super.onActivityCreated(savedInstanceState)
         showLoader()
+        noticeClear()
         dataBinding.hasResult = false
 
+        // Show notice on error
+        viewModel.lastCode
+                .observe(viewLifecycleOwner, Observer {
+                    if (!viewModel.areAllLoaded.value!!) {
+                        notice(it)
+                    } //TODO: else show small bar above motd
+                })
+
+        // Load data
         viewModel.getAllAnime()
         viewModel.getTrendingAnime(40)
 
@@ -64,16 +73,17 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, AnimeViewModel>(
                         Result.Status.SUCCESS -> {
                             if (!trendingList.data.isNullOrEmpty()) {
                                 hideLoader()
-                                dataBinding.hasResult = true
+                                if (viewModel.areAllLoaded.value!!) dataBinding.hasResult = true
                                 trendingAdapter.updateData(trendingList.data)
                             }
                         }
 
                         Result.Status.ERROR -> {
-                            toast(trendingList.message.toString())
+                            toast(trendingList.message!!.msg)
                         }
                     }
                 })
+
         viewModel.topAiringAnime.observe(viewLifecycleOwner, Observer { pagedList ->
             topAiringAdapter.submitList(pagedList)
         })
@@ -89,7 +99,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, AnimeViewModel>(
                 }
 
                 Result.Status.ERROR -> {
-                    toast(it.message.toString())
+                    toast(it.message!!.msg)
                 }
 
                 else -> {

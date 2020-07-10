@@ -1,10 +1,11 @@
 package dev.smoketrees.twist.api
 
-import dev.smoketrees.twist.BuildConfig
 import dev.smoketrees.twist.model.twist.Result
+import dev.smoketrees.twist.utils.Messages
 import retrofit2.Response
 import java.net.ConnectException
 import java.net.SocketTimeoutException
+import java.net.UnknownHostException
 
 open class BaseApiClient {
 
@@ -16,22 +17,25 @@ open class BaseApiClient {
                 if (body != null) {
                     Result.success(body)
                 } else {
-                    Result.error("Server response error")
+                    Result.error(Messages.Message(0,"Server response error"))
                 }
             } else {
-                Result.error("${response.code()} ${response.message()}")
+                Result.error(Messages.Message(response.code(), response.message()))
             }
         } catch (e: Exception) {
             val errorMessage = e.message ?: e.toString()
             return when (e) {
                 is SocketTimeoutException -> {
-                    Result.error("408 Timed out!")
+                    Result.error(Messages.Message(408,"Timed out!"))
                 }
                 is ConnectException -> {
-                    Result.error("111 Check your internet connection!")
+                    Result.error(Messages.Message(111,"Check your internet connection!"))
+                }
+                is UnknownHostException -> {
+                    Result.error(Messages.Message(111,"Check your internet connection!"))
                 }
                 else -> {
-                    Result.error(errorMessage)
+                    Result.error(Messages.Message(0, errorMessage))
                 }
             }
         }

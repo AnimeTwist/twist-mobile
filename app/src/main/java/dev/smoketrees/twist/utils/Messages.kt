@@ -59,6 +59,11 @@ object Messages {
 
     }
 
+    class Message(
+            val code: Int?,
+            val msg: String
+    )
+
     enum class Buttons(val text : String) {
         REFRESH("Refresh"),
         OPEN("Open in browser")

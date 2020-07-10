@@ -89,7 +89,7 @@ class EpisodesFragment :
                 }
 
                 Result.Status.ERROR -> {
-                    toast(it.message!!)
+                    toast(it.message!!.msg)
                     dataBinding.episodeList.hide()
                 }
             }
