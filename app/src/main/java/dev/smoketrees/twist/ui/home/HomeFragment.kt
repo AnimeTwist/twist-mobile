@@ -3,7 +3,6 @@ package dev.smoketrees.twist.ui.home
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.text.method.LinkMovementMethod
-import android.util.Log
 import android.view.*
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.content.edit
@@ -19,9 +18,9 @@ import dev.smoketrees.twist.model.twist.Result
 import dev.smoketrees.twist.ui.base.BaseFragment
 import dev.smoketrees.twist.utils.Constants
 import dev.smoketrees.twist.utils.hide
-import dev.smoketrees.twist.utils.show
 import dev.smoketrees.twist.utils.toast
 import org.koin.android.ext.android.inject
+
 
 class HomeFragment : BaseFragment<FragmentHomeBinding, AnimeViewModel>(
     R.layout.fragment_home,
@@ -47,105 +46,56 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, AnimeViewModel>(
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+        super.onActivityCreated(savedInstanceState)
+        showLoader()
+        dataBinding.hasResult = false
 
-        // only load all anime once
-        if (!viewModel.areAllLoaded.value!!) {
-            viewModel.getAllAnime().observe(viewLifecycleOwner, Observer {
-                when (it.status) {
-                    Result.Status.LOADING -> {
-                        showLoader()
-                        dataBinding.hasResult = false
-                    }
+        viewModel.getAllAnime()
+        viewModel.getTrendingAnime(40)
 
-                    Result.Status.SUCCESS -> {
-                        hideLoader()
-                        dataBinding.hasResult = true
-
-
-                        viewModel.getAllAnime().removeObservers(viewLifecycleOwner)
-
-                        viewModel.getTrendingAnime(40)
-                            .observe(viewLifecycleOwner, Observer { trendingList ->
-                                when (trendingList.status) {
-                                    Result.Status.LOADING -> {
-                                        showLoader()
-                                        dataBinding.hasResult = false
-                                    }
-
-                                    Result.Status.SUCCESS -> {
-                                        if (!trendingList.data.isNullOrEmpty()) {
-                                            trendingAdapter.updateData(trendingList.data.shuffled())
-                                            viewModel.areAllLoaded.value = true
-                                        }
-                                        hideLoader()
-                                        dataBinding.hasResult = true
-                                    }
-
-                                    Result.Status.ERROR -> {
-                                        toast(it.message.toString())
-                                    }
-                                }
-                            })
-                        viewModel.topAiringAnime.observe(viewLifecycleOwner, Observer { pagedList ->
-                            topAiringAdapter.submitList(pagedList)
-                        })
-                        viewModel.topRatedAnime.observe(viewLifecycleOwner, Observer { pagedList ->
-                            topRatedAdapter.submitList(pagedList)
-                        })
-                    }
-
-                    Result.Status.ERROR -> {
-                        notice(it.message.toString().split(" ")[0].toIntOrNull())
-                    }
-                }
-            })
-        } else {
-            viewModel.getTrendingAnime(40).observe(viewLifecycleOwner, Observer { trendingList ->
-                when (trendingList.status) {
-                    Result.Status.LOADING -> {
-                        showLoader()
-                        dataBinding.hasResult = false
-                    }
-
-                    Result.Status.SUCCESS -> {
-                        if (!trendingList.data.isNullOrEmpty()) {
-                            hideLoader()
-                            dataBinding.hasResult = true
-                            trendingAdapter.updateData(trendingList.data)
+        viewModel.trendingAnimeLiveData
+                .observe(viewLifecycleOwner, Observer { trendingList ->
+                    when (trendingList.status) {
+                        Result.Status.LOADING -> {
+                            showLoader()
+                            dataBinding.hasResult = false
                         }
 
-                        hideLoader()
-                        dataBinding.hasResult = true
-                    }
+                        Result.Status.SUCCESS -> {
+                            if (!trendingList.data.isNullOrEmpty()) {
+                                hideLoader()
+                                dataBinding.hasResult = true
+                                trendingAdapter.updateData(trendingList.data)
+                            }
+                        }
 
-                    Result.Status.ERROR -> {
-                        notice(trendingList.message.toString().split(" ")[0].toIntOrNull())
+                        Result.Status.ERROR -> {
+                            toast(trendingList.message.toString())
+                        }
                     }
+                })
+        viewModel.topAiringAnime.observe(viewLifecycleOwner, Observer { pagedList ->
+            topAiringAdapter.submitList(pagedList)
+        })
+        viewModel.topRatedAnime.observe(viewLifecycleOwner, Observer { pagedList ->
+            topRatedAdapter.submitList(pagedList)
+        })
+
+        viewModel.motdLiveData.observe(viewLifecycleOwner, Observer {
+            when (it.status) {
+                Result.Status.SUCCESS -> {
+                    dataBinding.motdTitleText.text = it.data?.title
+                    dataBinding.motdBodyText.setHtml(it.data?.message.toString())
                 }
-            })
-            viewModel.topAiringAnime.observe(viewLifecycleOwner, Observer { pagedList ->
-                topAiringAdapter.submitList(pagedList)
-            })
-            viewModel.topRatedAnime.observe(viewLifecycleOwner, Observer { pagedList ->
-                topRatedAdapter.submitList(pagedList)
-            })
 
-            viewModel.motdLiveData.observe(viewLifecycleOwner, Observer {
-                when (it.status) {
-                    Result.Status.SUCCESS -> {
-                        dataBinding.motdTitleText.text = it.data?.title
-                        dataBinding.motdBodyText.setHtml(it.data?.message.toString())
-                    }
-
-                    Result.Status.ERROR -> {
-                        toast(it.message.toString())
-                    }
-
-                    else -> {
-                    }
+                Result.Status.ERROR -> {
+                    toast(it.message.toString())
                 }
-            })
-        }
+
+                else -> {
+                }
+            }
+        })
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

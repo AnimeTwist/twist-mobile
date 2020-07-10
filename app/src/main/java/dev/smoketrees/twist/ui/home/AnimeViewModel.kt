@@ -22,6 +22,7 @@ class AnimeViewModel(private val repo: AnimeRepo) : ViewModel() {
         when (result.status) {
             Result.Status.SUCCESS -> {
                 result.data?.let { repo.saveAnime(it) }
+                areAllLoaded.postValue(true)
             }
             else -> {
             }
