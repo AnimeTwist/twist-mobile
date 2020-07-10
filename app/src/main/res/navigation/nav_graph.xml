@@ -34,6 +34,9 @@
             android:name="slugName"
             app:argType="string" />
         <argument
+            android:name="displayName"
+            app:argType="string" />
+        <argument
             android:name="episodeNo"
             android:defaultValue="0"
             app:argType="integer" />

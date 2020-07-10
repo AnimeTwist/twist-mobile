@@ -36,6 +36,7 @@ class EpisodesFragment :
         EpisodeListAdapter(requireActivity()) { ep, _ ->
             val action = EpisodesFragmentDirections.actionEpisodesFragmentToAnimePlayerActivity(
                 args.slugName,
+                dataBinding.anime!!.title!!,
                 ep.number!!,
                 false
             )
