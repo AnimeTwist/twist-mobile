@@ -17,6 +17,7 @@ import com.google.android.exoplayer2.SimpleExoPlayer
 import com.google.android.exoplayer2.source.ProgressiveMediaSource
 import com.google.android.exoplayer2.upstream.DefaultHttpDataSourceFactory
 import com.google.android.exoplayer2.util.Util
+import dev.smoketrees.twist.BuildConfig
 import dev.smoketrees.twist.R
 import dev.smoketrees.twist.model.twist.Result
 import dev.smoketrees.twist.utils.CryptoHelper
@@ -90,7 +91,7 @@ class AnimePlayerActivity : AppCompatActivity() {
                                     }
 
                                 val downloadUrl =
-                                    Uri.parse("https://twistcdn.bunny.sh${decryptedUrl}")
+                                    Uri.parse("${BuildConfig.CDN_URL}${decryptedUrl}")
                                 val downloadManager =
                                     getSystemService(DOWNLOAD_SERVICE) as DownloadManager
 

@@ -38,6 +38,14 @@ android {
                     + "}"
         )
 
+        buildConfigField(
+            "byte[]",
+            "CDN_URL",
+            "new byte[] {" + "https://twistcdn.bunny.sh".toByteArray()
+                .joinToString()
+                    + "}"
+        )
+
         javaCompileOptions {
             annotationProcessorOptions {
                 arguments(mapOf("room.incremental" to "true"))
