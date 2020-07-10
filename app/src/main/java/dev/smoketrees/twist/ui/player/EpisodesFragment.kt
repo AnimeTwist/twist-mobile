@@ -1,13 +1,14 @@
 package dev.smoketrees.twist.ui.player
 
 
+import android.content.res.Configuration
 import android.os.Bundle
 import android.text.method.ScrollingMovementMethod
 import android.view.View
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.GridLayoutManager
 import com.bumptech.glide.Glide
 import dev.smoketrees.twist.BR
 import dev.smoketrees.twist.R
@@ -16,6 +17,7 @@ import dev.smoketrees.twist.databinding.FragmentEpisodesBinding
 import dev.smoketrees.twist.model.twist.Result
 import dev.smoketrees.twist.ui.base.BaseFragment
 import dev.smoketrees.twist.ui.home.MainActivity
+import dev.smoketrees.twist.utils.calculateNoOfColumns
 import dev.smoketrees.twist.utils.hide
 import dev.smoketrees.twist.utils.toast
 import kotlinx.android.synthetic.main.activity_main.*
@@ -44,7 +46,12 @@ class EpisodesFragment :
         }
     }
 
-    private val linearLayoutManager by lazy { LinearLayoutManager(requireContext()) }
+    private val linearLayoutManager by lazy {
+        GridLayoutManager(
+            requireContext(),
+            4
+        )
+    }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)

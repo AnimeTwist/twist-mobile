@@ -37,8 +37,7 @@ class EpisodeListAdapter(
             onBottomReachedListener(position)
         }
 
-        holder.episode_text.text =
-            activity.getString(R.string.episode_number_xxx, episodeList[position].number!!)
+        holder.episode_text.text = episodeList[position].number!!.toString()
         holder.containerView.setOnClickListener {
             listener(episodeList[position], false)
         }
