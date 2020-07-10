@@ -174,11 +174,11 @@ class AnimePlayerActivity : AppCompatActivity() {
                 super.onPlayerStateChanged(playWhenReady, playbackState)
                 when (playbackState) {
                     Player.STATE_BUFFERING -> {
-                        progressBar.show()
+                        //progressBar.show()
                     }
 
                     Player.STATE_READY -> {
-                        progressBar.hide()
+                        //progressBar.hide()
                     }
                     Player.STATE_ENDED -> {
                         finish()
