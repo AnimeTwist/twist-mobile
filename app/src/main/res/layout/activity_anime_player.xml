@@ -15,17 +15,9 @@
         app:controller_layout_id="@layout/exo_playback_control_view"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:show_buffering="always">
-
-        <ProgressBar
-            android:id="@id/exo_buffering"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:indeterminate="true"
-            android:layout_gravity="center"
-            style="@style/ATSpinner"
-            android:indeterminateTint="@android:color/white"/>
-
-    </com.google.android.exoplayer2.ui.PlayerView>
+        app:played_color="@color/colorPrimary"
+        app:bar_height="2dp"
+        app:scrubber_drawable="@drawable/ic_at_seeker"
+        app:show_buffering="always" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

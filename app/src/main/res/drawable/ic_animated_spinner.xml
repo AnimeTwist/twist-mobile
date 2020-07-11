@@ -6,20 +6,20 @@
         android:name="vector"
         android:width="24dp"
         android:height="24dp"
-        android:viewportWidth="24"
-        android:viewportHeight="24">
+        android:viewportWidth="28"
+        android:viewportHeight="28">
       <path
           android:name="bg"
           android:fillColor="#000000"
-          android:fillAlpha="0.05"
-          android:pathData="M 12 0 A 12 12 0 0 1 12 24 A 12 12 0 0 1 12 0" />
+          android:fillAlpha="0.5"
+          android:pathData="M 14 0 A 14 14 0 0 1 14 28 A 14 14 0 0 1 14 0" />
       <group
           android:name="group"
-          android:pivotX="12"
-          android:pivotY="12">
+          android:pivotX="14"
+          android:pivotY="14">
         <path
             android:name="path"
-            android:pathData="M 12 4 L 10 12 C 10.2 14.67 13.8 14.67 14 12 Z"
+            android:pathData="M 14 6 L 12 14 C 12.2 16.67 15.8 16.67 16 14 Z"
             android:fillColor="#ffffff"
             android:strokeWidth="1"/>
       </group>

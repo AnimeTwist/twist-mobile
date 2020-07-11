@@ -26,10 +26,7 @@
     </style>
 
     <style name="ATSpinner" parent="@style/Widget.AppCompat.ProgressBar">
-        <item name="android:indeterminateOnly">true</item>
         <item name="android:indeterminateDrawable">@drawable/ic_animated_spinner</item>
-        <item name="android:indeterminateBehavior">repeat</item>
-        <item name="android:minHeight">24dp</item>
-        <item name="android:minWidth">24dp</item>
+        <item name="android:indeterminateOnly">true</item>
     </style>
 </resources>
