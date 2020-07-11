@@ -6,15 +6,20 @@
         android:name="vector"
         android:width="24dp"
         android:height="24dp"
-        android:viewportWidth="16"
-        android:viewportHeight="16">
+        android:viewportWidth="24"
+        android:viewportHeight="24">
+      <path
+          android:name="bg"
+          android:fillColor="#000000"
+          android:fillAlpha="0.05"
+          android:pathData="M 12 0 A 12 12 0 0 1 12 24 A 12 12 0 0 1 12 0" />
       <group
           android:name="group"
-          android:pivotX="8"
-          android:pivotY="8">
+          android:pivotX="12"
+          android:pivotY="12">
         <path
             android:name="path"
-            android:pathData="M 8 0 L 6 8 C 6.2 10.67 9.8 10.67 10 8 Z"
+            android:pathData="M 12 4 L 10 12 C 10.2 14.67 13.8 14.67 14 12 Z"
             android:fillColor="#ffffff"
             android:strokeWidth="1"/>
       </group>
@@ -26,7 +31,7 @@
           android:propertyName="rotation"
           android:valueFrom="0"
           android:valueTo="360"
-          android:duration="2000"
+          android:duration="1000"
           android:valueType="floatType"
           android:repeatCount="-1"
           android:interpolator="@android:anim/linear_interpolator"/>
