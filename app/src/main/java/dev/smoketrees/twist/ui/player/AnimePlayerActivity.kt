@@ -21,8 +21,6 @@ import dev.smoketrees.twist.BuildConfig
 import dev.smoketrees.twist.R
 import dev.smoketrees.twist.model.twist.Result
 import dev.smoketrees.twist.utils.CryptoHelper
-import dev.smoketrees.twist.utils.hide
-import dev.smoketrees.twist.utils.show
 import dev.smoketrees.twist.utils.toast
 import kotlinx.android.synthetic.main.activity_anime_player.*
 import kotlinx.android.synthetic.main.exo_playback_control_view.*
@@ -69,6 +67,7 @@ class AnimePlayerActivity : AppCompatActivity() {
         // Show information about episode
         exo_current_episode.text = String.format(resources.getString(R.string.episode_info), epNo)
         exo_ep_info.text = name
+        exo_back.setOnClickListener { finish() }
 
         Log.d("Should_download", shouldDownload.toString())
 
