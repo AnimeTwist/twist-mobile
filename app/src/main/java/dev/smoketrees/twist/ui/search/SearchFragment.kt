@@ -3,6 +3,7 @@ package dev.smoketrees.twist.ui.search
 import android.app.SearchManager
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.*
 import androidx.appcompat.widget.SearchView
 import androidx.lifecycle.asFlow
@@ -36,6 +37,8 @@ class SearchFragment :
 
     private val args: SearchFragmentArgs by navArgs()
     private var anime = emptyList<AnimeItem>()
+
+    private var menuCreated = false
 
     private val adapter by lazy {
         SearchListAdapter {
@@ -87,19 +90,21 @@ class SearchFragment :
 
         lifecycleScope.launch(Dispatchers.IO) {
             viewModel.searchQuery.asFlow().collect { searchString ->
-                viewModel.searchResults.postValue((FuzzySearch.extractAll(
-                    searchString,
-                    anime,
-                    ToStringFunction { it.title },
-                    WinklerWeightedRatio(),
-                    65
-                ) + FuzzySearch.extractAll(
-                    searchString,
-                    anime,
-                    ToStringFunction { it.altTitle },
-                    WinklerWeightedRatio(),
-                    65
-                )).sortedByDescending { it.score }.map { it.referent })
+                if (anime.count() != 0) {
+                    viewModel.searchResults.postValue((FuzzySearch.extractAll(
+                        searchString,
+                        anime,
+                        ToStringFunction { it.title },
+                        WinklerWeightedRatio(),
+                        65
+                    ) + FuzzySearch.extractAll(
+                        searchString,
+                        anime,
+                        ToStringFunction { it.altTitle },
+                        WinklerWeightedRatio(),
+                        65
+                    )).sortedByDescending { it.score }.map { it.referent })
+                }
             }
         }
     }
@@ -111,21 +116,46 @@ class SearchFragment :
             requireActivity().getSystemService(Context.SEARCH_SERVICE) as SearchManager
         val searchView = (menu.findItem(R.id.action_search).actionView as SearchView)
         searchView.setSearchableInfo(searchManager.getSearchableInfo(requireActivity().componentName))
+        searchView.maxWidth = Int.MAX_VALUE
+
+        // Handle query changes
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextChange(query: String): Boolean {
-                viewModel.searchQuery.postValue(query)
+                if (menuCreated) viewModel.searchQuery.postValue(query)
                 return true
             }
 
             override fun onQueryTextSubmit(query: String): Boolean {
-                viewModel.searchQuery.postValue(query)
+                if (menuCreated) viewModel.searchQuery.postValue(query)
                 return false
             }
         })
-        if (args.query.isBlank()) {
-            menu.findItem(R.id.action_search).expandActionView()
+
+        // Go back if not expanded
+        menu.findItem(R.id.action_search).setOnActionExpandListener(object : MenuItem.OnActionExpandListener {
+            override fun onMenuItemActionExpand(item: MenuItem?): Boolean {
+                if (!args.query.isBlank())
+                    searchView.post { searchView.setQuery(args.query, false) }
+                return true
+            }
+
+            override fun onMenuItemActionCollapse(item: MenuItem?): Boolean {
+                findNavController().popBackStack()
+                return false
+            }
+        })
+
+        // Expand
+        menu.findItem(R.id.action_search).expandActionView()
+
+        // Preserve search query on configuration change
+        if (viewModel.searchQuery.value != null) {
+            searchView.post {
+                searchView.setQuery(viewModel.searchQuery.value, false)
+                menuCreated = true
+            }
         } else {
-            searchView.setQuery(args.query, true)
+            menuCreated = true
         }
     }
 }

@@ -1,5 +1,6 @@
 package dev.smoketrees.twist.ui.home
 
+import android.util.Log
 import androidx.lifecycle.*
 import androidx.paging.LivePagedListBuilder
 import androidx.paging.PagedList
@@ -22,9 +23,11 @@ class AnimeViewModel(private val repo: AnimeRepo) : ViewModel() {
         when (result.status) {
             Result.Status.SUCCESS -> {
                 result.data?.let { repo.saveAnime(it) }
+                areAllLoaded.postValue(true)
+                lastCode.postValue(null)
             }
-            else -> {
-            }
+            Result.Status.ERROR -> lastCode.postValue(result.message!!.code)
+            else -> {}
         }
     }
 
@@ -42,7 +45,8 @@ class AnimeViewModel(private val repo: AnimeRepo) : ViewModel() {
     val searchResults: MutableLiveData<List<AnimeItem>> = MutableLiveData()
     val searchQuery = MutableLiveData<String>()
 
-    var areAllLoaded = false
+    var areAllLoaded = MutableLiveData<Boolean>(false)
+    var lastCode = MutableLiveData<Int>(null)
 
     var topAiringAnime: LiveData<PagedList<AnimeItem>>
     var topAiringAnimeNetworkState: LiveData<Result<List<AnimeItem>?>>

@@ -1,6 +1,5 @@
 package dev.smoketrees.twist.ui.home
 
-
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.text.method.LinkMovementMethod
@@ -48,32 +47,46 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, AnimeViewModel>(
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         showLoader()
+        noticeClear()
         dataBinding.hasResult = false
 
+        // Show notice on error
+        viewModel.lastCode
+                .observe(viewLifecycleOwner, Observer {
+                    if (!viewModel.areAllLoaded.value!!) {
+                        notice(it)
+                    } //TODO: else show small bar above motd
+                })
+
+        viewModel.areAllLoaded // Only show contents when everything is loaded
+                .observe(viewLifecycleOwner, Observer {
+                    dataBinding.hasResult = it
+                    if (it) hideLoader()
+                })
+
+        // Load data
         viewModel.getAllAnime()
         viewModel.getTrendingAnime(40)
 
         viewModel.trendingAnimeLiveData
-            .observe(viewLifecycleOwner, Observer { trendingList ->
-                when (trendingList.status) {
-                    Result.Status.LOADING -> {
-                        showLoader()
-                        dataBinding.hasResult = false
-                    }
+                .observe(viewLifecycleOwner, Observer { trendingList ->
+                    when (trendingList.status) {
+                        Result.Status.LOADING -> {
+                            showLoader()
+                        }
 
-                    Result.Status.SUCCESS -> {
-                        if (!trendingList.data.isNullOrEmpty()) {
-                            hideLoader()
-                            dataBinding.hasResult = true
-                            trendingAdapter.updateData(trendingList.data)
+                        Result.Status.SUCCESS -> {
+                            if (!trendingList.data.isNullOrEmpty()) {
+                                trendingAdapter.updateData(trendingList.data)
+                            }
+                        }
+
+                        Result.Status.ERROR -> {
+                            toast(trendingList.message!!.msg)
                         }
                     }
+                })
 
-                    Result.Status.ERROR -> {
-                        toast(trendingList.message.toString())
-                    }
-                }
-            })
         viewModel.topAiringAnime.observe(viewLifecycleOwner, Observer { pagedList ->
             topAiringAdapter.submitList(pagedList)
         })
@@ -89,7 +102,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, AnimeViewModel>(
                 }
 
                 Result.Status.ERROR -> {
-                    toast(it.message.toString())
+                    toast(it.message!!.msg)
                 }
 
                 else -> {
@@ -120,6 +133,9 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, AnimeViewModel>(
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
         inflater.inflate(R.menu.home_menu, menu)
+        viewModel.areAllLoaded.observe(viewLifecycleOwner, Observer {
+            menu.findItem(R.id.action_search).isVisible = it
+        })
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -127,6 +143,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, AnimeViewModel>(
             R.id.action_search -> {
                 val action = HomeFragmentDirections.actionHomeFragmentToSearchActivity("")
                 findNavController().navigate(action)
+                noticeClear()
             }
             R.id.action_day_night -> {
                 // Toggle the theme preference

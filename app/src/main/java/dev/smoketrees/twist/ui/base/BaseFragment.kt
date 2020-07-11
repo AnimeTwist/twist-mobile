@@ -38,6 +38,9 @@ abstract class BaseFragment<DB : ViewDataBinding, VM : ViewModel>(
     protected fun showLoader() = (requireActivity() as MainActivity).showLoader()
     protected fun hideLoader() = (requireActivity() as MainActivity).hideLoader()
 
+    protected fun notice(err_code: Int?) = (requireActivity() as MainActivity).notice(err_code)
+    protected fun noticeClear() = (requireActivity() as MainActivity).noticeClear()
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
