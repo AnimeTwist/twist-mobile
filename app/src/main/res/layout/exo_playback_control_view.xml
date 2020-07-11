@@ -63,13 +63,15 @@
 
         <TextView
             android:id="@id/exo_position"
-            android:layout_width="wrap_content"
+            android:layout_width="35dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
+            android:alpha="0.8"
             android:includeFontPadding="false"
-            android:textColor="#FFBEBEBE"
-            android:textSize="14sp"
+            android:textAlignment="center"
+            android:textColor="#ffffff"
+            android:textSize="16sp"
             android:textStyle="normal"
             tools:text="--:--" />
 
@@ -80,14 +82,17 @@
             android:layout_weight="1" />
 
         <TextView
-            android:id="@id/exo_duration"
-            android:layout_width="wrap_content"
+            android:id="@+id/exo_remaining"
+            android:layout_width="35dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
+            android:alpha="0.8"
             android:includeFontPadding="false"
-            android:textColor="#FFBEBEBE"
-            android:textSize="14sp"
+            android:text="@string/default_remaining"
+            android:textAlignment="center"
+            android:textColor="#ffffff"
+            android:textSize="16sp"
             android:textStyle="normal"
             tools:text="--:--" />
 

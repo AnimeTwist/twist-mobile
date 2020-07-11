@@ -36,4 +36,5 @@
     <string name="username_error">4-20 letters/dashes/underscores</string>
     <string name="email_username_error">Must not be blank!</string>
     <string name="twist_moe">Anime Twist</string>
+    <string name="default_remaining">00:00</string>
 </resources>
