@@ -1,9 +1,10 @@
 package dev.smoketrees.twist.model.twist
 
 import androidx.annotation.Keep
+import dev.smoketrees.twist.utils.Messages
 
 @Keep
-data class Result<out T>(val status: Status, val data: T?, val message: String?) {
+data class Result<out T>(val status: Status, val data: T?, val message: Messages.Message?) {
 
     enum class Status {
         SUCCESS,
@@ -20,7 +21,7 @@ data class Result<out T>(val status: Status, val data: T?, val message: String?)
             )
         }
 
-        fun <T> error(message: String, data: T? = null): Result<T> {
+        fun <T> error(message: Messages.Message, data: T? = null): Result<T> {
             return Result(
                 Status.ERROR,
                 data,

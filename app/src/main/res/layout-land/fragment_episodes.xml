@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="episodeViewModel"
             type="dev.smoketrees.twist.ui.player.EpisodesViewModel" />

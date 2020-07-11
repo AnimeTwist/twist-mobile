@@ -271,4 +271,9 @@ class AnimePlayerActivity : AppCompatActivity() {
         super.onDestroy()
         player.release()
     }
+
+    override fun onResume() {
+        super.onResume()
+        hideSystemUi()
+    }
 }

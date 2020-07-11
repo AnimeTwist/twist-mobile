@@ -48,7 +48,7 @@ class AccountFragment : Fragment() {
                     R.color.toolbar_text_color
                 )
             ),
-            6, 9,
+            6, 11,
             Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
         )
         signup_text.text = spannable

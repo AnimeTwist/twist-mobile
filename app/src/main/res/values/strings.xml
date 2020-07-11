@@ -37,4 +37,8 @@
     <string name="email_username_error">Must not be blank!</string>
     <string name="twist_moe">Anime Twist</string>
     <string name="default_remaining">00:00</string>
+    <string name="server_error_502">Twist API Server is unreachable</string>
+    <string name="client_error_408">Request timed out.</string>
+    <string name="no_connection">Check your internet connection.</string>
+    <string name="error_default">An unexpected error occurred.</string>
 </resources>

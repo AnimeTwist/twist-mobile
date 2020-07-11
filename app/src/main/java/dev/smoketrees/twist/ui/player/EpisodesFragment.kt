@@ -1,7 +1,6 @@
 package dev.smoketrees.twist.ui.player
 
 
-import android.content.res.Configuration
 import android.os.Bundle
 import android.text.method.ScrollingMovementMethod
 import android.view.View
@@ -17,7 +16,6 @@ import dev.smoketrees.twist.databinding.FragmentEpisodesBinding
 import dev.smoketrees.twist.model.twist.Result
 import dev.smoketrees.twist.ui.base.BaseFragment
 import dev.smoketrees.twist.ui.home.MainActivity
-import dev.smoketrees.twist.utils.calculateNoOfColumns
 import dev.smoketrees.twist.utils.hide
 import dev.smoketrees.twist.utils.toast
 import kotlinx.android.synthetic.main.activity_main.*
@@ -89,7 +87,7 @@ class EpisodesFragment :
                 }
 
                 Result.Status.ERROR -> {
-                    toast(it.message!!)
+                    toast(it.message!!.msg)
                     dataBinding.episodeList.hide()
                 }
             }

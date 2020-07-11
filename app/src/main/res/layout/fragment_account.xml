@@ -8,14 +8,15 @@
 
     <TextView
         android:id="@+id/signup_text"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="@string/twist_moe"
+        android:gravity="center"
         android:textAppearance="@style/TextAppearance.MaterialComponents.Headline3"
         android:textColor="@color/colorText"
         app:layout_constraintBottom_toTopOf="@+id/username_til"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="@id/username_til"
+        app:layout_constraintStart_toStartOf="@id/username_til"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.4"
         app:layout_constraintVertical_chainStyle="packed" />
@@ -26,8 +27,8 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
-        android:layout_marginEnd="24dp"
         android:layout_marginTop="48dp"
+        android:layout_marginEnd="24dp"
         android:hint="@string/username_til_hint"
         app:layout_constraintBottom_toTopOf="@+id/email_til"
         app:layout_constraintEnd_toEndOf="parent"
