@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <com.google.android.exoplayer2.ui.AspectRatioFrameLayout
+        android:id="@+id/exo_content_frame"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center">
+
+        <FrameLayout
+            android:id="@id/exo_overlay"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+    </com.google.android.exoplayer2.ui.AspectRatioFrameLayout>
+
+    <ProgressBar
+        android:id="@+id/exo_buffering"
+        style="@style/ATSpinner"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_gravity="center"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.google.android.exoplayer2.ui.PlaybackControlView
+        android:id="@id/exo_controller"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="visible"
+        app:played_color="@color/colorPrimary"
+        app:bar_height="2dp"
+        app:scrubber_drawable="@drawable/ic_at_seeker" />
+
+    <View
+        android:id="@id/exo_controller_placeholder"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+</merge>
