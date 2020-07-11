@@ -1,7 +1,6 @@
 package dev.smoketrees.twist.repository
 
 
-import android.util.Log
 import dev.smoketrees.twist.api.anime.AnimeWebClient
 import dev.smoketrees.twist.db.AnimeDao
 import dev.smoketrees.twist.db.AnimeDetailsDao
@@ -14,11 +13,6 @@ class AnimeRepo(
     private val episodeDao: AnimeDetailsDao,
     private val trendingAnimeDao: TrendingAnimeDao
 ) : BaseRepo() {
-//    fun getAllAnime() = makeRequestAndSave(
-//        databaseQuery = { animeDao.getAllAnime() },
-//        networkCall = { webClient.getAllAnime() },
-//        saveCallResult = { animeDao.saveAnime(it) }
-//    )
 
     fun getAllDbAnime() = animeDao.getAllAnime()
     suspend fun getAllNetworkAnime() = webClient.getAllAnime()
@@ -34,16 +28,6 @@ class AnimeRepo(
     fun getMotd() = makeRequest {
         webClient.getMotd()
     }
-
-    fun getSeasonalAnime() = makeRequestAndSave(
-        databaseQuery = { animeDao.getOngoingAnime() },
-        networkCall = { webClient.getAllAnime() },
-        saveCallResult = {
-
-            it.forEach { x -> Log.d("REPO", x.toString()) }
-            animeDao.saveAnime(it)
-        }
-    )
 
     fun getAnimeDetails(name: String, id: Int) = makeRequestAndSave(
         databaseQuery = { episodeDao.getAnimeDetails(id) },
