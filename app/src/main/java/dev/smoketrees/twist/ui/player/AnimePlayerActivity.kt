@@ -6,6 +6,7 @@ import android.content.pm.ActivityInfo
 import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
+import android.os.Handler
 import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
@@ -21,12 +22,11 @@ import dev.smoketrees.twist.BuildConfig
 import dev.smoketrees.twist.R
 import dev.smoketrees.twist.model.twist.Result
 import dev.smoketrees.twist.utils.CryptoHelper
-import dev.smoketrees.twist.utils.hide
-import dev.smoketrees.twist.utils.show
 import dev.smoketrees.twist.utils.toast
 import kotlinx.android.synthetic.main.activity_anime_player.*
 import kotlinx.android.synthetic.main.exo_playback_control_view.*
 import org.koin.android.viewmodel.ext.android.viewModel
+import java.util.concurrent.TimeUnit
 
 
 class AnimePlayerActivity : AppCompatActivity() {
@@ -69,6 +69,7 @@ class AnimePlayerActivity : AppCompatActivity() {
         // Show information about episode
         exo_current_episode.text = String.format(resources.getString(R.string.episode_info), epNo)
         exo_ep_info.text = name
+        exo_back.setOnClickListener { finish() }
 
         Log.d("Should_download", shouldDownload.toString())
 
@@ -169,16 +170,50 @@ class AnimePlayerActivity : AppCompatActivity() {
             )
         )
 
+        val remainingHandler = Handler()
+        val getRemaining: Runnable = object : Runnable {
+            override fun run() {
+                val duration = player.duration
+                val position = player.currentPosition
+                if (duration > 0)  {
+                    val remaining = duration - position
+                    val minutes = TimeUnit.MILLISECONDS.toMinutes(remaining)
+                    val seconds = TimeUnit.MILLISECONDS.toSeconds(remaining - TimeUnit.MINUTES.toMillis(minutes))
+                    val finalString = "${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}"
+                    exo_remaining.text = finalString
+
+                    // Remove scheduled updates.
+                    remainingHandler.removeCallbacks(this)
+
+                    // Schedule an update if necessary.
+                    if (player.playbackState != Player.STATE_IDLE && player.playbackState != Player.STATE_ENDED) {
+                        var delayMs: Long
+                        if (player.playWhenReady && player.playbackState == Player.STATE_READY) {
+                            delayMs = 1000 - position % 1000
+                            if (delayMs < 200) {
+                                delayMs += 1000
+                            }
+                        } else {
+                            delayMs = 1000
+                        }
+                        remainingHandler.postDelayed(this, delayMs)
+                    }
+                    // else die
+                }
+            }
+        }
+
         player.addListener(object : Player.EventListener {
             override fun onPlayerStateChanged(playWhenReady: Boolean, playbackState: Int) {
                 super.onPlayerStateChanged(playWhenReady, playbackState)
                 when (playbackState) {
                     Player.STATE_BUFFERING -> {
-                        progressBar.show()
+                        // do nothing
                     }
 
                     Player.STATE_READY -> {
-                        progressBar.hide()
+                        // Start calculating remaining time
+                        remainingHandler.post(getRemaining)
                     }
                     Player.STATE_ENDED -> {
                         finish()

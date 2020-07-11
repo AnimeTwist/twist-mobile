@@ -24,4 +24,9 @@
     <style name="AppTheme.Dark">
         <item name="cardBackgroundColor">@color/colorBackground</item>
     </style>
+
+    <style name="ATSpinner" parent="@style/Widget.AppCompat.ProgressBar">
+        <item name="android:indeterminateDrawable">@drawable/ic_animated_spinner</item>
+        <item name="android:indeterminateOnly">true</item>
+    </style>
 </resources>
