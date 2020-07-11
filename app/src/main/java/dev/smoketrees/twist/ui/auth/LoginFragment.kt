@@ -54,7 +54,7 @@ class LoginFragment : Fragment() {
                     R.color.toolbar_text_color
                 )
             ),
-            6, 9,
+            6, 11,
             Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
         )
         login_text.text = spannable
@@ -96,7 +96,7 @@ class LoginFragment : Fragment() {
 
                     Result.Status.ERROR -> {
                         showViews()
-                        toast(it.message.toString())
+                        toast(it.message?.code.toString())
                     }
                 }
             })
