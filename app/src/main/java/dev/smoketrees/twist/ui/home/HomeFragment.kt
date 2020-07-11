@@ -59,7 +59,10 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, AnimeViewModel>(
                 })
 
         viewModel.areAllLoaded // Only show contents when everything is loaded
-                .observe(viewLifecycleOwner, Observer { dataBinding.hasResult = it })
+                .observe(viewLifecycleOwner, Observer {
+                    dataBinding.hasResult = it
+                    if (it) hideLoader()
+                })
 
         // Load data
         viewModel.getAllAnime()
@@ -74,7 +77,6 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, AnimeViewModel>(
 
                         Result.Status.SUCCESS -> {
                             if (!trendingList.data.isNullOrEmpty()) {
-                                hideLoader()
                                 trendingAdapter.updateData(trendingList.data)
                             }
                         }
