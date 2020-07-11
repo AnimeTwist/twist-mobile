@@ -63,7 +63,7 @@
 
         <TextView
             android:id="@id/exo_position"
-            android:layout_width="35dp"
+            android:layout_width="50dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
@@ -83,7 +83,7 @@
 
         <TextView
             android:id="@+id/exo_remaining"
-            android:layout_width="35dp"
+            android:layout_width="50dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
