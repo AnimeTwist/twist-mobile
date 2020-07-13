@@ -72,44 +72,4 @@
             android:name="query"
             app:argType="string" />
     </fragment>
-    <fragment
-        android:id="@+id/accountFragment"
-        android:name="dev.smoketrees.twist.ui.auth.AccountFragment"
-        android:label="fragment_account"
-        tools:layout="@layout/fragment_account">
-        <action
-            android:id="@+id/action_accountFragment_to_loginFragment"
-            app:enterAnim="@anim/right_in"
-            app:exitAnim="@anim/left_out"
-            app:popEnterAnim="@anim/left_in"
-            app:popExitAnim="@anim/right_out"
-            app:destination="@id/loginFragment" />
-        <action
-            android:id="@+id/action_accountFragment_to_homeFragment"
-            app:enterAnim="@anim/right_in"
-            app:exitAnim="@anim/left_out"
-            app:popEnterAnim="@anim/left_in"
-            app:popExitAnim="@anim/right_out"
-            app:destination="@id/homeFragment" />
-    </fragment>
-    <fragment
-        android:id="@+id/loginFragment"
-        android:name="dev.smoketrees.twist.ui.auth.LoginFragment"
-        android:label="fragment_login"
-        tools:layout="@layout/fragment_login">
-        <action
-            android:id="@+id/action_loginFragment_to_accountFragment"
-            app:enterAnim="@anim/right_in"
-            app:exitAnim="@anim/left_out"
-            app:popEnterAnim="@anim/left_in"
-            app:popExitAnim="@anim/right_out"
-            app:destination="@id/accountFragment" />
-        <action
-            android:id="@+id/action_loginFragment_to_homeFragment"
-            app:enterAnim="@anim/right_in"
-            app:exitAnim="@anim/left_out"
-            app:popEnterAnim="@anim/left_in"
-            app:popExitAnim="@anim/right_out"
-            app:destination="@id/homeFragment" />
-    </fragment>
 </navigation>

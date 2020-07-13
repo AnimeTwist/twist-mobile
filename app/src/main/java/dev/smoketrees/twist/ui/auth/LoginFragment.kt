@@ -43,7 +43,7 @@ class LoginFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         if (pref.contains(Constants.PreferenceKeys.IS_LOGGED_IN)) {
             findNavController()
-                .navigate(LoginFragmentDirections.actionLoginFragmentToHomeFragment())
+                .navigate(LoginFragmentDirections.actionLoginFragment2ToMainActivity())
         }
 
         val spannable = SpannableString(getString(R.string.twist_moe))
@@ -91,7 +91,7 @@ class LoginFragment : Fragment() {
                         pref.edit { putBoolean(Constants.PreferenceKeys.IS_LOGGED_IN, true) }
                         (activity as AppCompatActivity?)!!.supportActionBar!!.show()
                         findNavController()
-                            .navigate(LoginFragmentDirections.actionLoginFragmentToHomeFragment())
+                            .navigate(LoginFragmentDirections.actionLoginFragment2ToMainActivity())
                     }
 
                     Result.Status.ERROR -> {
@@ -104,7 +104,7 @@ class LoginFragment : Fragment() {
 
         not_registered.setOnClickListener {
             findNavController()
-                .navigate(LoginFragmentDirections.actionLoginFragmentToAccountFragment())
+                .navigate(LoginFragmentDirections.actionLoginFragment2ToAccountFragment2())
         }
     }
 
@@ -124,10 +124,5 @@ class LoginFragment : Fragment() {
         login_button.show()
         not_registered.show()
         spinkit.hide()
-    }
-
-    override fun onResume() {
-        super.onResume()
-        (activity as AppCompatActivity?)!!.supportActionBar!!.hide()
     }
 }

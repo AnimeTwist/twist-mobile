@@ -102,7 +102,7 @@ class AccountFragment : Fragment() {
                         pref.edit { putBoolean(Constants.PreferenceKeys.IS_LOGGED_IN, true) }
                         (activity as AppCompatActivity?)!!.supportActionBar!!.show()
                         findNavController()
-                            .navigate(AccountFragmentDirections.actionAccountFragmentToHomeFragment())
+                            .navigate(AccountFragmentDirections.actionAccountFragment2ToMainActivity())
                     }
 
                     Result.Status.ERROR -> {
@@ -137,10 +137,5 @@ class AccountFragment : Fragment() {
         register_button.show()
         already_registered.show()
         spinkit.hide()
-    }
-
-    override fun onResume() {
-        super.onResume()
-        (activity as AppCompatActivity?)!!.supportActionBar!!.hide()
     }
 }
