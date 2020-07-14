@@ -1,24 +1,25 @@
 package dev.smoketrees.twist.ui.player
 
 import android.annotation.SuppressLint
-import android.app.DownloadManager
 import android.content.pm.ActivityInfo
 import android.net.Uri
 import android.os.Bundle
-import android.os.Environment
 import android.os.Handler
-import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.navigation.navArgs
+import com.google.android.exoplayer2.ExoPlaybackException
 import com.google.android.exoplayer2.ExoPlayer
 import com.google.android.exoplayer2.Player
+import com.google.android.exoplayer2.Player.DiscontinuityReason
 import com.google.android.exoplayer2.SimpleExoPlayer
+import com.google.android.exoplayer2.source.ConcatenatingMediaSource
 import com.google.android.exoplayer2.source.ProgressiveMediaSource
+import com.google.android.exoplayer2.source.TrackGroupArray
+import com.google.android.exoplayer2.trackselection.TrackSelectionArray
 import com.google.android.exoplayer2.upstream.DefaultHttpDataSourceFactory
 import com.google.android.exoplayer2.util.Util
-import dev.smoketrees.twist.BuildConfig
 import dev.smoketrees.twist.R
 import dev.smoketrees.twist.model.twist.Result
 import dev.smoketrees.twist.utils.CryptoHelper
@@ -34,6 +35,7 @@ class AnimePlayerActivity : AppCompatActivity() {
     private val args: AnimePlayerActivityArgs by navArgs()
     private val viewModel by viewModel<PlayerViewModel>()
     private lateinit var player: ExoPlayer
+    private lateinit var concatenatedSource: ConcatenatingMediaSource
 
     @SuppressLint("SourceLockedOrientationActivity")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -61,95 +63,69 @@ class AnimePlayerActivity : AppCompatActivity() {
             }
         }
 
-        val slug = args.slugName
-        val name = args.displayName
-        val epNo = args.episodeNo
-        val shouldDownload = args.shouldDownload
+        viewModel.currEp.value = args.episodeNo
+        exo_ep_info!!.text = args.displayName
+        exo_back!!.setOnClickListener { finish() }
 
-        // Show information about episode
-        exo_current_episode.text = String.format(resources.getString(R.string.episode_info), epNo)
-        exo_ep_info.text = name
-        exo_back.setOnClickListener { finish() }
-
-        Log.d("Should_download", shouldDownload.toString())
-
-        val referer = "https://twist.moe/a/$slug/$epNo"
-        viewModel.referer = referer
-
-        if (shouldDownload) {
-            viewModel.getAnimeSources(slug).observe(this, Observer {
-                when (it.status) {
-                    Result.Status.LOADING -> {
-                        // TODO: Hide/show some shit
-                    }
-
-                    Result.Status.SUCCESS -> {
-                        if (it != null) {
-                            if (!it.data.isNullOrEmpty()) {
-                                val decryptedUrl =
-                                    it.data[epNo - 1].source?.let { src ->
-                                        CryptoHelper.decryptSourceUrl(src)
-                                    }
-
-                                val downloadUrl =
-                                    Uri.parse("${BuildConfig.CDN_URL}${decryptedUrl}")
-                                val downloadManager =
-                                    getSystemService(DOWNLOAD_SERVICE) as DownloadManager
-
-                                val request = DownloadManager.Request(downloadUrl)
-                                    .setTitle("Downloading $slug-$epNo")
-                                    .setDescription("Downloading episode $epNo")
-                                    .setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
-                                    .setDestinationInExternalPublicDir(
-                                        Environment.DIRECTORY_MOVIES,
-                                        "$slug-episode-$epNo.mkv"
-                                    )
-                                    .addRequestHeader("Referer", referer)
-
-                                Log.d("DOWNLOAD", downloadUrl.toString())
-
-                                viewModel.downloadID = downloadManager.enqueue(request)
-                                finish()
-                            }
-                        }
-                    }
-
-                    Result.Status.ERROR -> {
-                        toast(it.message.toString())
-                    }
-                }
-            })
-        }
-
+        concatenatedSource = ConcatenatingMediaSource()
         player = SimpleExoPlayer.Builder(this).build()
 
-        if (viewModel.currUri == null) {
-            viewModel.getAnimeSources(slug).observe(this, Observer {
-                when (it.status) {
-                    Result.Status.LOADING -> {
-                        // TODO: Hide/show some shit
-                    }
+        // Load episode and add next episode to playlist
+        setupAnimeSource(viewModel.currEp.value!!, true)
 
-                    Result.Status.SUCCESS -> {
-                        if (it != null) {
-                            if (!it.data.isNullOrEmpty()) {
-                                val decryptedUrl =
-                                    it.data[epNo - 1].source?.let { src ->
+        viewModel.currEp.observe(this, Observer {
+            exo_current_episode.text = String.format(resources.getString(R.string.episode_info), it)
+            // Add next episode
+            setupAnimeSource(it + 1)
+        })
+    }
+
+    private fun setupAnimeSource(epNo: Int, initial: Boolean = false) {
+        val slug = args.slugName
+
+        viewModel.getAnimeSources(slug).observe(this, Observer {
+            when (it.status) {
+                Result.Status.LOADING -> {
+                    // TODO: Hide/show some shit
+                }
+
+                Result.Status.SUCCESS -> {
+                    if (it != null) {
+                        if (!it.data.isNullOrEmpty()) {
+                            val decryptedUrl =
+                                    it.data[(epNo - 1) % it.data.size].source?.let { src ->
                                         CryptoHelper.decryptSourceUrl(
-                                            src
+                                                src
                                         )
                                     }
-                                play(Uri.parse("https://twistcdn.bunny.sh${decryptedUrl}"))
+                            val sourceFactory = DefaultHttpDataSourceFactory(
+                                    Util.getUserAgent(
+                                            this,
+                                            "twist.moe"
+                                    )
+                            )
+
+                            // Add mediaSource to playlist
+                            concatenatedSource.addMediaSource(ProgressiveMediaSource.Factory {
+                                val dataSource = sourceFactory.createDataSource()
+                                dataSource.setRequestProperty("Referer", "https://twist.moe/a/$slug/$epNo")
+                                dataSource
+                            }.createMediaSource(Uri.parse("https://twistcdn.bunny.sh${decryptedUrl}")))
+
+                            if (initial) {
+                                initializePlayer()
+                                preparePlayer()
+                                hideSystemUi()
                             }
                         }
                     }
-
-                    Result.Status.ERROR -> {
-                        toast(it.message.toString())
-                    }
                 }
-            })
-        }
+
+                Result.Status.ERROR -> {
+                    toast(it.message!!.msg)
+                }
+            }
+        })
     }
 
     @SuppressLint("InlinedApi")
@@ -162,13 +138,7 @@ class AnimePlayerActivity : AppCompatActivity() {
                 or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION)
     }
 
-    private fun preparePlayer(uri: Uri) {
-        val sourceFactory = DefaultHttpDataSourceFactory(
-            Util.getUserAgent(
-                this,
-                "twist.moe"
-            )
-        )
+    private fun preparePlayer() {
 
         val remainingHandler = Handler()
         val getRemaining: Runnable = object : Runnable {
@@ -180,7 +150,7 @@ class AnimePlayerActivity : AppCompatActivity() {
                     val minutes = TimeUnit.MILLISECONDS.toMinutes(remaining)
                     val seconds = TimeUnit.MILLISECONDS.toSeconds(remaining - TimeUnit.MINUTES.toMillis(minutes))
                     val finalString = "${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}"
-                    exo_remaining.text = finalString
+                    exo_remaining!!.text = finalString
 
                     // Remove scheduled updates.
                     remainingHandler.removeCallbacks(this)
@@ -203,6 +173,7 @@ class AnimePlayerActivity : AppCompatActivity() {
             }
         }
 
+        var lastSavedWindow = 0
         player.addListener(object : Player.EventListener {
             override fun onPlayerStateChanged(playWhenReady: Boolean, playbackState: Int) {
                 super.onPlayerStateChanged(playWhenReady, playbackState)
@@ -223,15 +194,17 @@ class AnimePlayerActivity : AppCompatActivity() {
                     }
                 }
             }
+
+            override fun onPositionDiscontinuity(@DiscontinuityReason reason: Int) {
+                super.onPositionDiscontinuity(reason)
+                if (lastSavedWindow != player.currentWindowIndex) {
+                    viewModel.currEp.value = viewModel.currEp.value?.plus(1)
+                }
+                lastSavedWindow = player.currentWindowIndex
+            }
         })
 
-        val mediaSource = ProgressiveMediaSource.Factory {
-            val dataSource = sourceFactory.createDataSource()
-            dataSource.setRequestProperty("Referer", viewModel.referer)
-            dataSource
-        }.createMediaSource(uri)
-
-        player.prepare(mediaSource, true, false)
+        player.prepare(concatenatedSource, true, false)
     }
 
     private fun initializePlayer() {
@@ -245,13 +218,6 @@ class AnimePlayerActivity : AppCompatActivity() {
         player_view.player = player
         player.playWhenReady = viewModel.playWhenReady
         player.seekTo(viewModel.currentWindowIndex, viewModel.playbackPosition)
-    }
-
-    private fun play(uri: Uri) {
-        viewModel.currUri = uri
-        initializePlayer()
-        preparePlayer(uri)
-        hideSystemUi()
     }
 
     override fun onStart() {
