@@ -74,6 +74,7 @@ class MainActivity : AppCompatActivity() {
             notice_button.show()
         }
 
+        spinkit.hide()
         notice_bar.show()
 
         // Disable scrolling while error notice displayed
