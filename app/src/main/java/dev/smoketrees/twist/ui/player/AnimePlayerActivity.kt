@@ -63,62 +63,36 @@ class AnimePlayerActivity : AppCompatActivity() {
             }
         }
 
-        viewModel.currEp.value = args.episodeNo
         exo_ep_info!!.text = args.displayName
         exo_back!!.setOnClickListener { finish() }
 
         concatenatedSource = ConcatenatingMediaSource()
         player = SimpleExoPlayer.Builder(this).build()
 
-        // Load episode and add next episode to playlist
-        setupAnimeSource(viewModel.currEp.value!!, true)
-
-        viewModel.currEp.observe(this, Observer {
-            exo_current_episode.text = String.format(resources.getString(R.string.episode_info), it)
-            // Add next episode
-            setupAnimeSource(it + 1)
-        })
-    }
-
-    private fun setupAnimeSource(epNo: Int, initial: Boolean = false) {
-        val slug = args.slugName
-
-        viewModel.getAnimeSources(slug).observe(this, Observer {
+        // Get anime sources
+        viewModel.getAnimeSources(args.slugName).observe(this, Observer {
             when (it.status) {
                 Result.Status.LOADING -> {
                     // TODO: Hide/show some shit
                 }
 
                 Result.Status.SUCCESS -> {
-                    if (it != null) {
-                        if (!it.data.isNullOrEmpty()) {
-                            val decryptedUrl =
-                                    it.data[(epNo - 1) % it.data.size].source?.let { src ->
-                                        CryptoHelper.decryptSourceUrl(
-                                                src
-                                        )
-                                    }
-                            val sourceFactory = DefaultHttpDataSourceFactory(
-                                    Util.getUserAgent(
-                                            this,
-                                            "twist.moe"
-                                    )
-                            )
+                    viewModel.sources = it.data
 
-                            // Add mediaSource to playlist
-                            concatenatedSource.addMediaSource(ProgressiveMediaSource.Factory {
-                                val dataSource = sourceFactory.createDataSource()
-                                dataSource.setRequestProperty("Referer", "https://twist.moe/a/$slug/$epNo")
-                                dataSource
-                            }.createMediaSource(Uri.parse("https://twistcdn.bunny.sh${decryptedUrl}")))
+                    // Load episode and add next episode to playlist
+                    setupAnimeSource(args.episodeNo)
+                    viewModel.currEp.value = args.episodeNo
 
-                            if (initial) {
-                                initializePlayer()
-                                preparePlayer()
-                                hideSystemUi()
-                            }
-                        }
-                    }
+                    // initialize player
+                    initializePlayer()
+                    preparePlayer()
+                    hideSystemUi()
+
+                    viewModel.currEp.observe(this, Observer {
+                        exo_current_episode.text = String.format(resources.getString(R.string.episode_info), it)
+                        // Add next episode
+                        setupAnimeSource((it + 1) % viewModel.sources!!.size)
+                    })
                 }
 
                 Result.Status.ERROR -> {
@@ -126,6 +100,31 @@ class AnimePlayerActivity : AppCompatActivity() {
                 }
             }
         })
+
+    }
+
+    private fun setupAnimeSource(epNo: Int) {
+        if (!viewModel.sources.isNullOrEmpty()) {
+            val decryptedUrl =
+                    viewModel.sources!![epNo - 1].source?.let { src ->
+                        CryptoHelper.decryptSourceUrl(
+                                src
+                        )
+                    }
+            val sourceFactory = DefaultHttpDataSourceFactory(
+                    Util.getUserAgent(
+                            this,
+                            "twist.moe"
+                    )
+            )
+
+            // Add mediaSource to playlist
+            concatenatedSource.addMediaSource(ProgressiveMediaSource.Factory {
+                val dataSource = sourceFactory.createDataSource()
+                dataSource.setRequestProperty("Referer", "https://twist.moe/a/${args.slugName}/$epNo")
+                dataSource
+            }.createMediaSource(Uri.parse("https://twistcdn.bunny.sh${decryptedUrl}")))
+        }
     }
 
     @SuppressLint("InlinedApi")
@@ -198,7 +197,9 @@ class AnimePlayerActivity : AppCompatActivity() {
             override fun onPositionDiscontinuity(@DiscontinuityReason reason: Int) {
                 super.onPositionDiscontinuity(reason)
                 if (lastSavedWindow != player.currentWindowIndex) {
-                    viewModel.currEp.value = viewModel.currEp.value?.plus(1)
+                    concatenatedSource.removeMediaSource(0)
+                    player.seekTo(0,0)
+                    viewModel.currEp.value = (viewModel.currEp.value!! + 1) % viewModel.sources!!.size
                 }
                 lastSavedWindow = player.currentWindowIndex
             }
