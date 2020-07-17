@@ -52,19 +52,59 @@
     </RelativeLayout>
 
     <RelativeLayout
-        android:id="@+id/skip_notice"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:alpha="0">
+        android:layout_height="match_parent">
 
         <LinearLayout
+            android:id="@+id/err_notice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="50dp"
+            android:orientation="horizontal"
+            android:visibility="gone">
+
+            <TextView
+                android:id="@+id/errorText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:fontFamily="@font/lato_thin"
+                android:textColor="#FF0000"
+                android:textSize="18sp"
+                tools:text="MEDIA_ERR_EXAMPLE" />
+
+            <Button
+                android:id="@+id/retry"
+                style="@style/Widget.AppCompat.Button.Borderless.Colored"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:layout_marginEnd="5sp"
+                android:layout_weight="1"
+                android:background="?android:attr/selectableItemBackgroundBorderless"
+                android:backgroundTint="#11ffffff"
+                android:fontFamily="@font/lato_thin"
+                android:paddingLeft="10dp"
+                android:paddingTop="2dp"
+                android:paddingRight="10dp"
+                android:paddingBottom="2dp"
+                android:text="@string/retry_button"
+                android:textAllCaps="false"
+                android:textColor="#ffffff"
+                android:textSize="16sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/skip_notice"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:layout_alignParentBottom="true"
             android:layout_marginEnd="10dp"
             android:layout_marginBottom="60dp"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:alpha="0">
 
             <TextView
                 android:id="@+id/skipText"

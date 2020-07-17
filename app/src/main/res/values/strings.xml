@@ -44,4 +44,5 @@
     <string name="next_episode_countdown">Next episode in: %s</string>
     <string name="next_button">Next</string>
     <string name="cancel_button">Cancel</string>
+    <string name="retry_button">Retry</string>
 </resources>

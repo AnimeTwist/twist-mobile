@@ -16,6 +16,7 @@ import androidx.lifecycle.Observer
 import androidx.navigation.navArgs
 import androidx.vectordrawable.graphics.drawable.Animatable2Compat
 import androidx.vectordrawable.graphics.drawable.AnimatedVectorDrawableCompat
+import com.google.android.exoplayer2.ExoPlaybackException
 import com.google.android.exoplayer2.ExoPlayer
 import com.google.android.exoplayer2.Player
 import com.google.android.exoplayer2.SimpleExoPlayer
@@ -103,7 +104,10 @@ class AnimePlayerActivity : AppCompatActivity() {
                 }
 
                 Result.Status.ERROR -> {
-                    toast(it.message!!.msg)
+                    when (it.message!!.code) {
+                        111 -> showError("ERR_INTERNET_CONN")
+                    }
+                    toast(it.message.msg)
                 }
             }
         })
@@ -141,6 +145,12 @@ class AnimePlayerActivity : AppCompatActivity() {
                 or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
                 or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
                 or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION)
+    }
+
+    private fun showError(message: String) {
+        controllerHandler.removeCallbacksAndMessages(null)
+        errorText.text = message
+        err_notice.visibility = View.VISIBLE
     }
 
     private fun showNotice() {
@@ -249,11 +259,12 @@ class AnimePlayerActivity : AppCompatActivity() {
         }
         paused = false
 
-        controllerHandler.postDelayed({
-            exo_controller.visibility = View.INVISIBLE
-            if (skipFlag) hideNotice()
-        }, 3000)
-
+        if (player.playbackError == null && concatenatedSource.size != 0) {
+            controllerHandler.postDelayed({
+                exo_controller.visibility = View.INVISIBLE
+                if (skipFlag) hideNotice()
+            }, 3000)
+        }
     }
 
     private fun preparePlayer() {
@@ -314,6 +325,7 @@ class AnimePlayerActivity : AppCompatActivity() {
                 }
             })
         }
+        retry.setOnClickListener { recreate() }
         skip.isClickable = false
         cancel.isClickable = false
 
@@ -331,6 +343,7 @@ class AnimePlayerActivity : AppCompatActivity() {
                     Player.STATE_READY -> {
                         // Start calculating remaining time
                         remainingHandler.post(getRemaining)
+                        err_notice.visibility = View.GONE
                         if (player.isPlaying) play()
                     }
                     else -> { /* Do nothing */ }
@@ -354,6 +367,30 @@ class AnimePlayerActivity : AppCompatActivity() {
                     skipFlag = false
                 }
                 lastSavedWindow = player.currentWindowIndex
+            }
+
+            override fun onPlayerError(error: ExoPlaybackException) {
+                super.onPlayerError(error)
+                controllerHandler.removeCallbacksAndMessages(null)
+
+                when (error.type) {
+                    ExoPlaybackException.TYPE_SOURCE -> {
+                        showError("MEDIA_ERR_DECODE")
+                    }
+                    ExoPlaybackException.TYPE_REMOTE -> {
+                        showError("MEDIA_ERR_ABORTED")
+                    }
+                    ExoPlaybackException.TYPE_OUT_OF_MEMORY -> {
+                        showError("ERR_OUT_OF_MEMORY")
+                    }
+                    ExoPlaybackException.TYPE_RENDERER -> {
+                        showError("MEDIA_ERR_RENDER")
+                    }
+                    ExoPlaybackException.TYPE_UNEXPECTED -> {
+                        showError("Could not load video")
+                        toast(error.message.toString())
+                    }
+                }
             }
         })
 
