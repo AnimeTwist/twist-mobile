@@ -4,17 +4,17 @@
   <aapt:attr name="android:drawable">
     <vector
         android:name="vector"
-        android:width="24dp"
-        android:height="24dp"
+        android:width="28dp"
+        android:height="28dp"
         android:viewportWidth="28"
         android:viewportHeight="28">
       <path
           android:name="bg"
-          android:fillColor="#000000"
-          android:fillAlpha="0.5"
-          android:pathData="M 14 0 A 14 14 0 0 1 14 28 A 14 14 0 0 1 14 0" />
+          android:pathData="M 14 0 H 14 A 14 14 0 0 1 28 14 V 14 A 14 14 0 0 1 14 28 H 14 A 14 14 0 0 1 0 14 V 14 A 14 14 0 0 1 14 0 Z"
+          android:fillColor="#000"
+          android:fillAlpha="0.8" />
       <group
-          android:name="group"
+          android:name="fill"
           android:pivotX="14"
           android:pivotY="14">
         <path
@@ -25,7 +25,7 @@
       </group>
     </vector>
   </aapt:attr>
-  <target android:name="group">
+  <target android:name="fill">
     <aapt:attr name="android:animation">
       <objectAnimator
           android:propertyName="rotation"

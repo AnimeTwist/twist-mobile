@@ -26,6 +26,28 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <RelativeLayout
+        android:id="@+id/state_indicator"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/indicator_base"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:foregroundGravity="center"
+            android:src="@drawable/ic_at_state_in" />
+
+        <ImageView
+            android:id="@+id/indicator_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:foregroundGravity="center"
+            android:src="@drawable/ic_at_play" />
+    </RelativeLayout>
+
     <com.google.android.exoplayer2.ui.PlaybackControlView
         android:id="@id/exo_controller"
         android:layout_width="match_parent"

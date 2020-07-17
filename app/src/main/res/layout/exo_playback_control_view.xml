@@ -6,6 +6,7 @@
     android:layout_height="match_parent">
 
     <LinearLayout
+        android:id="@+id/linearLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/player_gradient"
@@ -78,7 +79,7 @@
         <View
             android:id="@id/exo_progress_placeholder"
             android:layout_width="0dp"
-            android:layout_height="26dp"
+            android:layout_height="24dp"
             android:layout_weight="1" />
 
         <TextView
@@ -106,6 +107,7 @@
             android:paddingEnd="8dp"
             android:paddingBottom="8dp"
             android:src="@drawable/ic_screen_rotation" />
+
     </LinearLayout>
 
     <ImageButton

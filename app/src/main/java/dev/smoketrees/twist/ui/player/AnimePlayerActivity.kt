@@ -2,22 +2,23 @@ package dev.smoketrees.twist.ui.player
 
 import android.annotation.SuppressLint
 import android.content.pm.ActivityInfo
+import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.view.View
+import android.view.animation.AnimationUtils
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.navigation.navArgs
-import com.google.android.exoplayer2.ExoPlaybackException
+import androidx.vectordrawable.graphics.drawable.Animatable2Compat
+import androidx.vectordrawable.graphics.drawable.AnimatedVectorDrawableCompat
 import com.google.android.exoplayer2.ExoPlayer
 import com.google.android.exoplayer2.Player
-import com.google.android.exoplayer2.Player.DiscontinuityReason
 import com.google.android.exoplayer2.SimpleExoPlayer
 import com.google.android.exoplayer2.source.ConcatenatingMediaSource
 import com.google.android.exoplayer2.source.ProgressiveMediaSource
-import com.google.android.exoplayer2.source.TrackGroupArray
-import com.google.android.exoplayer2.trackselection.TrackSelectionArray
+import com.google.android.exoplayer2.ui.PlayerView
 import com.google.android.exoplayer2.upstream.DefaultHttpDataSourceFactory
 import com.google.android.exoplayer2.util.Util
 import dev.smoketrees.twist.R
@@ -25,6 +26,7 @@ import dev.smoketrees.twist.model.twist.Result
 import dev.smoketrees.twist.utils.CryptoHelper
 import dev.smoketrees.twist.utils.toast
 import kotlinx.android.synthetic.main.activity_anime_player.*
+import kotlinx.android.synthetic.main.exo_at_player_view.*
 import kotlinx.android.synthetic.main.exo_playback_control_view.*
 import org.koin.android.viewmodel.ext.android.viewModel
 import java.util.concurrent.TimeUnit
@@ -36,11 +38,14 @@ class AnimePlayerActivity : AppCompatActivity() {
     private val viewModel by viewModel<PlayerViewModel>()
     private lateinit var player: ExoPlayer
     private lateinit var concatenatedSource: ConcatenatingMediaSource
+    private var paused = false
+    private val controllerHandler = Handler()
 
     @SuppressLint("SourceLockedOrientationActivity")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_anime_player)
+
         requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
         exo_rotate_icon.setOnClickListener {
             when (viewModel.orientation) {
@@ -63,11 +68,14 @@ class AnimePlayerActivity : AppCompatActivity() {
             }
         }
 
-        exo_ep_info!!.text = args.displayName
-        exo_back!!.setOnClickListener { finish() }
+        exo_ep_info.text = args.displayName
+        exo_back.setOnClickListener { finish() }
 
         concatenatedSource = ConcatenatingMediaSource()
         player = SimpleExoPlayer.Builder(this).build()
+        initializePlayer()
+        preparePlayer()
+        hideSystemUi()
 
         // Get anime sources
         viewModel.getAnimeSources(args.slugName).observe(this, Observer {
@@ -83,15 +91,10 @@ class AnimePlayerActivity : AppCompatActivity() {
                     setupAnimeSource(args.episodeNo)
                     viewModel.currEp.value = args.episodeNo
 
-                    // initialize player
-                    initializePlayer()
-                    preparePlayer()
-                    hideSystemUi()
-
-                    viewModel.currEp.observe(this, Observer {
-                        exo_current_episode.text = String.format(resources.getString(R.string.episode_info), it)
+                    viewModel.currEp.observe(this, Observer { ep ->
+                        exo_current_episode.text = String.format(resources.getString(R.string.episode_info), ep)
                         // Add next episode
-                        setupAnimeSource((it + 1) % viewModel.sources!!.size)
+                        setupAnimeSource((ep + 1) % viewModel.sources!!.size)
                     })
                 }
 
@@ -100,7 +103,6 @@ class AnimePlayerActivity : AppCompatActivity() {
                 }
             }
         })
-
     }
 
     private fun setupAnimeSource(epNo: Int) {
@@ -137,6 +139,88 @@ class AnimePlayerActivity : AppCompatActivity() {
                 or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION)
     }
 
+    private fun pause() {
+        controllerHandler.removeCallbacksAndMessages(null)
+        player.playWhenReady = false
+        state_indicator.visibility = View.VISIBLE
+        indicator_icon.setImageResource(R.drawable.ic_at_pause)
+
+        if (player.playbackState == Player.STATE_BUFFERING) {
+            player_view.setShowBuffering(PlayerView.SHOW_BUFFERING_NEVER)
+
+            // Morph from buffer
+            val anim = AnimatedVectorDrawableCompat.create(
+                this,
+                R.drawable.ic_at_state_buffer_in
+            )
+            indicator_base.setImageDrawable(anim)
+            anim!!.start()
+        }
+        else {
+            // Scale in
+            state_indicator.requestLayout()
+            state_indicator.animation =  AnimationUtils.loadAnimation(this, R.anim.scale_in)
+            state_indicator.animate().start()
+
+            // Morph from square
+            val anim = AnimatedVectorDrawableCompat.create(
+                this,
+                R.drawable.ic_at_state_in
+            )
+            indicator_base.setImageDrawable(anim)
+            anim!!.start()
+        }
+        paused = true
+    }
+
+    private fun play() {
+        hideSystemUi()
+        player.playWhenReady = true
+
+        fun ready() {
+            state_indicator.visibility = View.INVISIBLE
+            player_view.setShowBuffering(PlayerView.SHOW_BUFFERING_ALWAYS)
+        }
+
+        if (player.playbackState == Player.STATE_BUFFERING) {
+            // Morph into buffer
+            val anim = AnimatedVectorDrawableCompat.create(
+                this,
+                R.drawable.ic_at_state_buffer_out
+            )
+            indicator_base.setImageDrawable(anim)
+            anim!!.registerAnimationCallback(object: Animatable2Compat.AnimationCallback() {
+                override fun onAnimationEnd(drawable: Drawable?) {
+                    super.onAnimationEnd(drawable)
+                    ready()
+                }
+            })
+            anim.start()
+        }
+        else {
+            indicator_icon.setImageResource(R.drawable.ic_at_play)
+            // Scale out
+            state_indicator.requestLayout()
+            state_indicator.animation =  AnimationUtils.loadAnimation(this, R.anim.scale_out)
+            state_indicator.animate().start()
+
+            // Morph into square
+            val anim = AnimatedVectorDrawableCompat.create(
+                this,
+                R.drawable.ic_at_state_out
+            )
+            indicator_base.setImageDrawable(anim)
+            anim!!.registerAnimationCallback(object: Animatable2Compat.AnimationCallback() {
+                override fun onAnimationEnd(drawable: Drawable?) {
+                    super.onAnimationEnd(drawable)
+                    ready()
+                }
+            })
+            anim.start()
+        }
+        paused = false
+    }
+
     private fun preparePlayer() {
 
         val remainingHandler = Handler()
@@ -146,6 +230,9 @@ class AnimePlayerActivity : AppCompatActivity() {
                 val position = player.currentPosition
                 if (duration > 0)  {
                     val remaining = duration - position
+                    if (remaining <= 180) {
+                        // TODO: Show skip notice
+                    }
                     val minutes = TimeUnit.MILLISECONDS.toMinutes(remaining)
                     val seconds = TimeUnit.MILLISECONDS.toSeconds(remaining - TimeUnit.MINUTES.toMillis(minutes))
                     val finalString = "${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}"
@@ -173,29 +260,43 @@ class AnimePlayerActivity : AppCompatActivity() {
         }
 
         var lastSavedWindow = 0
+
+        player_view.setOnClickListener {
+            if (player.playWhenReady && (player.isPlaying || player.playbackState == Player.STATE_BUFFERING)) pause()
+            else play()
+        }
+
+        exo_play.setOnClickListener { play() }
+        exo_pause.setOnClickListener { pause() }
+
         player.addListener(object : Player.EventListener {
             override fun onPlayerStateChanged(playWhenReady: Boolean, playbackState: Int) {
                 super.onPlayerStateChanged(playWhenReady, playbackState)
                 when (playbackState) {
                     Player.STATE_BUFFERING -> {
-                        // do nothing
+                        controllerHandler.removeCallbacksAndMessages(null)
+                        exo_controller.visibility = View.VISIBLE
+                        if (!paused) state_indicator.visibility = View.INVISIBLE
                     }
 
                     Player.STATE_READY -> {
                         // Start calculating remaining time
                         remainingHandler.post(getRemaining)
+                        if (player.isPlaying) {
+                            play()
+                            controllerHandler.postDelayed({
+                                exo_controller.visibility = View.INVISIBLE
+                            }, 3000)
+                        }
                     }
-                    Player.STATE_ENDED -> {
-                        finish()
-                    }
-                    Player.STATE_IDLE -> {
-                        // do nothing
-                    }
+                    else -> { /* Do nothing */ }
                 }
             }
 
-            override fun onPositionDiscontinuity(@DiscontinuityReason reason: Int) {
+            override fun onPositionDiscontinuity(@Player.DiscontinuityReason reason: Int) {
                 super.onPositionDiscontinuity(reason)
+                if (reason == Player.DISCONTINUITY_REASON_SEEK && paused) play()
+                if (reason == Player.DISCONTINUITY_REASON_SEEK_ADJUSTMENT && paused) play()
                 if (lastSavedWindow != player.currentWindowIndex) {
                     concatenatedSource.removeMediaSource(0)
                     player.seekTo(0,0)
@@ -209,13 +310,6 @@ class AnimePlayerActivity : AppCompatActivity() {
     }
 
     private fun initializePlayer() {
-//        val loadControl = DefaultLoadControl.Builder()
-//            .setBufferDurationsMs(
-//                DefaultLoadControl.DEFAULT_MIN_BUFFER_MS,
-//                10 * 50 * 1000,
-//                DefaultLoadControl.DEFAULT_BUFFER_FOR_PLAYBACK_MS,
-//                DefaultLoadControl.DEFAULT_BUFFER_FOR_PLAYBACK_AFTER_REBUFFER_MS
-//            ).createDefaultLoadControl()
         player_view.player = player
         player.playWhenReady = viewModel.playWhenReady
         player.seekTo(viewModel.currentWindowIndex, viewModel.playbackPosition)
@@ -224,14 +318,15 @@ class AnimePlayerActivity : AppCompatActivity() {
     override fun onStart() {
         super.onStart()
         player.seekTo(viewModel.playbackPosition)
-        player.playWhenReady = viewModel.playWhenReady
+        if (!viewModel.playWhenReady) pause()
+        else play()
     }
 
     override fun onStop() {
         super.onStop()
         viewModel.playWhenReady = player.playWhenReady
         viewModel.playbackPosition = player.currentPosition
-        player.playWhenReady = false
+        if (!paused) pause()
     }
 
     override fun onDestroy() {
