@@ -1,5 +1,7 @@
 package dev.smoketrees.twist.ui.player
 
+import android.animation.Animator
+import android.animation.AnimatorListenerAdapter
 import android.annotation.SuppressLint
 import android.content.pm.ActivityInfo
 import android.graphics.drawable.Drawable
@@ -7,6 +9,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.view.View
+import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
@@ -39,6 +42,7 @@ class AnimePlayerActivity : AppCompatActivity() {
     private lateinit var player: ExoPlayer
     private lateinit var concatenatedSource: ConcatenatingMediaSource
     private var paused = false
+    private var skipFlag = false
     private val controllerHandler = Handler()
 
     @SuppressLint("SourceLockedOrientationActivity")
@@ -139,6 +143,30 @@ class AnimePlayerActivity : AppCompatActivity() {
                 or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION)
     }
 
+    private fun showNotice() {
+        skip_notice.alpha = (0f)
+        skip_notice.translationY = 100f
+        skip.isClickable = true
+        cancel.isClickable = true
+        skip_notice.animate()
+                .alpha(1f)
+                .translationY(0f)
+                .setDuration(300)
+                .setListener(null)
+    }
+
+    private fun hideNotice(adapter: AnimatorListenerAdapter? = null) {
+        skip_notice.alpha = (1f)
+        skip_notice.translationY = 0f
+        skip.isClickable = false
+        cancel.isClickable = false
+        skip_notice.animate()
+                .alpha(0f)
+                .translationY(100f)
+                .setDuration(300)
+                .setListener(adapter)
+    }
+
     private fun pause() {
         controllerHandler.removeCallbacksAndMessages(null)
         player.playWhenReady = false
@@ -171,6 +199,7 @@ class AnimePlayerActivity : AppCompatActivity() {
             anim!!.start()
         }
         paused = true
+        if (skipFlag && exo_controller.visibility == View.INVISIBLE) showNotice()
     }
 
     private fun play() {
@@ -219,6 +248,12 @@ class AnimePlayerActivity : AppCompatActivity() {
             anim.start()
         }
         paused = false
+
+        controllerHandler.postDelayed({
+            exo_controller.visibility = View.INVISIBLE
+            if (skipFlag) hideNotice()
+        }, 3000)
+
     }
 
     private fun preparePlayer() {
@@ -230,13 +265,16 @@ class AnimePlayerActivity : AppCompatActivity() {
                 val position = player.currentPosition
                 if (duration > 0)  {
                     val remaining = duration - position
-                    if (remaining <= 180) {
-                        // TODO: Show skip notice
+                    if (skipFlag != remaining <= 180000) {
+                        skipFlag = remaining <= 180000
+                        if (skipFlag && exo_controller.visibility == View.VISIBLE) showNotice()
+                        if (!skipFlag) hideNotice()
                     }
                     val minutes = TimeUnit.MILLISECONDS.toMinutes(remaining)
                     val seconds = TimeUnit.MILLISECONDS.toSeconds(remaining - TimeUnit.MINUTES.toMillis(minutes))
                     val finalString = "${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}"
                     exo_remaining!!.text = finalString
+                    if (skipFlag) skipText.text = String.format(resources.getString(R.string.next_episode_countdown), finalString)
 
                     // Remove scheduled updates.
                     remainingHandler.removeCallbacks(this)
@@ -265,9 +303,19 @@ class AnimePlayerActivity : AppCompatActivity() {
             if (player.playWhenReady && (player.isPlaying || player.playbackState == Player.STATE_BUFFERING)) pause()
             else play()
         }
-
         exo_play.setOnClickListener { play() }
         exo_pause.setOnClickListener { pause() }
+        skip.setOnClickListener { player.seekTo(1,0) }
+        cancel.setOnClickListener {
+            hideNotice(object : AnimatorListenerAdapter() {
+                override fun onAnimationEnd(animation: Animator?) {
+                    super.onAnimationEnd(animation)
+                    skip_notice.visibility = View.INVISIBLE
+                }
+            })
+        }
+        skip.isClickable = false
+        cancel.isClickable = false
 
         player.addListener(object : Player.EventListener {
             override fun onPlayerStateChanged(playWhenReady: Boolean, playbackState: Int) {
@@ -276,18 +324,14 @@ class AnimePlayerActivity : AppCompatActivity() {
                     Player.STATE_BUFFERING -> {
                         controllerHandler.removeCallbacksAndMessages(null)
                         exo_controller.visibility = View.VISIBLE
+                        if (skipFlag) showNotice()
                         if (!paused) state_indicator.visibility = View.INVISIBLE
                     }
 
                     Player.STATE_READY -> {
                         // Start calculating remaining time
                         remainingHandler.post(getRemaining)
-                        if (player.isPlaying) {
-                            play()
-                            controllerHandler.postDelayed({
-                                exo_controller.visibility = View.INVISIBLE
-                            }, 3000)
-                        }
+                        if (player.isPlaying) play()
                     }
                     else -> { /* Do nothing */ }
                 }
@@ -301,6 +345,13 @@ class AnimePlayerActivity : AppCompatActivity() {
                     concatenatedSource.removeMediaSource(0)
                     player.seekTo(0,0)
                     viewModel.currEp.value = (viewModel.currEp.value!! + 1) % viewModel.sources!!.size
+                    hideNotice(object : AnimatorListenerAdapter() {
+                        override fun onAnimationEnd(animation: Animator?) {
+                            super.onAnimationEnd(animation)
+                            skip_notice.visibility = View.VISIBLE
+                        }
+                    })
+                    skipFlag = false
                 }
                 lastSavedWindow = player.currentWindowIndex
             }
