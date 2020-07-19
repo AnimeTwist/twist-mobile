@@ -9,7 +9,6 @@ import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.view.View
-import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
@@ -148,6 +147,7 @@ class AnimePlayerActivity : AppCompatActivity() {
     }
 
     private fun showError(message: String) {
+        exo_controller.visibility = View.VISIBLE
         controllerHandler.removeCallbacksAndMessages(null)
         errorText.text = message
         err_notice.visibility = View.VISIBLE

@@ -73,7 +73,7 @@ class MainActivity : AppCompatActivity() {
             notice_button.setOnClickListener(noticeObject.listener)
             notice_button.show()
         }
-        
+
         notice_bar.show()
 
         // Disable scrolling while error notice displayed
