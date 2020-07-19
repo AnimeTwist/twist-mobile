@@ -3,14 +3,19 @@ package dev.smoketrees.twist.ui.player
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.graphics.drawable.Drawable
+import android.media.session.MediaSession
 import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
+import android.support.v4.media.session.MediaSessionCompat
+import android.view.KeyEvent
 import android.view.View
 import android.view.animation.AnimationUtils
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.Observer
 import androidx.navigation.navArgs
 import androidx.vectordrawable.graphics.drawable.Animatable2Compat
@@ -19,6 +24,7 @@ import com.google.android.exoplayer2.ExoPlaybackException
 import com.google.android.exoplayer2.ExoPlayer
 import com.google.android.exoplayer2.Player
 import com.google.android.exoplayer2.SimpleExoPlayer
+import com.google.android.exoplayer2.ext.mediasession.MediaSessionConnector
 import com.google.android.exoplayer2.source.ConcatenatingMediaSource
 import com.google.android.exoplayer2.source.ProgressiveMediaSource
 import com.google.android.exoplayer2.ui.PlayerView
@@ -41,6 +47,8 @@ class AnimePlayerActivity : AppCompatActivity() {
     private val viewModel by viewModel<PlayerViewModel>()
     private lateinit var player: ExoPlayer
     private lateinit var concatenatedSource: ConcatenatingMediaSource
+    lateinit var mediaSession: MediaSessionCompat
+    lateinit var mediaSessionConnector: MediaSessionConnector
     private var paused = false
     private var skipFlag = false
     private val controllerHandler = Handler()
@@ -80,6 +88,38 @@ class AnimePlayerActivity : AppCompatActivity() {
         initializePlayer()
         preparePlayer()
         hideSystemUi()
+
+        // Connect to media session
+        mediaSession = MediaSessionCompat(this, packageName)
+        mediaSessionConnector = MediaSessionConnector(mediaSession)
+        mediaSessionConnector.setPlayer(player)
+
+        // Use player effects
+        mediaSession.setCallback(object : MediaSessionCompat.Callback() {
+
+            override fun onSkipToNext() {
+                player.seekTo(1, 0)
+                super.onSkipToNext()
+            }
+
+            override fun onPause() {
+                pause()
+                super.onPause()
+            }
+
+            override fun onPlay() {
+                play()
+                super.onPlay()
+            }
+
+            override fun onStop() {
+                pause()
+                super.onStop()
+            }
+        })
+
+        mediaSession.setFlags(MediaSessionCompat.FLAG_HANDLES_MEDIA_BUTTONS or MediaSessionCompat.FLAG_HANDLES_TRANSPORT_CONTROLS)
+
 
         // Get anime sources
         viewModel.getAnimeSources(args.slugName).observe(this, Observer {
@@ -180,6 +220,7 @@ class AnimePlayerActivity : AppCompatActivity() {
     private fun pause() {
         controllerHandler.removeCallbacksAndMessages(null)
         player.playWhenReady = false
+        exo_controller.visibility = View.VISIBLE
         state_indicator.visibility = View.VISIBLE
         indicator_icon.setImageResource(R.drawable.ic_at_pause)
 
@@ -355,7 +396,7 @@ class AnimePlayerActivity : AppCompatActivity() {
                 if (reason == Player.DISCONTINUITY_REASON_SEEK && paused) play()
                 if (reason == Player.DISCONTINUITY_REASON_SEEK_ADJUSTMENT && paused) play()
                 if (lastSavedWindow != player.currentWindowIndex) {
-                    skip_notice.visibility = View.INVISIBLE
+                    if (!skipFlag) skip_notice.visibility = View.INVISIBLE
                     concatenatedSource.removeMediaSource(0)
                     player.seekTo(0,0)
                     viewModel.currEp.value = (viewModel.currEp.value!! + 1) % viewModel.sources!!.size
@@ -409,6 +450,8 @@ class AnimePlayerActivity : AppCompatActivity() {
         player.seekTo(viewModel.playbackPosition)
         if (!viewModel.playWhenReady) pause()
         else play()
+        mediaSessionConnector.setPlayer(player)
+        mediaSession.isActive = true
     }
 
     override fun onStop() {
@@ -416,15 +459,33 @@ class AnimePlayerActivity : AppCompatActivity() {
         viewModel.playWhenReady = player.playWhenReady
         viewModel.playbackPosition = player.currentPosition
         if (!paused) pause()
+        mediaSessionConnector.setPlayer(null)
+        mediaSession.isActive = false
     }
 
     override fun onDestroy() {
         super.onDestroy()
+        mediaSession.release()
         player.release()
     }
 
     override fun onResume() {
         super.onResume()
         hideSystemUi()
+    }
+
+    override fun onKeyDown(keyCode: Int, event: KeyEvent): Boolean {
+        when (keyCode) {
+            KeyEvent.KEYCODE_MEDIA_PLAY -> {
+                if (paused) play()
+            }
+            KeyEvent.KEYCODE_MEDIA_PAUSE -> {
+                if (!paused) pause()
+            }
+            KeyEvent.KEYCODE_MEDIA_NEXT -> {
+                player.seekTo(1,0)
+            }
+        }
+        return super.onKeyDown(keyCode, event)
     }
 }

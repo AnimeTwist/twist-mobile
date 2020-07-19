@@ -127,7 +127,8 @@ dependencies {
     implementation("org.apache.commons:commons-lang3:3.9")
 
     // Exoplayer - stream video
-    implementation("com.google.android.exoplayer:exoplayer:2.11.6")
+    implementation("com.google.android.exoplayer:exoplayer:2.11.7")
+    implementation("com.google.android.exoplayer:extension-mediasession:2.11.7")
 
     // Spinkit - loading animations
     implementation("com.github.ybq:Android-SpinKit:1.4.0")
