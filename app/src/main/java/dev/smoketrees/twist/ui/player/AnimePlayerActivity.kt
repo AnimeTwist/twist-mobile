@@ -355,6 +355,7 @@ class AnimePlayerActivity : AppCompatActivity() {
                 if (reason == Player.DISCONTINUITY_REASON_SEEK && paused) play()
                 if (reason == Player.DISCONTINUITY_REASON_SEEK_ADJUSTMENT && paused) play()
                 if (lastSavedWindow != player.currentWindowIndex) {
+                    skip_notice.visibility = View.INVISIBLE
                     concatenatedSource.removeMediaSource(0)
                     player.seekTo(0,0)
                     viewModel.currEp.value = (viewModel.currEp.value!! + 1) % viewModel.sources!!.size
