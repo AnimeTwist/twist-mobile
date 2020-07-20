@@ -41,4 +41,8 @@
     <string name="client_error_408">Request timed out.</string>
     <string name="no_connection">Check your internet connection.</string>
     <string name="error_default">An unexpected error occurred.</string>
+    <string name="next_episode_countdown">Next episode in: %s</string>
+    <string name="next_button">Next</string>
+    <string name="cancel_button">Cancel</string>
+    <string name="retry_button">Retry</string>
 </resources>
