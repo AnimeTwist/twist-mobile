@@ -16,6 +16,9 @@
         app:controller_layout_id="@layout/exo_playback_control_view"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:show_buffering="always" />
+        app:show_buffering="always"
+        app:hide_on_touch="false"
+        app:auto_show="false"
+        app:show_timeout="-1"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
