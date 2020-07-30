@@ -19,6 +19,8 @@ import dev.smoketrees.twist.model.twist.LoginDetails
 import dev.smoketrees.twist.model.twist.Result
 import dev.smoketrees.twist.ui.home.AnimeViewModel
 import dev.smoketrees.twist.utils.Constants
+import dev.smoketrees.twist.utils.PreferenceHelper.get
+import dev.smoketrees.twist.utils.PreferenceHelper.set
 import dev.smoketrees.twist.utils.hide
 import dev.smoketrees.twist.utils.show
 import dev.smoketrees.twist.utils.toast
@@ -41,9 +43,11 @@ class LoginFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        if (pref.contains(Constants.PreferenceKeys.IS_LOGGED_IN)) {
-            findNavController()
-                .navigate(LoginFragmentDirections.actionLoginFragment2ToMainActivity())
+        if (pref.contains(Constants.PreferenceKeys.JWT)) {
+            if (pref[Constants.PreferenceKeys.JWT, ""] != "") {
+                findNavController()
+                    .navigate(LoginFragmentDirections.actionLoginFragment2ToMainActivity())
+            }
         }
 
         val spannable = SpannableString(getString(R.string.twist_moe))
@@ -88,8 +92,8 @@ class LoginFragment : Fragment() {
 
                     Result.Status.SUCCESS -> {
                         showViews()
-                        pref.edit { putBoolean(Constants.PreferenceKeys.IS_LOGGED_IN, true) }
-                        (activity as AppCompatActivity?)!!.supportActionBar!!.show()
+                        pref[Constants.PreferenceKeys.JWT] = it.data!!.token
+                        (activity as AppCompatActivity?)?.supportActionBar?.show()
                         findNavController()
                             .navigate(LoginFragmentDirections.actionLoginFragment2ToMainActivity())
                     }

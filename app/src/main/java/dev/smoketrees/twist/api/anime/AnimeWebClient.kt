@@ -49,4 +49,8 @@ class AnimeWebClient(private val webService: AnimeWebService) : BaseApiClient() 
     suspend fun signUp(registerDetails: RegisterDetails) = getResult {
         webService.signUp(registerDetails)
     }
+
+    suspend fun getUserLibrary(jwt: String) = getResult {
+        webService.getUserLibrary(jwt)
+    }
 }

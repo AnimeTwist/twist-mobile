@@ -13,7 +13,7 @@ fun getOkHttpClient(): OkHttpClient {
         val httpLoggingInterceptor = HttpLoggingInterceptor()
         httpClient.addInterceptor(
             httpLoggingInterceptor.apply {
-                httpLoggingInterceptor.level = HttpLoggingInterceptor.Level.BODY
+                httpLoggingInterceptor.level = HttpLoggingInterceptor.Level.BASIC
             }
         )
     }

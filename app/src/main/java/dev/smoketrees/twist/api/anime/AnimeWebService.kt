@@ -42,4 +42,7 @@ interface AnimeWebService {
 
     @POST("auth/signup")
     suspend fun signUp(@Body registerDetails: RegisterDetails): Response<LoginResponse>
+
+    @GET("user/library")
+    suspend fun getUserLibrary(@Header("jwt") jwt: String): Response<Map<String, Map<String, LibraryEpisode>>>
 }

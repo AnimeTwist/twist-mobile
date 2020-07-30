@@ -90,4 +90,8 @@ class AnimeRepo(
     fun signUp(registerDetails: RegisterDetails) = makeRequest {
         webClient.signUp(registerDetails)
     }
+
+    fun getUserLibrary(jwt: String) = makeRequest {
+        webClient.getUserLibrary(jwt)
+    }
 }

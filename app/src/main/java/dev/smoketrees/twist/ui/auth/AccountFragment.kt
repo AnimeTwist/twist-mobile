@@ -19,6 +19,7 @@ import dev.smoketrees.twist.model.twist.RegisterDetails
 import dev.smoketrees.twist.model.twist.Result
 import dev.smoketrees.twist.ui.home.AnimeViewModel
 import dev.smoketrees.twist.utils.*
+import dev.smoketrees.twist.utils.PreferenceHelper.set
 import kotlinx.android.synthetic.main.fragment_account.*
 import org.koin.android.ext.android.inject
 import org.koin.android.viewmodel.ext.android.sharedViewModel
@@ -99,7 +100,7 @@ class AccountFragment : Fragment() {
 
                     Result.Status.SUCCESS -> {
                         showViews()
-                        pref.edit { putBoolean(Constants.PreferenceKeys.IS_LOGGED_IN, true) }
+                        pref[Constants.PreferenceKeys.JWT] = it.data!!.token
                         (activity as AppCompatActivity?)!!.supportActionBar!!.show()
                         findNavController()
                             .navigate(AccountFragmentDirections.actionAccountFragment2ToMainActivity())

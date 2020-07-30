@@ -55,6 +55,8 @@ class AnimeViewModel(private val repo: AnimeRepo) : ViewModel() {
     fun signIn(loginDetails: LoginDetails) = repo.signIn(loginDetails)
     fun signUp(registerDetails: RegisterDetails) = repo.signUp(registerDetails)
 
+    fun getUserLibrary(jwt: String) = repo.getUserLibrary(jwt)
+
     init {
         allAnimeLivedata.addSource(_dbAnime) {
             allAnimeLivedata.value = if (it.isEmpty()) Result.loading() else Result.success(it)

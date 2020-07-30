@@ -17,6 +17,7 @@ import dev.smoketrees.twist.model.twist.AnimeItem
 import dev.smoketrees.twist.model.twist.Result
 import dev.smoketrees.twist.ui.base.BaseFragment
 import dev.smoketrees.twist.utils.Constants
+import dev.smoketrees.twist.utils.PreferenceHelper.get
 import dev.smoketrees.twist.utils.hide
 import dev.smoketrees.twist.utils.toast
 import org.koin.android.ext.android.inject
@@ -67,6 +68,23 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, AnimeViewModel>(
         // Load data
         viewModel.getAllAnime()
         viewModel.getTrendingAnime(40)
+
+        if (pref[Constants.PreferenceKeys.JWT, ""] != "") {
+            viewModel.getUserLibrary(pref[Constants.PreferenceKeys.JWT, ""].toString())
+                .observe(viewLifecycleOwner, Observer {
+                    when (it.status) {
+                        Result.Status.LOADING -> {
+                        }
+
+                        Result.Status.SUCCESS -> {
+                            // do library stuff here
+                        }
+
+                        Result.Status.ERROR -> {
+                        }
+                    }
+                })
+        }
 
         viewModel.trendingAnimeLiveData
                 .observe(viewLifecycleOwner, Observer { trendingList ->
