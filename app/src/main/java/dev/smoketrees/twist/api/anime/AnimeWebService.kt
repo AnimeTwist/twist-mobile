@@ -45,4 +45,7 @@ interface AnimeWebService {
 
     @GET("user/library")
     suspend fun getUserLibrary(@Header("jwt") jwt: String): Response<Map<String, Map<String, LibraryEpisode>>>
+
+    @PATCH("user/library/episode")
+    suspend fun updateUserLibrary(@Header("jwt") jwt: String, @Body body: PatchLibRequest): Response<PatchLibResponse>
 }

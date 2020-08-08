@@ -54,6 +54,8 @@ class AnimeRepo(
         }
     }
 
+    fun getAnimeByIds(ids: List<Int>) = animeDao.getAnimeByIds(ids)
+
     // TODO: add support for this data to nejire and use it in the app
     private fun getAnimeDetailsEntity(
         episodeDetails: AnimeDetails
@@ -94,4 +96,6 @@ class AnimeRepo(
     fun getUserLibrary(jwt: String) = makeRequest {
         webClient.getUserLibrary(jwt)
     }
+
+    suspend fun getUserLibrarySync(jwt: String) = webClient.getUserLibrary(jwt)
 }

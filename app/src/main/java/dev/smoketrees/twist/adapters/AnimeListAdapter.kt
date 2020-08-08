@@ -14,7 +14,7 @@ import dev.smoketrees.twist.model.twist.AnimeItem
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.animelist_item.*
 
-class AnimeListAdapter(
+open class AnimeListAdapter(
     private val context: Context,
     val listener: (AnimeItem) -> Unit
 ) :

@@ -11,11 +11,9 @@ fun getOkHttpClient(): OkHttpClient {
 
     if (BuildConfig.DEBUG) {
         val httpLoggingInterceptor = HttpLoggingInterceptor()
-        httpClient.addInterceptor(
-            httpLoggingInterceptor.apply {
-                httpLoggingInterceptor.level = HttpLoggingInterceptor.Level.BASIC
-            }
-        )
+        httpClient.addInterceptor(httpLoggingInterceptor.apply {
+            httpLoggingInterceptor.level = HttpLoggingInterceptor.Level.BASIC
+        })
     }
 
     return httpClient.readTimeout(60, TimeUnit.SECONDS)

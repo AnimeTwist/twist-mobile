@@ -27,7 +27,8 @@ class AnimeViewModel(private val repo: AnimeRepo) : ViewModel() {
                 lastCode.postValue(null)
             }
             Result.Status.ERROR -> lastCode.postValue(result.message!!.code)
-            else -> {}
+            else -> {
+            }
         }
     }
 
@@ -52,10 +53,26 @@ class AnimeViewModel(private val repo: AnimeRepo) : ViewModel() {
     var topAiringAnimeNetworkState: LiveData<Result<List<AnimeItem>?>>
     var topRatedAnime: LiveData<PagedList<AnimeItem>>
 
+    val userLibrary = MutableLiveData<Map<String, Map<String, LibraryEpisode>>>()
+
     fun signIn(loginDetails: LoginDetails) = repo.signIn(loginDetails)
     fun signUp(registerDetails: RegisterDetails) = repo.signUp(registerDetails)
 
-    fun getUserLibrary(jwt: String) = repo.getUserLibrary(jwt)
+    fun getAnimeByIds(ids: List<Int>) = repo.getAnimeByIds(ids)
+
+    fun getUserLibrary(jwt: String) = viewModelScope.launch(Dispatchers.IO) {
+        val result = repo.getUserLibrarySync(jwt)
+
+        when (result.status) {
+            Result.Status.SUCCESS -> {
+                userLibrary.postValue(result.data!!)
+            }
+
+            else -> {
+            }
+        }
+
+    }
 
     init {
         allAnimeLivedata.addSource(_dbAnime) {

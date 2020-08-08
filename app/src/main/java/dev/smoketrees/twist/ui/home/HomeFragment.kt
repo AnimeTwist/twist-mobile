@@ -1,5 +1,6 @@
 package dev.smoketrees.twist.ui.home
 
+import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.text.method.LinkMovementMethod
@@ -15,12 +16,14 @@ import dev.smoketrees.twist.adapters.PagedAnimeListAdapter
 import dev.smoketrees.twist.databinding.FragmentHomeBinding
 import dev.smoketrees.twist.model.twist.AnimeItem
 import dev.smoketrees.twist.model.twist.Result
+import dev.smoketrees.twist.ui.auth.AuthActivity
 import dev.smoketrees.twist.ui.base.BaseFragment
 import dev.smoketrees.twist.utils.Constants
 import dev.smoketrees.twist.utils.PreferenceHelper.get
 import dev.smoketrees.twist.utils.hide
 import dev.smoketrees.twist.utils.toast
 import org.koin.android.ext.android.inject
+import java.text.SimpleDateFormat
 
 
 class HomeFragment : BaseFragment<FragmentHomeBinding, AnimeViewModel>(
@@ -36,6 +39,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, AnimeViewModel>(
     private val topAiringAdapter by lazy { PagedAnimeListAdapter(requireContext()) { navigate(it) } }
     private val trendingAdapter by lazy { AnimeListAdapter(requireContext()) { navigate(it) } }
     private val topRatedAdapter by lazy { PagedAnimeListAdapter(requireContext()) { navigate(it) } }
+    private val libraryAdapter by lazy { AnimeListAdapter(requireContext()) { navigate(it) } }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -53,17 +57,17 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, AnimeViewModel>(
 
         // Show notice on error
         viewModel.lastCode
-                .observe(viewLifecycleOwner, Observer {
-                    if (!viewModel.areAllLoaded.value!!) {
-                        notice(it)
-                    } //TODO: else show small bar above motd
-                })
+            .observe(viewLifecycleOwner, Observer {
+                if (!viewModel.areAllLoaded.value!!) {
+                    notice(it)
+                } //TODO: else show small bar above motd
+            })
 
         viewModel.areAllLoaded // Only show contents when everything is loaded
-                .observe(viewLifecycleOwner, Observer {
-                    dataBinding.hasResult = it
-                    if (it) hideLoader()
-                })
+            .observe(viewLifecycleOwner, Observer {
+                dataBinding.hasResult = it
+                if (it) hideLoader()
+            })
 
         // Load data
         viewModel.getAllAnime()
@@ -71,39 +75,40 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, AnimeViewModel>(
 
         if (pref[Constants.PreferenceKeys.JWT, ""] != "") {
             viewModel.getUserLibrary(pref[Constants.PreferenceKeys.JWT, ""].toString())
-                .observe(viewLifecycleOwner, Observer {
-                    when (it.status) {
-                        Result.Status.LOADING -> {
+            viewModel.userLibrary.observe(viewLifecycleOwner, Observer {
+                viewModel.getAnimeByIds(it.keys.toList().map { key -> key.toInt() })
+                    .observe(viewLifecycleOwner, Observer { items ->
+                        if (items.isNotEmpty()) {
+                            dataBinding.isLoggedIn = true
+                            libraryAdapter.updateData(items.sortedByDescending {animeItem ->
+                                it[animeItem.id.toString()]?.values?.toList()?.last()?.watched_at
+                            })
                         }
-
-                        Result.Status.SUCCESS -> {
-                            // do library stuff here
-                        }
-
-                        Result.Status.ERROR -> {
-                        }
-                    }
-                })
+                    })
+            })
+        } else {
+            startActivity(Intent(requireContext(), AuthActivity::class.java))
+            requireActivity().finish()
         }
 
         viewModel.trendingAnimeLiveData
-                .observe(viewLifecycleOwner, Observer { trendingList ->
-                    when (trendingList.status) {
-                        Result.Status.LOADING -> {
-                            showLoader()
-                        }
+            .observe(viewLifecycleOwner, Observer { trendingList ->
+                when (trendingList.status) {
+                    Result.Status.LOADING -> {
+                        showLoader()
+                    }
 
-                        Result.Status.SUCCESS -> {
-                            if (!trendingList.data.isNullOrEmpty()) {
-                                trendingAdapter.updateData(trendingList.data)
-                            }
-                        }
-
-                        Result.Status.ERROR -> {
-                            toast(trendingList.message!!.msg)
+                    Result.Status.SUCCESS -> {
+                        if (!trendingList.data.isNullOrEmpty()) {
+                            trendingAdapter.updateData(trendingList.data)
                         }
                     }
-                })
+
+                    Result.Status.ERROR -> {
+                        toast(trendingList.message!!.msg)
+                    }
+                }
+            })
 
         viewModel.topAiringAnime.observe(viewLifecycleOwner, Observer { pagedList ->
             topAiringAdapter.submitList(pagedList)
@@ -137,6 +142,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, AnimeViewModel>(
         dataBinding.topAiringRecyclerview.adapter = topAiringAdapter
         dataBinding.trendingRecyclerview.adapter = trendingAdapter
         dataBinding.topRatedRecyclerview.adapter = topRatedAdapter
+        dataBinding.currentlyWatchingRecyclerview.adapter = libraryAdapter
     }
 
     private fun navigate(anime: AnimeItem) {

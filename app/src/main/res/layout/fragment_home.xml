@@ -12,6 +12,10 @@
         <variable
             name="hasResult"
             type="boolean" />
+
+        <variable
+            name="isLoggedIn"
+            type="boolean" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -31,9 +35,7 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:isGone="@{!hasResult}"
-                tools:layout_editor_absoluteX="0dp"
-                tools:layout_editor_absoluteY="182dp">
+                app:isGone="@{!hasResult}">
 
                 <com.google.android.material.card.MaterialCardView
                     android:id="@+id/banner_container"
@@ -66,12 +68,12 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="16dp"
-                            app:layout_constraintHorizontal_bias="0.0"
                             android:layout_marginTop="16dp"
                             android:layout_marginEnd="4dp"
                             android:text="@string/header_title"
                             android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
                             app:layout_constraintEnd_toStartOf="@+id/dismiss_banner_button"
+                            app:layout_constraintHorizontal_bias="0.0"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
 
@@ -95,18 +97,49 @@
                 </com.google.android.material.card.MaterialCardView>
 
                 <TextView
+                    android:id="@+id/currently_watching_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="16dp"
+                    android:text="@string/currently_watching_title"
+                    android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
+                    android:textColor="@color/colorAccent"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    app:isGone="@{!isLoggedIn}"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/banner_container" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/currently_watching_recyclerview"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:clipToPadding="false"
+                    android:orientation="horizontal"
+                    android:paddingStart="10dp"
+                    app:isGone="@{!isLoggedIn}"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/currently_watching_text"
+                    tools:listitem="@layout/animelist_item" />
+
+                <TextView
                     android:id="@+id/top_airing_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
-                    android:layout_marginTop="8dp"
+                    android:layout_marginTop="24dp"
                     android:text="@string/seasonal_anime_title"
                     android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
                     android:textColor="@color/colorAccent"
                     android:textSize="20sp"
                     android:textStyle="bold"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/banner_container" />
+                    app:layout_constraintTop_toBottomOf="@id/currently_watching_recyclerview" />
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/top_airing_recyclerview"

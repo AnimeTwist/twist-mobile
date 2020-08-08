@@ -24,10 +24,13 @@ interface AnimeDao {
     @Query("SELECT * FROM animeitem WHERE ongoing = 1")
     fun getOngoingAnimeList(): List<AnimeItem>
 
+    @Query("SELECT * FROM animeitem WHERE uid IN (:ids)")
+    fun getAnimeByIds(ids: List<Int>): LiveData<List<AnimeItem>>
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun saveAnime(vararg animeItems: AnimeItem)
 
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun saveAnime(animeItems: List<AnimeItem>)
 
     @Delete
