@@ -1,6 +1,5 @@
 package dev.smoketrees.twist.ui.home
 
-import android.util.Log
 import androidx.lifecycle.*
 import androidx.paging.LivePagedListBuilder
 import androidx.paging.PagedList
@@ -31,6 +30,8 @@ class AnimeViewModel(private val repo: AnimeRepo) : ViewModel() {
             }
         }
     }
+
+    fun updateUserLibrary(jwt: String, body: PatchLibRequest) = repo.updateUserLibrary(jwt, body)
 
     fun getTrendingAnime(limit: Int) = viewModelScope.launch(Dispatchers.IO) {
         val result = repo.getNetworkTrendingAnime(limit)

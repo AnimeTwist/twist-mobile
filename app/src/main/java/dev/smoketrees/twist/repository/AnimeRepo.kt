@@ -98,4 +98,8 @@ class AnimeRepo(
     }
 
     suspend fun getUserLibrarySync(jwt: String) = webClient.getUserLibrary(jwt)
+
+    fun updateUserLibrary(jwt: String, body: PatchLibRequest) = makeRequest {
+        webClient.updateUserLibrary(jwt, body)
+    }
 }

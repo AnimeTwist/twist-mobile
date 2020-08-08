@@ -2,6 +2,7 @@ package dev.smoketrees.twist.api.anime
 
 import dev.smoketrees.twist.api.BaseApiClient
 import dev.smoketrees.twist.model.twist.LoginDetails
+import dev.smoketrees.twist.model.twist.PatchLibRequest
 import dev.smoketrees.twist.model.twist.RegisterDetails
 
 class AnimeWebClient(private val webService: AnimeWebService) : BaseApiClient() {
@@ -52,5 +53,9 @@ class AnimeWebClient(private val webService: AnimeWebService) : BaseApiClient() 
 
     suspend fun getUserLibrary(jwt: String) = getResult {
         webService.getUserLibrary(jwt)
+    }
+
+    suspend fun updateUserLibrary(jwt: String, body: PatchLibRequest) = getResult {
+        webService.updateUserLibrary(jwt, body)
     }
 }
