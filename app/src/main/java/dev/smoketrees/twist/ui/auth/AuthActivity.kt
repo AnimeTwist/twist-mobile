@@ -1,7 +1,7 @@
 package dev.smoketrees.twist.ui.auth
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 import dev.smoketrees.twist.R
 
 class AuthActivity : AppCompatActivity() {

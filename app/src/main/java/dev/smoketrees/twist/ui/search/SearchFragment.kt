@@ -3,7 +3,6 @@ package dev.smoketrees.twist.ui.search
 import android.app.SearchManager
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.*
 import androidx.appcompat.widget.SearchView
 import androidx.lifecycle.asFlow
@@ -132,18 +131,19 @@ class SearchFragment :
         })
 
         // Go back if not expanded
-        menu.findItem(R.id.action_search).setOnActionExpandListener(object : MenuItem.OnActionExpandListener {
-            override fun onMenuItemActionExpand(item: MenuItem?): Boolean {
-                if (!args.query.isBlank())
-                    searchView.post { searchView.setQuery(args.query, false) }
-                return true
-            }
+        menu.findItem(R.id.action_search)
+            .setOnActionExpandListener(object : MenuItem.OnActionExpandListener {
+                override fun onMenuItemActionExpand(item: MenuItem?): Boolean {
+                    if (!args.query.isBlank())
+                        searchView.post { searchView.setQuery(args.query, false) }
+                    return true
+                }
 
-            override fun onMenuItemActionCollapse(item: MenuItem?): Boolean {
-                findNavController().popBackStack()
-                return false
-            }
-        })
+                override fun onMenuItemActionCollapse(item: MenuItem?): Boolean {
+                    findNavController().popBackStack()
+                    return false
+                }
+            })
 
         // Expand
         menu.findItem(R.id.action_search).expandActionView()

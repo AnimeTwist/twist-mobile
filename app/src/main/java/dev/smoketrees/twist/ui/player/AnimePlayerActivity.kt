@@ -3,10 +3,8 @@ package dev.smoketrees.twist.ui.player
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
 import android.annotation.SuppressLint
-import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.graphics.drawable.Drawable
-import android.media.session.MediaSession
 import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
@@ -15,7 +13,6 @@ import android.view.KeyEvent
 import android.view.View
 import android.view.animation.AnimationUtils
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.Observer
 import androidx.navigation.navArgs
 import androidx.vectordrawable.graphics.drawable.Animatable2Compat
@@ -136,7 +133,8 @@ class AnimePlayerActivity : AppCompatActivity() {
                     viewModel.currEp.value = args.episodeNo
 
                     viewModel.currEp.observe(this, Observer { ep ->
-                        exo_current_episode.text = String.format(resources.getString(R.string.episode_info), ep)
+                        exo_current_episode.text =
+                            String.format(resources.getString(R.string.episode_info), ep)
                         // Add next episode
                         setupAnimeSource((ep + 1) % viewModel.sources!!.size)
                     })
@@ -155,22 +153,25 @@ class AnimePlayerActivity : AppCompatActivity() {
     private fun setupAnimeSource(epNo: Int) {
         if (!viewModel.sources.isNullOrEmpty()) {
             val decryptedUrl =
-                    viewModel.sources!![epNo - 1].source?.let { src ->
-                        CryptoHelper.decryptSourceUrl(
-                                src
-                        )
-                    }
-            val sourceFactory = DefaultHttpDataSourceFactory(
-                    Util.getUserAgent(
-                            this,
-                            "twist.moe"
+                viewModel.sources!![epNo - 1].source?.let { src ->
+                    CryptoHelper.decryptSourceUrl(
+                        src
                     )
+                }
+            val sourceFactory = DefaultHttpDataSourceFactory(
+                Util.getUserAgent(
+                    this,
+                    "twist.moe"
+                )
             )
 
             // Add mediaSource to playlist
             concatenatedSource.addMediaSource(ProgressiveMediaSource.Factory {
                 val dataSource = sourceFactory.createDataSource()
-                dataSource.setRequestProperty("Referer", "https://twist.moe/a/${args.slugName}/$epNo")
+                dataSource.setRequestProperty(
+                    "Referer",
+                    "https://twist.moe/a/${args.slugName}/$epNo"
+                )
                 dataSource
             }.createMediaSource(Uri.parse("https://twistcdn.bunny.sh${decryptedUrl}")))
         }
@@ -199,10 +200,10 @@ class AnimePlayerActivity : AppCompatActivity() {
         skip.isClickable = true
         cancel.isClickable = true
         skip_notice.animate()
-                .alpha(1f)
-                .translationY(0f)
-                .setDuration(300)
-                .setListener(null)
+            .alpha(1f)
+            .translationY(0f)
+            .setDuration(300)
+            .setListener(null)
     }
 
     private fun hideNotice(adapter: AnimatorListenerAdapter? = null) {
@@ -211,10 +212,10 @@ class AnimePlayerActivity : AppCompatActivity() {
         skip.isClickable = false
         cancel.isClickable = false
         skip_notice.animate()
-                .alpha(0f)
-                .translationY(100f)
-                .setDuration(300)
-                .setListener(adapter)
+            .alpha(0f)
+            .translationY(100f)
+            .setDuration(300)
+            .setListener(adapter)
     }
 
     private fun pause() {
@@ -234,11 +235,10 @@ class AnimePlayerActivity : AppCompatActivity() {
             )
             indicator_base.setImageDrawable(anim)
             anim!!.start()
-        }
-        else {
+        } else {
             // Scale in
             state_indicator.requestLayout()
-            state_indicator.animation =  AnimationUtils.loadAnimation(this, R.anim.scale_in)
+            state_indicator.animation = AnimationUtils.loadAnimation(this, R.anim.scale_in)
             state_indicator.animate().start()
 
             // Morph from square
@@ -269,19 +269,18 @@ class AnimePlayerActivity : AppCompatActivity() {
                 R.drawable.ic_at_state_buffer_out
             )
             indicator_base.setImageDrawable(anim)
-            anim!!.registerAnimationCallback(object: Animatable2Compat.AnimationCallback() {
+            anim!!.registerAnimationCallback(object : Animatable2Compat.AnimationCallback() {
                 override fun onAnimationEnd(drawable: Drawable?) {
                     super.onAnimationEnd(drawable)
                     ready()
                 }
             })
             anim.start()
-        }
-        else {
+        } else {
             indicator_icon.setImageResource(R.drawable.ic_at_play)
             // Scale out
             state_indicator.requestLayout()
-            state_indicator.animation =  AnimationUtils.loadAnimation(this, R.anim.scale_out)
+            state_indicator.animation = AnimationUtils.loadAnimation(this, R.anim.scale_out)
             state_indicator.animate().start()
 
             // Morph into square
@@ -290,7 +289,7 @@ class AnimePlayerActivity : AppCompatActivity() {
                 R.drawable.ic_at_state_out
             )
             indicator_base.setImageDrawable(anim)
-            anim!!.registerAnimationCallback(object: Animatable2Compat.AnimationCallback() {
+            anim!!.registerAnimationCallback(object : Animatable2Compat.AnimationCallback() {
                 override fun onAnimationEnd(drawable: Drawable?) {
                     super.onAnimationEnd(drawable)
                     ready()
@@ -315,7 +314,7 @@ class AnimePlayerActivity : AppCompatActivity() {
             override fun run() {
                 val duration = player.duration
                 val position = player.currentPosition
-                if (duration > 0)  {
+                if (duration > 0) {
                     val remaining = duration - position
                     if (skipFlag != remaining <= 180000) {
                         skipFlag = remaining <= 180000
@@ -323,10 +322,16 @@ class AnimePlayerActivity : AppCompatActivity() {
                         if (!skipFlag) hideNotice()
                     }
                     val minutes = TimeUnit.MILLISECONDS.toMinutes(remaining)
-                    val seconds = TimeUnit.MILLISECONDS.toSeconds(remaining - TimeUnit.MINUTES.toMillis(minutes))
-                    val finalString = "${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}"
+                    val seconds = TimeUnit.MILLISECONDS.toSeconds(
+                        remaining - TimeUnit.MINUTES.toMillis(minutes)
+                    )
+                    val finalString = "${minutes.toString().padStart(2, '0')}:${seconds.toString()
+                        .padStart(2, '0')}"
                     exo_remaining!!.text = finalString
-                    if (skipFlag) skipText.text = String.format(resources.getString(R.string.next_episode_countdown), finalString)
+                    if (skipFlag) skipText.text = String.format(
+                        resources.getString(R.string.next_episode_countdown),
+                        finalString
+                    )
 
                     // Remove scheduled updates.
                     remainingHandler.removeCallbacks(this)
@@ -357,7 +362,7 @@ class AnimePlayerActivity : AppCompatActivity() {
         }
         exo_play.setOnClickListener { play() }
         exo_pause.setOnClickListener { pause() }
-        skip.setOnClickListener { player.seekTo(1,0) }
+        skip.setOnClickListener { player.seekTo(1, 0) }
         cancel.setOnClickListener {
             hideNotice(object : AnimatorListenerAdapter() {
                 override fun onAnimationEnd(animation: Animator?) {
@@ -387,7 +392,8 @@ class AnimePlayerActivity : AppCompatActivity() {
                         err_notice.visibility = View.GONE
                         if (player.isPlaying) play()
                     }
-                    else -> { /* Do nothing */ }
+                    else -> { /* Do nothing */
+                    }
                 }
             }
 
@@ -398,8 +404,9 @@ class AnimePlayerActivity : AppCompatActivity() {
                 if (lastSavedWindow != player.currentWindowIndex) {
                     if (!skipFlag) skip_notice.visibility = View.INVISIBLE
                     concatenatedSource.removeMediaSource(0)
-                    player.seekTo(0,0)
-                    viewModel.currEp.value = (viewModel.currEp.value!! + 1) % viewModel.sources!!.size
+                    player.seekTo(0, 0)
+                    viewModel.currEp.value =
+                        (viewModel.currEp.value!! + 1) % viewModel.sources!!.size
                     hideNotice(object : AnimatorListenerAdapter() {
                         override fun onAnimationEnd(animation: Animator?) {
                             super.onAnimationEnd(animation)
@@ -483,7 +490,7 @@ class AnimePlayerActivity : AppCompatActivity() {
                 if (!paused) pause()
             }
             KeyEvent.KEYCODE_MEDIA_NEXT -> {
-                player.seekTo(1,0)
+                player.seekTo(1, 0)
             }
         }
         return super.onKeyDown(keyCode, event)

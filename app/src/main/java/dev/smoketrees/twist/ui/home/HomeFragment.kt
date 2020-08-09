@@ -23,7 +23,6 @@ import dev.smoketrees.twist.utils.PreferenceHelper.get
 import dev.smoketrees.twist.utils.hide
 import dev.smoketrees.twist.utils.toast
 import org.koin.android.ext.android.inject
-import java.text.SimpleDateFormat
 
 
 class HomeFragment : BaseFragment<FragmentHomeBinding, AnimeViewModel>(
@@ -80,7 +79,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, AnimeViewModel>(
                     .observe(viewLifecycleOwner, Observer { items ->
                         if (items.isNotEmpty()) {
                             dataBinding.isLoggedIn = true
-                            libraryAdapter.updateData(items.sortedByDescending {animeItem ->
+                            libraryAdapter.updateData(items.sortedByDescending { animeItem ->
                                 it[animeItem.id.toString()]?.values?.toList()?.last()?.watched_at
                             })
                         }

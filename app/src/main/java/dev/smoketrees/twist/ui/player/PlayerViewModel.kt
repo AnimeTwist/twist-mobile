@@ -1,8 +1,6 @@
 package dev.smoketrees.twist.ui.player
 
 import android.content.pm.ActivityInfo
-import android.net.Uri
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import dev.smoketrees.twist.model.twist.AnimeSource
