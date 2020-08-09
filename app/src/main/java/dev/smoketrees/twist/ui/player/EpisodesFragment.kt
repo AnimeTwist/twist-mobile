@@ -36,7 +36,7 @@ class EpisodesFragment :
     private val fab by lazy { (requireActivity() as MainActivity).scroll_fab }
 
     private val episodeAdapter by lazy {
-        EpisodeListAdapter(requireActivity()) { ep, _ ->
+        EpisodeListAdapter { ep, _ ->
             val action = EpisodesFragmentDirections.actionEpisodesFragmentToAnimePlayerActivity(
                 args.slugName,
                 dataBinding.anime!!.title!!,
@@ -57,49 +57,53 @@ class EpisodesFragment :
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        viewModel.getAnimeDetails(args.slugName, args.id).observe(viewLifecycleOwner, Observer { animeDetails ->
-            when (animeDetails.status) {
-                Result.Status.LOADING -> {
-                    showLoader()
-                    dataBinding.hasResult = false
-                    fab.hide()
-                }
+        viewModel.getAnimeDetails(args.slugName, args.id)
+            .observe(viewLifecycleOwner, Observer { animeDetails ->
+                when (animeDetails.status) {
+                    Result.Status.LOADING -> {
+                        showLoader()
+                        dataBinding.hasResult = false
+                        fab.hide()
+                    }
 
-                Result.Status.SUCCESS -> {
-                    animeDetails.data?.let { detailsEntity ->
-                        dataBinding.anime = detailsEntity
+                    Result.Status.SUCCESS -> {
+                        animeDetails.data?.let { detailsEntity ->
+                            dataBinding.anime = detailsEntity
 
-                        Glide.with(requireContext())
-                            .load(detailsEntity.imageUrl)
-                            .into(dataBinding.animeImage)
+                            Glide.with(requireContext())
+                                .load(detailsEntity.imageUrl)
+                                .into(dataBinding.animeImage)
 
-                        hideLoader()
-                        dataBinding.hasResult = true
+                            hideLoader()
+                            dataBinding.hasResult = true
 
 
-                        if (linearLayoutManager.findLastCompletelyVisibleItemPosition() < episodeAdapter.itemCount - 1) {
-                            fab.show()
-                        }
-
-                        animeViewModel.getWatchedEpisodes(args.id).observe(viewLifecycleOwner, Observer { animeWithEps ->
-                            if (detailsEntity.episodeList.isNotEmpty()) {
-                                episodeAdapter.updateData(animeDetails.data.episodeList)
-
-                                if (animeWithEps.watchedEpisodes.isNotEmpty()) {
-                                    val epMap = animeWithEps.watchedEpisodes.map { it.episode_id to it }.toMap()
-                                    episodeAdapter.updateWatchedEps(epMap)
-                                }
+                            if (linearLayoutManager.findLastCompletelyVisibleItemPosition() < episodeAdapter.itemCount - 1) {
+                                fab.show()
                             }
-                        })
+
+                            animeViewModel.getWatchedEpisodes(args.id)
+                                .observe(viewLifecycleOwner, Observer { animeWithEps ->
+                                    if (detailsEntity.episodeList.isNotEmpty()) {
+                                        episodeAdapter.updateData(animeDetails.data.episodeList)
+
+                                        if (animeWithEps.watchedEpisodes.isNotEmpty()) {
+                                            val epMap =
+                                                animeWithEps.watchedEpisodes.map { it.episode_id to it }
+                                                    .toMap()
+                                            episodeAdapter.updateWatchedEps(epMap)
+                                        }
+                                    }
+                                })
+                        }
+                    }
+
+                    Result.Status.ERROR -> {
+                        toast(animeDetails.message!!.msg)
+                        dataBinding.episodeList.hide()
                     }
                 }
-
-                Result.Status.ERROR -> {
-                    toast(animeDetails.message!!.msg)
-                    dataBinding.episodeList.hide()
-                }
-            }
-        })
+            })
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
