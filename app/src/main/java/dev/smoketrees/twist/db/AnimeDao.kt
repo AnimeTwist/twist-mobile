@@ -3,6 +3,8 @@ package dev.smoketrees.twist.db
 import androidx.lifecycle.LiveData
 import androidx.room.*
 import dev.smoketrees.twist.model.twist.AnimeItem
+import dev.smoketrees.twist.model.twist.AnimeWithEpisodes
+import dev.smoketrees.twist.model.twist.LibraryEpisode
 
 @Dao
 interface AnimeDao {
@@ -27,8 +29,12 @@ interface AnimeDao {
     @Query("SELECT * FROM animeitem WHERE uid IN (:ids)")
     fun getAnimeByIds(ids: List<Int>): LiveData<List<AnimeItem>>
 
+    @Transaction
+    @Query("SELECT * FROM animeitem WHERE uid = :id")
+    fun getWatchedEpisodes(id: Int): LiveData<List<AnimeWithEpisodes>>
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun saveAnime(vararg animeItems: AnimeItem)
+    suspend fun saveWatchedEpisodes(episodes: List<LibraryEpisode>)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun saveAnime(animeItems: List<AnimeItem>)

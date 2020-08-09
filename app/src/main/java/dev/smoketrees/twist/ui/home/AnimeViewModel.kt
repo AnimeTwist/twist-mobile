@@ -67,6 +67,9 @@ class AnimeViewModel(private val repo: AnimeRepo) : ViewModel() {
         when (result.status) {
             Result.Status.SUCCESS -> {
                 userLibrary.postValue(result.data!!)
+                result.data.forEach {
+                    repo.saveWatchedEpisodes(it.value.values.toList())
+                }
             }
 
             else -> {

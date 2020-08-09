@@ -99,6 +99,11 @@ class AnimeRepo(
 
     suspend fun getUserLibrarySync(jwt: String) = webClient.getUserLibrary(jwt)
 
+    suspend fun saveWatchedEpisodes(episodes: List<LibraryEpisode>) =
+        animeDao.saveWatchedEpisodes(episodes)
+
+    fun getWatchedEpisodes(id: Int) = animeDao.getWatchedEpisodes(id)
+
     fun updateUserLibrary(jwt: String, body: PatchLibRequest) = makeRequest {
         webClient.updateUserLibrary(jwt, body)
     }

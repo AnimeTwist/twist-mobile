@@ -5,11 +5,12 @@ import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import dev.smoketrees.twist.model.twist.AnimeDetailsEntity
 import dev.smoketrees.twist.model.twist.AnimeItem
+import dev.smoketrees.twist.model.twist.LibraryEpisode
 import dev.smoketrees.twist.model.twist.TrendingAnimeItem
 
 @Database(
-    entities = [AnimeItem::class, AnimeDetailsEntity::class, TrendingAnimeItem::class],
-    version = 3,
+    entities = [AnimeItem::class, AnimeDetailsEntity::class, TrendingAnimeItem::class, LibraryEpisode::class],
+    version = 4,
     exportSchema = false
 )
 @TypeConverters(EpisodeListTypeConverter::class)
