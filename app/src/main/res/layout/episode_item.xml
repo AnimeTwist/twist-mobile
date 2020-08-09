@@ -27,20 +27,17 @@
             app:layout_constraintVertical_bias="0.5"
             tools:text="1" />
 
-        <ImageButton
-            android:id="@+id/download_button"
+        <ImageView
+            android:id="@+id/is_watched"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
             android:background="@android:color/transparent"
-            android:padding="8dp"
-            android:src="@drawable/ic_file_download"
-            android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="@+id/episode_text"
+            android:padding="4dp"
+            android:visibility="invisible"
+            tools:visibility="visible"
+            android:src="@drawable/ic_check"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/episode_text" />
-
+            app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
 </com.google.android.material.card.MaterialCardView>

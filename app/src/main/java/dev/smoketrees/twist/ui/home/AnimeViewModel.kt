@@ -61,6 +61,8 @@ class AnimeViewModel(private val repo: AnimeRepo) : ViewModel() {
 
     fun getAnimeByIds(ids: List<Int>) = repo.getAnimeByIds(ids)
 
+    fun getWatchedEpisodes(id: Int) = repo.getWatchedEpisodes(id)
+
     fun getUserLibrary(jwt: String) = viewModelScope.launch(Dispatchers.IO) {
         val result = repo.getUserLibrarySync(jwt)
 

@@ -9,6 +9,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.livinglifetechway.quickpermissions_kotlin.runWithPermissions
 import dev.smoketrees.twist.R
 import dev.smoketrees.twist.model.twist.Episode
+import dev.smoketrees.twist.model.twist.LibraryEpisode
+import dev.smoketrees.twist.utils.show
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.episode_item.*
 
@@ -19,6 +21,7 @@ class EpisodeListAdapter(
     RecyclerView.Adapter<EpisodeListAdapter.EpisodeViewHolder>() {
 
     private var episodeList: List<Episode> = mutableListOf()
+    private var watchedEpisodeList: Map<Int, LibraryEpisode> = mutableMapOf()
     lateinit var onBottomReachedListener: (Int) -> Unit
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
@@ -41,12 +44,8 @@ class EpisodeListAdapter(
         holder.containerView.setOnClickListener {
             listener(episodeList[position], false)
         }
-        holder.download_button.setOnClickListener {
-            // check for perms
-            activity.runWithPermissions(Manifest.permission.WRITE_EXTERNAL_STORAGE) {
-                listener(episodeList[position], true)
-            }
-
+        if (watchedEpisodeList[episodeList[position].id] != null) {
+            holder.is_watched.show()
         }
     }
 
@@ -56,6 +55,11 @@ class EpisodeListAdapter(
 
     fun updateData(newData: List<Episode>) {
         episodeList = newData
+        notifyDataSetChanged()
+    }
+
+    fun updateWatchedEps(newData: Map<Int, LibraryEpisode>) {
+        watchedEpisodeList = newData
         notifyDataSetChanged()
     }
 }

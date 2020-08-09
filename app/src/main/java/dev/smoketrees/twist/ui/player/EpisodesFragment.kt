@@ -15,10 +15,12 @@ import dev.smoketrees.twist.adapters.EpisodeListAdapter
 import dev.smoketrees.twist.databinding.FragmentEpisodesBinding
 import dev.smoketrees.twist.model.twist.Result
 import dev.smoketrees.twist.ui.base.BaseFragment
+import dev.smoketrees.twist.ui.home.AnimeViewModel
 import dev.smoketrees.twist.ui.home.MainActivity
 import dev.smoketrees.twist.utils.hide
 import dev.smoketrees.twist.utils.toast
 import kotlinx.android.synthetic.main.activity_main.*
+import org.koin.android.viewmodel.ext.android.sharedViewModel
 
 class EpisodesFragment :
     BaseFragment<FragmentEpisodesBinding, EpisodesViewModel>(
@@ -29,6 +31,7 @@ class EpisodesFragment :
     override val bindingVariable: Int = BR.episodeViewModel
 
     private val args: EpisodesFragmentArgs by navArgs()
+    private val animeViewModel by sharedViewModel<AnimeViewModel>()
 
     private val fab by lazy { (requireActivity() as MainActivity).scroll_fab }
 
@@ -54,8 +57,8 @@ class EpisodesFragment :
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        viewModel.getAnimeDetails(args.slugName, args.id).observe(viewLifecycleOwner, Observer {
-            when (it.status) {
+        viewModel.getAnimeDetails(args.slugName, args.id).observe(viewLifecycleOwner, Observer { animeDetails ->
+            when (animeDetails.status) {
                 Result.Status.LOADING -> {
                     showLoader()
                     dataBinding.hasResult = false
@@ -63,12 +66,9 @@ class EpisodesFragment :
                 }
 
                 Result.Status.SUCCESS -> {
-                    it.data?.let { detailsEntity ->
+                    animeDetails.data?.let { detailsEntity ->
                         dataBinding.anime = detailsEntity
 
-/*                        detailsEntity.airing?.let { ongoing ->
-                            if (ongoing) dataBinding.animeOngoingText.show() else dataBinding.animeOngoingText.hide()
-                        }*/
                         Glide.with(requireContext())
                             .load(detailsEntity.imageUrl)
                             .into(dataBinding.animeImage)
@@ -76,18 +76,26 @@ class EpisodesFragment :
                         hideLoader()
                         dataBinding.hasResult = true
 
-                        if (detailsEntity.episodeList.isNotEmpty()) {
-                            episodeAdapter.updateData(it.data.episodeList)
-                        }
 
                         if (linearLayoutManager.findLastCompletelyVisibleItemPosition() < episodeAdapter.itemCount - 1) {
                             fab.show()
                         }
+
+                        animeViewModel.getWatchedEpisodes(args.id).observe(viewLifecycleOwner, Observer { animeWithEps ->
+                            if (detailsEntity.episodeList.isNotEmpty()) {
+                                episodeAdapter.updateData(animeDetails.data.episodeList)
+
+                                if (animeWithEps.watchedEpisodes.isNotEmpty()) {
+                                    val epMap = animeWithEps.watchedEpisodes.map { it.episode_id to it }.toMap()
+                                    episodeAdapter.updateWatchedEps(epMap)
+                                }
+                            }
+                        })
                     }
                 }
 
                 Result.Status.ERROR -> {
-                    toast(it.message!!.msg)
+                    toast(animeDetails.message!!.msg)
                     dataBinding.episodeList.hide()
                 }
             }

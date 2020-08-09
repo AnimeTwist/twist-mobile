@@ -31,7 +31,7 @@ interface AnimeDao {
 
     @Transaction
     @Query("SELECT * FROM animeitem WHERE uid = :id")
-    fun getWatchedEpisodes(id: Int): LiveData<List<AnimeWithEpisodes>>
+    fun getWatchedEpisodes(id: Int): LiveData<AnimeWithEpisodes>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun saveWatchedEpisodes(episodes: List<LibraryEpisode>)
